@@ -1,0 +1,229 @@
+/* Estilo Global */
+.home {
+  background: #9cb6d2;
+  color: black;
+}
+
+.caixa {
+  padding: 60px 0px;
+  margin-bottom: 1px solid #e5e5e5;
+}
+
+footer p a {
+  margin: 5px 15px;
+}
+
+/* Estilo do card alunos*/
+.card-dark:hover {
+  border: 1px solid #0d6efd;
+}
+.rounded-10 {
+  border-radius: 10px !important;
+}
+
+/* Ocultar formulários de cadastro */
+.ocultar {
+  display: none !important;
+}
+
+/* Corrige o hover dos itens do dropdown para manter fundo e texto na tela de perfil */
+.dropdown-menu.bg-dark .dropdown-item {
+  color: white;
+}
+
+.dropdown-menu.bg-dark .dropdown-item:hover {
+  background-color: #1a1a1a; /* ou outra cor escura */
+}
+
+.sidebar {
+  height: 100vh;
+}
+
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+/* ------------------- ESTILOS EXCLUSIVOS PARA A TELA DE CURRÍCULO ------------------- */
+
+#curriculo {
+  background-color: #000;
+  color: #fff;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+/* Abas do currículo */
+#curriculo .nav-tabs .nav-link {
+  background-color: #1a1a1a;
+  color: #fff;
+  border: none;
+  margin-right: 5px;
+}
+
+#curriculo .nav-tabs .nav-link.active {
+  background-color: #343a40;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Conteúdo das abas */
+#curriculo .tab-pane {
+  margin-top: 10px;
+}
+
+/* Inputs com fundo branco, texto preto e acessibilidade */
+#curriculo input,
+#curriculo textarea,
+#curriculo select {
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+/* Placeholder preto */
+#curriculo ::placeholder {
+  color: #000;
+  opacity: 1;
+}
+
+/* Validação com triângulo vermelho */
+#curriculo .is-invalid {
+  border-color: red;
+  position: relative;
+}
+
+#curriculo .is-invalid::after {
+  content: "▲";
+  color: red;
+  font-size: 1rem;
+  position: absolute;
+  right: 10px;
+  top: 10px;
+}
+
+/* Botão de salvar com destaque */
+#curriculo .btn-salvar {
+  background-color: #28a745;
+  color: #fff;
+  font-weight: bold;
+  border: none;
+  margin-top: 10px;
+}
+
+#curriculo .btn-salvar:hover {
+  background-color: #218838;
+}
+
+/* ----------- ESTILOS EXCLUSIVOS PARA A TELA DE PERFIL INSTITUICAO ------------------- */
+
+.sidebar-instituicao {
+  width: 160px;
+  height: 100vh;
+  background-color: #212529;
+  color: white;
+  padding-top: 1rem;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+.sidebar-instituicao .nav-link-instituicao {
+  color: #ced4da;
+  padding: 0.75rem 1.25rem;
+  text-decoration: none;
+  display: block;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+.sidebar-instituicao .nav-link-instituicao:hover,
+.sidebar-instituicao .nav-link-instituicao.active {
+  background-color: #343a40;
+  color: white;
+  border-left: 4px solid #0d6efd; /* Destaque azul do Bootstrap */
+}
+
+/* Layout responsivo: tela menor */
+@media (max-width: 991.98px) {
+  .sidebar-instituicao {
+    position: relative;
+    width: 100%;
+    height: auto;
+  }
+
+  .content {
+    margin-left: 0 !important;
+    padding: 1rem;
+  }
+}
+
+/* Layout desktop */
+@media (min-width: 992px) {
+  .content {
+    margin-left: 160px; /* igual à sidebar */
+    padding: 1rem 2rem; /* espaçamento interno agradável */
+  }
+}
+
+.secao-ocultavel {
+  display: none;
+}
+
+/* Ajustes nos cards do dashboard */
+.card {
+  transition: transform 0.2s ease;
+}
+
+.card:hover {
+  transform: scale(1.02);
+}
+
+/* Espaçamento entre os cards */
+.row.gx-2.gy-2 {
+  margin-top: 1rem;
+}
+
+/* Reduz a largura do card em telas menores */
+@media (max-width: 768px) {
+  .card {
+    width: 100% !important;
+  }
+}
+
+/* ------------------- VALIDAÇÃO DE FORMULÁRIOS ------------------- */
+
+/* Validação de campos válidos */
+input:valid,
+select:valid {
+  border-color: #198754 !important;
+  background-image: url('data:image/svg+xml,<svg fill="%23198754" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.5L5.5 14 0 8.5l1.5-1.5L5.5 11 14.5 1.5z"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+}
+
+/* Validação de campos inválidos */
+input:invalid,
+select:invalid {
+  border-color: #dc3545 !important;
+  background-image: url('data:image/svg+xml,<svg fill="%23dc3545" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M1.293 1.293l13.414 13.414M14.707 1.293L1.293 14.707"/></svg>');
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+}
+
+/* Validação de campos válidos dentro da área de currículo */
+#curriculo input:valid,
+#curriculo select:valid {
+  border-color: #198754 !important;
+  background-image: url('data:image/svg+xml,<svg fill="%23198754" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M16 2.5L5.5 14 0 8.5l1.5-1.5L5.5 11 14.5 1.5z"/></svg>');
+}

@@ -1,0 +1,52 @@
+/* Estilos Gerais */
+.body-dark {
+    background-color: #212529;
+    color: white;
+  }
+  
+  /* Sidebar de Filtros */
+  .sidebar-dark {
+    background-color: #343a40;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  /* Input e Select escuros */
+  .input-dark {
+    background-color: white;
+    color: black;
+    border: 1px solid #495057;
+  }
+  
+  .input-dark::placeholder {
+    color: black;
+  }
+  
+  /* Cards de Vagas */
+  .card-dark {
+    background-color: #343a40;
+    color: white;
+    border: none;
+    border-radius: 15px;
+    transition: border 0.3s;
+  }
+  
+  .card-dark:hover {
+    border: 1px solid #0d6efd;
+  }
+  
+  /* Botões */
+  .btn-primary {
+    background-color: #0d6efd;
+    border: none;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0b5ed7;
+  }
+  
+  .btn-outline-light:hover {
+    background-color: white;
+    color: #212529;
+  }
+  
