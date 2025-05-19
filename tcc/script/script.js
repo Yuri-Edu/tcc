@@ -19,7 +19,7 @@ function showSection(id) {
       mostrarSubsecao('disponiveis', document.querySelector('#abas-vagas button:first-child'));
     }
   }
-  
+    
 
 // Aguarda o carregamento completo da página antes de executar qualquer código
 document.addEventListener("DOMContentLoaded", function() {
