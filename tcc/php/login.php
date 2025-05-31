@@ -1,45 +1,75 @@
 <?php
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 session_start();
-include('conexao.php');
+session_start();
+include_once 'db.php'; // Arquivo de conexão
 
-// Recebe os dados do formulário
-$email = $_POST['email'];
-$senha = $_POST['senha'];
+if ($_SERVER['REQUEST_METHOD'] === 'post') {
+    $email = trim($_POST['email']);
+    $senha = trim($_POST['senha']);
 
-// Consulta o banco
-$sql = "SELECT * FROM usuarios WHERE email = '$email'";
-$result = $conn->query($sql);
-
-// Verifica se encontrou o email
-if($result->num_rows > 0){
-    $row = $result->fetch_assoc();
-
-    // Verifica a senha
-    if(password_verify($senha, $row['senha'])){
-        // Salva dados na sessão
-        $_SESSION['id'] = $row['id'];
-        $_SESSION['email'] = $row['email'];
-        $_SESSION['perfil'] = $row['perfil'];
-
-        // Redireciona para o perfil correto
-        if($row['perfil'] == 'aluno'){
-            header('Location: ../aluno/perfil.php');
-        } elseif($row['perfil'] == 'empresa'){
-            header('Location: ../empresa/perfil.php');
-        } elseif($row['perfil'] == 'instituicao'){
-            header('Location: ../instituicao/perfil.php');
-        } else {
-            echo "Perfil não identificado!";
-        }
+    if (empty($email) || empty($senha)) {
+        $_SESSION['erro'] = "Por favor, preencha todos os campos.";
+        header("Location: ../login.php");
         exit();
-
-    } else {
-        echo "Senha incorreta";
     }
 
-} else {
-    echo "Email não encontrado";
-}
+    $sql = "SELECT * FROM usuarios WHERE email = ?";
+    $stmt = $conn->prepare($sql);
 
-$conn->close();
+    if (!$stmt) {
+        $_SESSION['erro'] = "Erro no servidor. Tente novamente mais tarde.";
+        header("Location: ../login.php");
+        exit();
+    }
+
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+
+    $resultado = $stmt->get_result();
+
+    if ($resultado->num_rows === 1) {
+        $usuario = $resultado->fetch_assoc();
+
+        if (password_verify($senha, $usuario['senha'])) {
+            $_SESSION['id_usuario'] = $usuario['id'];
+            $_SESSION['email'] = $usuario['email'];
+            $_SESSION['tipo_usuario'] = $usuario['tipo_usuario'];
+
+            switch ($usuario['tipo_usuario']) {
+                case 'aluno':
+                    header("Location: ../perfil/aluno.php");
+                    break;
+                case 'empresa':
+                    header("Location: ../perfil/empresa.php");
+                    break;
+                case 'instituicao':
+                    header("Location: ../perfil/instituicao.php");
+                    break;
+                default:
+                    $_SESSION['erro'] = "Tipo de usuário desconhecido.";
+                    header("Location: ../login.php");
+                    break;
+            }
+            exit();
+        } else {
+            $_SESSION['erro'] = "Senha incorreta.";
+            header("Location: ../login.php");
+            exit();
+        }
+    } else {
+        $_SESSION['erro'] = "Usuário não encontrado.";
+        header("Location: ../login.php");
+        exit();
+    }
+
+    $stmt->close();
+    $conn->close();
+} else {
+    $_SESSION['erro'] = "Acesso inválido.";
+    header("Location: ../login.php");
+    exit();
+}
 ?>

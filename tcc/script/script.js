@@ -57,28 +57,23 @@ document.addEventListener("DOMContentLoaded", function() {
    * Função para redirecionar para a tela de login
    */
   function login() {
-      window.open("../tela_login/index.html", "_self"); 
+      window.open("../tela_login/index.php", "_self"); 
   }
   
   /**
    * Função para redirecionar para a tela de cadastro
    */
   function cadastrar() {
-      window.open("../cadastrar/cadastrar.html", "_self");
+      window.open("../cadastrar/cadastrar.php", "_self");
   }
   
-  /**
-   * Função para redirecionar para a tela de perfil
-   */
-  function perfil() {
-      window.open("../perfil/index.html", "_self");
-  }
+ 
   
     /**
    * Função para redirecionar para a tela de vagas
    */
     function vagas() {
-      window.open("../tela_inicial/vagas.html", "_self");
+      window.open("../tela_inicial/vagas.php", "_self");
   }
   
 
@@ -86,9 +81,20 @@ document.addEventListener("DOMContentLoaded", function() {
    * Função para sair e voltar para a tela de login
    */
   function sair() {
-      window.open("../tela_login/index.html", "_self");
+      window.open("../tela_login/index.php", "_self");
   }
-  
+  /**
+   * Função que envia o perfil dinamicamente dependendo da opção selecionada
+   */
+     const selectUsuario = document.getElementById('usuario');
+const inputPerfil = document.querySelectorAll('input[name="perfil"]');
+
+selectUsuario.addEventListener('change', function() {
+    inputPerfil.forEach(input => {
+        input.value = this.value; // Define o perfil selecionado em todos os formulários
+    });
+});
+ 
   /**
    * Função que exibe formulários dinamicamente dependendo da opção selecionada
    */
@@ -764,5 +770,15 @@ function toggleSection(section) {
     });
   });
 // Fim da função do Meu cadastro
+
+// Função para excluir vagas
+const modal = document.getElementById('modalConfirmarExclusao');
+  modal.addEventListener('show.bs.modal', function (event) {
+    const button = event.relatedTarget; // botão que abriu o modal
+    const id = button.getAttribute('data-id'); // pega o data-id
+
+    const confirmar = document.getElementById('confirmarExclusao');
+    confirmar.href = 'excluir_vaga.php?id=' + id; // monta o link de exclusão
+  });
 
 

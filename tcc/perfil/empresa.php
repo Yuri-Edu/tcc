@@ -570,32 +570,35 @@ if(!isset($_SESSION['id']) || $_SESSION['perfil'] != 'empresa'){
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-              <form>
-                <div class="mb-3">
-                  <label for="inputVaga" class="form-label">Vaga</label>
-                  <input type="text" class="form-control" id="inputVagaNova">
-                </div>
-                <div class="mb-3">
-                  <label for="inputEmpresa" class="form-label">Empresa</label>
-                  <input type="text" class="form-control" id="inputEmpresaNova">
-                </div>
-                <div class="mb-3">
-                  <label for="inputCurso" class="form-label">Curso</label>
-                  <input type="text" class="form-control" id="inputCursoNova">
-                </div>
-                <div class="mb-3">
-                  <label for="inputTipo" class="form-label">Tipo</label>
-                  <input type="text" class="form-control" id="inputTipoNova">
-                </div>
-                <div class="mb-3">
-                  <label for="inputStatus" class="form-label">Status</label>
-                  <input type="text" class="form-control" id="inputStatusNova">
-                </div>
-                <div class="mb-3">
-                  <label for="inputDescricao" class="form-label">Descrição</label>
-                  <textarea class="form-control" id="inputDescricaoNova" rows="3"></textarea>
-                </div>
-              </form>
+              <form action="backend/cadastrarVagas.php" method="POST">
+                  <div class="mb-3">
+                    <label for="inputVaga" class="form-label">Vaga</label>
+                    <input type="text" class="form-control" id="inputVagaNova" name="vaga">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputEmpresa" class="form-label">Empresa</label>
+                    <input type="text" class="form-control" id="inputEmpresaNova" name="empresa">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputCurso" class="form-label">Curso</label>
+                    <input type="text" class="form-control" id="inputCursoNova" name="curso">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputTipo" class="form-label">Tipo</label>
+                    <input type="text" class="form-control" id="inputTipoNova" name="tipo">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputStatus" class="form-label">Status</label>
+                    <input type="text" class="form-control" id="inputStatusNova" name="status">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputDescricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="inputDescricaoNova" name="descricao" rows="3"></textarea>
+                  </div>
+                  
+                  <button type="submit" class="btn btn-primary">Salvar Vaga</button>
+                </form>
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -615,32 +618,38 @@ if(!isset($_SESSION['id']) || $_SESSION['perfil'] != 'empresa'){
               <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
             </div>
             <div class="modal-body">
-              <form>
-                <div class="mb-3">
-                  <label for="inputVaga" class="form-label">Vaga</label>
-                  <input type="text" class="form-control" id="inputVaga">
-                </div>
-                <div class="mb-3">
-                  <label for="inputEmpresa" class="form-label">Empresa</label>
-                  <input type="text" class="form-control" id="inputEmpresa">
-                </div>
-                <div class="mb-3">
-                  <label for="inputCurso" class="form-label">Curso</label>
-                  <input type="text" class="form-control" id="inputCurso">
-                </div>
-                <div class="mb-3">
-                  <label for="inputTipo" class="form-label">Tipo</label>
-                  <input type="text" class="form-control" id="inputTipo">
-                </div>
-                <div class="mb-3">
-                  <label for="inputStatus" class="form-label">Status</label>
-                  <input type="text" class="form-control" id="inputStatus">
-                </div>
-                <div class="mb-3">
-                  <label for="inputDescricao" class="form-label">Descrição</label>
-                  <textarea class="form-control" id="inputDescricao" rows="3"></textarea>
-                </div>
+             <form action="editarVagas.php" method="POST">
+                  <div class="mb-3">
+                    <label for="inputTitulo" class="form-label">Vaga</label>
+                    <input type="text" class="form-control" id="inputTitulo" name="titulo" value="<?= htmlspecialchars($vaga['titulo']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputDescricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="inputDescricao" rows="3" name="descricao"><?= htmlspecialchars($vaga['descricao']) ?></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputRequisitos" class="form-label">Requisitos</label>
+                    <textarea class="form-control" id="inputRequisitos" rows="3" name="requisitos"><?= htmlspecialchars($vaga['requisitos']) ?></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputCurso" class="form-label">Curso</label>
+                    <input type="text" class="form-control" id="inputCurso" name="curso" value="<?= htmlspecialchars($vaga['curso']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputTurno" class="form-label">Turno</label>
+                    <input type="text" class="form-control" id="inputTurno" name="turno" value="<?= htmlspecialchars($vaga['turno']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputTipo" class="form-label">Tipo</label>
+                    <input type="text" class="form-control" id="inputTipo" name="tipo" value="<?= htmlspecialchars($vaga['tipo']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputStatus" class="form-label">Status</label>
+                    <input type="text" class="form-control" id="inputStatus" name="status" value="<?= htmlspecialchars($vaga['status']) ?>">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Salvar</button>
               </form>
+
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
@@ -695,6 +704,8 @@ if(!isset($_SESSION['id']) || $_SESSION['perfil'] != 'empresa'){
         </div>
       </div>
       </div>
+
+      <!-- Seção de Documentos -->
       <div id="sec-empresa-documentos" class="secao-ocultavel" style="display: none;">
         <h3 class="mb-4">
         <i class="bi bi-file-earmark-text-fill me-2"></i>Documentos

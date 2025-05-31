@@ -3,7 +3,7 @@ session_start();
 
 // Verifica se está logado e se é aluno
 if(!isset($_SESSION['id']) || $_SESSION['perfil'] != 'aluno'){
-    header('Location: ../index.html');
+    header('Location: ../tela_inicial/home.php');
     exit();
 }
 ?>
