@@ -2,8 +2,8 @@
 session_start();
 
 // Verifica se está logado e se é aluno
-if(!isset($_SESSION['id']) || $_SESSION['perfil'] != 'empresa'){
-    header('Location: ../index.php');
+if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
+    header('Location: ../tela_inicial/index.php');
     exit();
 }
 ?>
