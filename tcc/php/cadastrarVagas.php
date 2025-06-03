@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmt->execute()) {
         echo "Vaga cadastrada com sucesso!";
-        header("Location: listar_vagas.php");
+        
     } else {
         echo "Erro ao cadastrar vaga: " . $stmt->error;
     }

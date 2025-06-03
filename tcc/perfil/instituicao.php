@@ -88,11 +88,11 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'instituicao'
           <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
           <div class="row gx-2 gy-2">
             <!-- Cards -->
-            <div class="col-md-6 d-flex justify-content-start">
+           <div class="col-md-6 d-flex justify-content-start">
               <a href="estagios.html" class="card bg-dark text-white border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-clock-history me-2"></i>Estágios Pendentes</h5>
-                  <p class="card-text display-6">12</p>
+                  <p class="card-text display-6"><?php echo $estagios_pendentes; ?></p>
                 </div>
               </a>
             </div>
@@ -100,15 +100,15 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'instituicao'
               <a href="relatorios.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-file-earmark-text me-2"></i>Relatórios Aguardando</h5>
-                  <p class="card-text display-6">8</p>
+                  <p class="card-text display-6"><?php echo $relatorio_pendentes; ?></p>
                 </div>
               </a>
             </div>
             <div class="col-md-6 d-flex justify-content-start">
               <a href="alunos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
-                  <h5 class="card-title"><i class="bi bi-people-fill me-2"></i>Alunos Cadastrados</h5>
-                  <p class="card-text display-6">142</p>
+                  <h5 class="card-title"><i class="bi bi-people-fill me-2"></i>Estagios Cadastrados</h5>
+                  <p class="card-text display-6"><?php echo $estagios_cadastrados; ?> </p>
                 </div>
               </a>
             </div>
@@ -116,7 +116,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'instituicao'
               <a href="vagas.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-megaphone-fill me-2"></i>Vagas Criadas</h5>
-                  <p class="card-text display-6">26</p>
+                  <p class="card-text display-6"><?php echo $vagas_criadas; ?></p>
                 </div>
               </a>
             </div>
@@ -124,12 +124,13 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'instituicao'
               <a href="documentos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 70%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-file-earmark-excel me-2"></i>Documentos Pendentes</h5>
-                  <p class="card-text display-6">5</p>
+                  <p class="card-text display-6"><?php echo $documentos_penentes; ?></p>
                 </div>
               </a>
             </div>
           </div>
         </div>
+
 
         <!-- seção alunos -->
         <div id="sec-alunos" class="secao-ocultavel" style="display: none;">
@@ -1289,21 +1290,21 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'instituicao'
           <div class="container mt-4">
             <h3 class="mb-4"> <i class="bi bi-gear-fill me-2"></i> Configurações</h3>
 
-            <!-- Abas -->
-              <ul class="nav nav-pills mb-3 bg-dark p-2 rounded" id="configTab" role="tablist">
-              <li class="nav-item"><a class="nav-link active text-white" data-bs-toggle="pill" href="#dadosInstitucionais">Dados Institucionais</a></li>
-              <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#regrasSistema">Regras do Sistema</a></li>
-              <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#configAlunos">Configurações dos Alunos</a></li>
-              <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#configEmpresas">Configurações das Empresas</a></li>
-              <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#gerenciamentoVagas">Gerenciamento de Vagas</a></li>
-              <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#notificacoesMensagens">Notificações e Mensagens</a></li>
-              <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#perfisPermissoes">Perfis e Permissões</a></li>
-              <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#segurancaAcesso">Segurança e Acesso</a></li>
-            </ul>
+          
 
             <!-- Conteúdo das abas -->
               <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
-
+                  <!-- Abas -->
+              <ul class="nav nav-pills mb-3 bg-dark p-2 rounded" id="configTab" role="tablist">
+               <li class="nav-item"><a class="nav-link active text-white" data-bs-toggle="pill" href="#dadosInstitucionais">Dados Institucionais</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#regrasSistema">Regras do Sistema</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#configAlunos">Configurações dos Alunos</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#configEmpresas">Configurações das Empresas</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#gerenciamentoVagas">Gerenciamento de Vagas</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#notificacoesMensagens">Notificações e Mensagens</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#perfisPermissoes">Perfis e Permissões</a></li>
+                <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#segurancaAcesso">Segurança e Acesso</a></li>
+              </ul>
                 <!-- Aba Dados Institucionais -->
                 <div class="tab-pane fade show active" id="dadosInstitucionais">
                   <div class="row">

@@ -83,7 +83,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               <a href="estagios.html" class="card bg-dark text-white border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-clock-history me-2"></i>Estágios Pendentes</h5>
-                  <p class="card-text display-6"><?php echo $estagios_pendentes; ?></p>
+                  <p class="card-text display-6">12</p>
                 </div>
               </a>
             </div>
@@ -91,7 +91,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               <a href="relatorios.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-file-earmark-text me-2"></i>Relatórios Aguardando</h5>
-                  <p class="card-text display-6"><?php echo $relatorio_pendentes; ?></p>
+                  <p class="card-text display-6">8</p>
                 </div>
               </a>
             </div>
@@ -99,7 +99,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               <a href="alunos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-people-fill me-2"></i>Estagios Cadastrados</h5>
-                  <p class="card-text display-6"><?php echo $estagios_cadastrados; ?> </p>
+                  <p class="card-text display-6">142</p>
                 </div>
               </a>
             </div>
@@ -107,7 +107,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               <a href="vagas.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-megaphone-fill me-2"></i>Vagas Criadas</h5>
-                  <p class="card-text display-6"><?php echo $vagas_criadas; ?></p>
+                  <p class="card-text display-6">26</p>
                 </div>
               </a>
             </div>
@@ -115,13 +115,12 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               <a href="documentos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 70%;">
                 <div class="card-body">
                   <h5 class="card-title"><i class="bi bi-file-earmark-excel me-2"></i>Documentos Pendentes</h5>
-                  <p class="card-text display-6"><?php echo $documentos_penentes; ?></p>
+                  <p class="card-text display-6">5</p>
                 </div>
               </a>
             </div>
           </div>
-        </div>
-
+      </div>
       <!-- Seção de Estágios -->
       <div id="sec-empresa-estagios" class="secao-ocultavel" style="display: none;">
           <!-- Filtros e Botões -->
@@ -237,57 +236,44 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                       </div>
                       <div class="modal-body bg-dark text-white">
-                          <form action="../php/cadastrarEstagiarios.php" method="POST" id="formCriarEstagio">
-          
-          <div class="mb-3">
-            <label for="empresa" class="form-label">Empresa</label>
-            <input type="text" class="form-control" id="empresa" name="empresa" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="curso" class="form-label">Curso</label>
-            <input type="text" class="form-control" id="curso" name="curso" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="duracao" class="form-label">Duração</label>
-            <input type="text" class="form-control" id="duracao" name="duracao" placeholder="Em meses" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="periodo" class="form-label">Período</label>
-            <select class="form-select" id="periodo" name="periodo" required>
-              <option value="Manhã">Manhã</option>
-              <option value="Tarde">Tarde</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label for="inicio" class="form-label">Início</label>
-            <input type="date" class="form-control" id="inicio" name="inicio" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="termino" class="form-label">Término</label>
-            <input type="date" class="form-control" id="termino" name="termino" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="status" class="form-label">Status</label>
-            <select class="form-select" id="status" name="status" required>
-              <option value="Pendentes">Pendentes</option>
-              <option value="Em curso">Em curso</option>
-              <option value="Concluído">Concluído</option>
-              <option value="Encerrado">Encerrado</option>
-            </select>
-          </div>
-
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Cadastrar</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          </div>
-
-        </form>
+                          <form id="formCriarEstagio">
+                              <div class="mb-3">
+                                  <label for="empresa" class="form-label">Empresa</label>
+                                  <input type="text" class="form-control" id="empresa" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="curso" class="form-label">Curso</label>
+                                  <input type="text" class="form-control" id="curso" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="duracao" class="form-label">Duração</label>
+                                  <input type="text" class="form-control" id="duracao" placeholder="Em meses" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="periodo" class="form-label">Período</label>
+                                  <select class="form-select" id="periodo" required>
+                                      <option value="Manhã">Manhã</option>
+                                      <option value="Tarde">Tarde</option>
+                                  </select>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="inicio" class="form-label">Início</label>
+                                  <input type="date" class="form-control" id="inicio" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="termino" class="form-label">Término</label>
+                                  <input type="date" class="form-control" id="termino" required>
+                              </div>
+                              <div class="mb-3">
+                                  <label for="status" class="form-label">Status</label>
+                                  <select class="form-select" id="status" required>
+                                      <option value="Pendentes">Pendentes</option>
+                                      <option value="Aprovado">Em curso</option>
+                                      <option value="Concluído">Concluído</option>
+                                      <option value="Encerrado">Encerrado</option>
+                                  </select>
+                              </div>
+                          </form>
                       </div>
                       <div class="modal-footer bg-dark text-white">
                           <button type="button" class="btn btn-outline-light " id="btnCriarEstagio">Criar Estágio</button>
@@ -1038,7 +1024,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
       </div>
 
     </main>
-  </div>
   </div>
 
   <!-- Bootstrap e scripts -->
