@@ -598,300 +598,648 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'instituicao'
           <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
 
       <!-- Aba Relatórios -->
-      <div class="tab-pane fade show active" id="relatorios">
-        <div class="d-flex justify-content-between mb-3">
-          <!-- Filtros -->
-          <div>
-            <input type="text" class="form-control bg-light text-dark mb-2" placeholder="Buscar relatório...">
-            <select class="form-select bg-light text-dark" aria-label="Filtrar por categoria">
-              <option selected>Filtrar por categoria</option>
-              <option value="1">Relatório 1</option>
-              <option value="2">Relatório 2</option>
-              <option value="3">Relatório 3</option>
-            </select>
+         <div id="sec-empresa-relatorios" class="secao-ocultavel" style="display: none;">
+         <h3 class="mb-4">
+          <i class="bi bi-bar-chart-line-fill me-2"></i>Relatórios
+        </h3>
+
+          <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
+
+      <!-- Aba Relatórios -->
+
+        <div class="tab-pane fade show active" id="relatorios">
+          <div class="d-flex justify-content-between mb-3">
+            <!-- Filtros -->
+            <div>
+              <input type="text" class="form-control bg-light text-dark mb-2" placeholder="Buscar relatório...">
+              <select class="form-select bg-light text-dark" aria-label="Filtrar por categoria">
+                <option selected>Filtrar por categoria</option>
+                <option value="ativos">Estagiários Ativos</option>
+                <option value="pendentes">Pendentes</option>
+                <option value="curso">Por Curso</option>
+                <option value="periodo">Por Período</option>
+                <option value="empresa">Por Empresa</option>
+                <option value="termino">Com Término Próximo</option>
+                <option value="documentos">Pendência de Documentos</option>
+                <option value="faltas">Faltas / Avaliações</option>
+                <option value="geral">Relatório Geral</option>
+              </select>
+            </div>
+
+            <!-- Botão de Upload -->
+            <div>
+              <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadRelatorioModal">
+                + Novo Relatório
+              </button>
+            </div>
           </div>
 
-          <!-- Botão de Upload -->
-          <div>
-            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadRelatorioModal">+ Novo Relatório</button>
-          </div>
-        </div>
-
-        <!-- Tabela de Relatórios -->
+          <!-- Tabela de Relatórios -->
+          <!-- Tabela de Relatórios Padrão -->
+        <!-- Tabela de Relatórios Padrões -->
         <table class="table table-dark table-bordered">
           <thead>
             <tr>
-              <th scope="col">Nome do Relatório</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">Data de Upload</th>
+              <th scope="col">Relatório</th>
+              <th scope="col">Descrição</th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Relatório Anual 2025.pdf</td>
-              <td>Relatório Financeiro</td>
-              <td>01/05/2025</td>
-              <td>
-                <button class="btn btn-outline-light btn-sm">Visualizar</button>
-                <button class="btn btn-outline-light btn-sm">Excluir</button>
-              </td>
+              <td>Estagiários Ativos</td>
+              <td>Lista de todos os estagiários em atividade</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio1">Preencher</button></td>
             </tr>
             <tr>
-              <td>Relatório de Vagas 2025.pdf</td>
-              <td>Relatório de Vagas</td>
-              <td>02/05/2025</td>
-              <td>
-                <button class="btn btn-outline-light btn-sm">Visualizar</button>
-                <button class="btn btn-outline-light btn-sm">Excluir</button>
-              </td>
+              <td>Estágios Pendentes de Aprovação</td>
+              <td>Estágios que aguardam análise ou assinatura</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio2">Preencher</button></td>
             </tr>
-            <!-- Mais relatórios podem ser listados aqui -->
+            <tr>
+              <td>Estágios por Status</td>
+              <td>Quantidade por status (Em curso, Concluído, etc)</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio3">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estágios por Curso</td>
+              <td>Distribuição dos estágios por curso</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio4">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estágios por Período</td>
+              <td>Turnos dos estágios (Manhã/Tarde/Noite)</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio5">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estágios a Encerrar</td>
+              <td>Estágios com término nos próximos 30 dias</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio6">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estagiários por Empresa</td>
+              <td>Estagiários agrupados por empresa</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio7">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Documentos Pendentes</td>
+              <td>Estagiários que não entregaram documentos</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio8">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Faltas ou Avaliações</td>
+              <td>Relatório de presença ou avaliações</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio9">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Geral de Estágios</td>
+              <td>Resumo completo com filtros</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio10">Preencher</button></td>
+            </tr>
           </tbody>
         </table>
+
+        <!-- Modais para os 10 relatórios -->
+        <div class="modal fade" id="modalRelatorio1" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h5 class="modal-title">Estagiários Ativos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <form action="php/salvar_relatorio.php" method="POST">
+                <div class="modal-body">
+                  <input type="hidden" name="tipo" value="estagiarios_ativos">
+                  <div class="mb-3">
+                    <label class="form-label">Comentário adicional (opcional)</label>
+                    <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- Modal para Relatório 2: Estágios Pendentes -->
+         <div class="modal fade" id="modalRelatorio2" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Estágios Pendentes de Aprovação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
       </div>
-
-           </div>
-
-          <!-- Modal de Upload de Relatório -->
-          <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
+      <form action="php/salvar_relatorio.php" method="POST">
+        <div class="modal-body">
+          <input type="hidden" name="tipo" value="pendentes_aprovacao">
+          <div class="mb-3">
+            <label class="form-label">Comentário adicional (opcional)</label>
+            <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+        </div>
+      </form>
+    </div>
+  </div>
+        </div>
+        <!-- Modal para Relatório 3: Estágios por Status -->
+          <div class="modal fade" id="modalRelatorio3" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content bg-dark text-white">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
+                  <h5 class="modal-title">Estágios por Status</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body">
-                  <form>
+                <form action="php/salvar_relatorio.php" method="POST">
+                  <div class="modal-body">
+                    <input type="hidden" name="tipo" value="estagios_por_status">
                     <div class="mb-3">
-                      <label for="relatorioName" class="form-label">Nome do Relatório</label>
-                      <input type="text" class="form-control bg-light text-dark" id="relatorioName" placeholder="Nome do Relatório">
+                      <label class="form-label">Filtrar por Status (opcional)</label>
+                      <select class="form-select bg-light text-dark" name="status">
+                        <option value="">Todos</option>
+                        <option value="Em curso">Em curso</option>
+                        <option value="Concluído">Concluído</option>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Encerrado">Encerrado</option>
+                        <option value="Pendente">Pendente</option>
+                      </select>
                     </div>
+                  </div>
+        
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- Modal para Relatório 4: Estágios por Curso -->
+          <div class="modal fade" id="modalRelatorio4" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                  <h5 class="modal-title">Estágios por Curso</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <form action="php/salvar_relatorio.php" method="POST">
+                  <div class="modal-body">
+                    <input type="hidden" name="tipo" value="estagios_por_curso">
                     <div class="mb-3">
-                      <label for="relatorioCategory" class="form-label">Categoria</label>
-                      <select class="form-select bg-light text-dark" id="relatorioCategory">
-                        <option selected>Escolha a categoria</option>
-                        <option value="1">Relatório Financeiro</option>
-                        <option value="2">Relatório de Vagas</option>
-                        <option value="3">Relatório de Estágios</option>
+                      <label class="form-label">Filtrar por Curso (opcional)</label>
+                      <select class="form-select bg-light text-dark" name="curso">
+                        <option value="">Todos</option>
+                        <option value="Administração">Administração</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Enfermagem">Enfermagem</option>
+                        <option value="Engenharia">Engenharia</option>
+                        <!-- Adicione outros cursos conforme necessário -->
                       </select>
                     </div>
                     <div class="mb-3">
-                      <label for="relatorioFile" class="form-label">Arquivo</label>
-                      <input type="file" class="form-control bg-light text-dark" id="relatorioFile">
+                      <label class="form-label">Comentário adicional (opcional)</label>
+                      <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea> 
                     </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                  <button type="button" class="btn btn-primary">Salvar Relatório</button>
-                </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
 
+        <!-- Modal para Relatório 5: Estágios por Período -->
+          <div class="modal fade" id="modalRelatorio5" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                  <h5 class="modal-title">Estágios por Período</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <form action="php/salvar_relatorio.php" method="POST">
+                  <div class="modal-body">
+                    <input type="hidden" name="tipo" value="estagios_por_periodo">
+                    <div class="mb-3">
+                      <label class="form-label">Filtrar por Período (opcional)</label>
+                      <select class="form-select bg-light text-dark" name="periodo">
+                        <option value="">Todos</option>
+                        <option value="Manhã">Manhã</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noite">Noite</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Comentário adicional (opcional)</label>
+                      <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- Modal para Relatório 6: Estágios a Encerrar -->
+            <div class="modal fade" id="modalRelatorio6" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Estágios a Encerrar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                  </div>
+                  <form action="php/salvar_relatorio.php" method="POST">
+                    <div class="modal-body">
+                      <input type="hidden" name="tipo" value="estagios_a_encerrar">
+                      <div class="mb-3">
+                        <label class="form-label">Comentário adicional (opcional)</label>
+                        <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Modal para Relatório 9: Faltas ou Avaliações -->
+                <div class="modal fade" id="modalRelatorio9" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content bg-dark text-white">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Faltas ou Avaliações</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="php/salvar_relatorio.php" method="POST">
+                          <input type="hidden" name="tipo" value="faltas_avaliacoes">
+
+                          <!-- Calendário de Faltas -->
+                          <h6 class="text-white">Data(s) de Falta</h6>
+                          <div class="mb-3">
+                            <input type="date" name="faltas[]" class="form-control bg-light text-dark mb-2">
+                            <input type="date" name="faltas[]" class="form-control bg-light text-dark mb-2">
+                            <input type="date" name="faltas[]" class="form-control bg-light text-dark mb-2">
+                          </div>
+
+                          <!-- Avaliação -->
+                          <h6 class="text-white mt-4">Formulário de Avaliação</h6>
+                          <div class="mb-3">
+                            <label class="form-label">Desempenho</label>
+                            <select name="avaliacao_desempenho" class="form-select bg-light text-dark">
+                              <option value="Excelente">Excelente</option>
+                              <option value="Bom">Bom</option>
+                              <option value="Regular">Regular</option>
+                              <option value="Insatisfatório">Insatisfatório</option>
+                            </select>
+                          </div>
+
+                          <div class="mb-3">
+                            <label class="form-label">Assiduidade</label>
+                            <select name="avaliacao_assiduidade" class="form-select bg-light text-dark">
+                              <option value="Ótima">Ótima</option>
+                              <option value="Boa">Boa</option>
+                              <option value="Razoável">Razoável</option>
+                              <option value="Ruim">Ruim</option>
+                            </select>
+                          </div>
+
+                          <div class="mb-3">
+                            <label class="form-label">Comentário adicional (opcional)</label>
+                            <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+                          </div>
+
+                          <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" name="gerar_relatorio" class="btn btn-success">Gerar Relatório de Avaliação</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal para Relatório 10: Geral de Estágios -->
+                    <div class="modal fade" id="modalRelatorio10" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark text-white">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Relatório Geral de Estágios</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                          </div>
+                          <form action="php/salvar_relatorio.php" method="POST">
+                            <div class="modal-body">
+                              <input type="hidden" name="tipo" value="geral_estagios">
+
+                              <!-- Filtro por Curso -->
+                              <div class="mb-3">
+                                <label class="form-label">Curso</label>
+                                <select name="curso" class="form-select bg-light text-dark">
+                                  <option value="">Todos</option>
+                                  <option value="Administração">Administração</option>
+                                  <option value="Informática">Informática</option>
+                                  <option value="Enfermagem">Enfermagem</option>
+                                  <option value="Engenharia">Engenharia</option>
+                                  <!-- Adicione outros cursos conforme necessário -->
+                                </select>
+                              </div>
+
+                              <!-- Filtro por Período -->
+                              <div class="mb-3">
+                                <label class="form-label">Período</label>
+                                <select name="periodo" class="form-select bg-light text-dark">
+                                  <option value="">Todos</option>
+                                  <option value="Manhã">Manhã</option>
+                                  <option value="Tarde">Tarde</option>
+                                  <option value="Noite">Noite</option>
+                                </select>
+                              </div>
+
+                              <!-- Filtro por Status -->
+                              <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select name="status" class="form-select bg-light text-dark">
+                                  <option value="">Todos</option>
+                                  <option value="Em curso">Em curso</option>
+                                  <option value="Concluído">Concluído</option>
+                                  <option value="Aprovado">Aprovado</option>
+                                  <option value="Encerrado">Encerrado</option>
+                                  <option value="Pendente">Pendente</option>
+                                </select>
+                              </div>
+
+                              <div class="mb-3">
+                                <label class="form-label">Comentário adicional (opcional)</label>
+                                <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+
         </div>
+        <!-- Modal de Upload de Relatório -->
+        <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <div class="modal-body">
+              <form action="../php/uploadRelatorio.php" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="relatorioName" class="form-label">Nome do Relatório</label>
+            <input type="text" class="form-control bg-light text-dark" id="relatorioName" name="relatorioName" required>
+          </div>
+          <div class="mb-3">
+            <label for="relatorioCategory" class="form-label">Categoria</label>
+            <select class="form-select bg-light text-dark" id="relatorioCategory" name="relatorioCategory" required>
+              <option selected disabled>Escolha a categoria</option>
+              <option value="Relatório Financeiro">Relatório Financeiro</option>
+              <option value="Relatório de Vagas">Relatório de Vagas</option>
+              <option value="Relatório de Estágios">Relatório de Estágios</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="relatorioFile" class="form-label">Arquivo</label>
+            <input type="file" class="form-control bg-light text-dark" id="relatorioFile" name="relatorioFile" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary">Salvar Relatório</button>
+          </div>
+        </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+
+      </div>
         <!-- seção vagas -->
-        <div id="sec-vagas" class="secao-ocultavel" style="display: none;">
-          <h2><i class="bi bi-megaphone-fill me-2"></i>Vagas</h2> 
-          <!-- Botão Criar Nova Vaga -->
-            <div class="mb-4">
-              <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCriarVaga">Criar Nova Vaga</button>
-            </div> 
-                
-                <!-- Cards de Totais -->
-            <div class="row mb-4">
-              <div class="col-md-6">
-                <div class="card bg-dark text-white">
-                  <div class="card-body">
-                    <h5 class="card-title">Total de Vagas Criadas</h5>
-                    <p class="card-text fs-4" id="totalVagasCriadas">5</p>
-                  </div>
-                </div>
-              </div>
-              <div class="col-md-6">
-                <div class="card bg-dark text-white">
-                  <div class="card-body">
-                    <h5 class="card-title">Vagas Pendentes</h5>
-                    <p class="card-text fs-4" id="vagasPendentes">2</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Tabela de Vagas -->
-            <table class="table table-dark">
-              <thead>
-                <tr>
-                  <th scope="col">Vaga</th>
-                  <th scope="col">Empresa</th>
-                  <th scope="col">Curso</th>
-                  <th scope="col">Tipo</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">Ações</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Desenvolvedor Front-End</td>
-                  <td>Tech Solutions</td>
-                  <td>Ciência da Computação</td>
-                  <td>Estágio</td>
-                  <td class="status-vaga">Pendente</td>
-                  <td>
-                    <button class="btn btn-outline-info btn-editar" data-bs-toggle="modal" data-bs-target="#modalVaga"
-                      data-vaga="Desenvolvedor Front-End" data-empresa="Tech Solutions" data-curso="Ciência da Computação"
-                      data-tipo="Estágio" data-status="Pendente" data-descricao="Vaga para estágio em front-end">
-                      <i class="bi bi-pencil"></i>
-                    </button>
-                  
-                    <button class="btn btn-outline-danger">
-                      <i class="bi bi-trash"></i>
-                    </button>
-                  
-                    <button class="btn btn-outline-success btn-ver" data-bs-toggle="modal" data-bs-target="#modalCandidatos">
-                      <i class="bi bi-eye"></i>
-                    </button>
-                  </td>
-                  
-                </tr>
-              </tbody>
-            </table>
-
-            <!-- Modal de Criar Nova Vaga -->
-            <div class="modal fade" id="modalCriarVaga" tabindex="-1" aria-labelledby="modalCriarVagaLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalCriarVagaLabel">Criar Nova Vaga</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <div class="mb-3">
-                        <label for="inputVaga" class="form-label">Vaga</label>
-                        <input type="text" class="form-control" id="inputVagaNova">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputEmpresa" class="form-label">Empresa</label>
-                        <input type="text" class="form-control" id="inputEmpresaNova">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputCurso" class="form-label">Curso</label>
-                        <input type="text" class="form-control" id="inputCursoNova">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputTipo" class="form-label">Tipo</label>
-                        <input type="text" class="form-control" id="inputTipoNova">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputStatus" class="form-label">Status</label>
-                        <input type="text" class="form-control" id="inputStatusNova">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputDescricao" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="inputDescricaoNova" rows="3"></textarea>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary" id="salvarNovaVaga">Salvar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-
-            <!-- Modal de Edição de Vaga -->
-            <div class="modal fade" id="modalVaga" tabindex="-1" aria-labelledby="modalVagaLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalVagaLabel">Editar Vaga</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <div class="mb-3">
-                        <label for="inputVaga" class="form-label">Vaga</label>
-                        <input type="text" class="form-control" id="inputVaga">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputEmpresa" class="form-label">Empresa</label>
-                        <input type="text" class="form-control" id="inputEmpresa">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputCurso" class="form-label">Curso</label>
-                        <input type="text" class="form-control" id="inputCurso">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputTipo" class="form-label">Tipo</label>
-                        <input type="text" class="form-control" id="inputTipo">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputStatus" class="form-label">Status</label>
-                        <input type="text" class="form-control" id="inputStatus">
-                      </div>
-                      <div class="mb-3">
-                        <label for="inputDescricao" class="form-label">Descrição</label>
-                        <textarea class="form-control" id="inputDescricao" rows="3"></textarea>
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Salvar</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Modal de Visualização de Candidatos -->
-            <div class="modal fade" id="modalCandidatos" tabindex="-1" aria-labelledby="modalCandidatosLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalCandidatosLabel">Candidatos</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                  </div>
-                  <div class="modal-body">
-                    <table class="table table-dark">
-                      <thead>
-                        <tr>
-                          <th scope="col">Nome</th>
-                          <th scope="col">Curso</th>
-                          <th scope="col">Status</th>
-                        </tr>
-                      </thead>
-                      <tbody id="listaCandidatos">
-                        <!-- Candidatos Dinâmicos -->
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Modal de Confirmação de Exclusão -->
-            <div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-labelledby="modalConfirmarExclusaoLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalConfirmarExclusaoLabel">Confirmar Exclusão</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                  </div>
-                  <div class="modal-body">
-                    Tem certeza que deseja excluir esta vaga?
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                    <button type="button" class="btn btn-danger" id="confirmarExclusao">Excluir</button>
-                  </div>
-                </div>
-              </div>
+         <div id="sec-empresa-vagas" class="secao-ocultavel" style="display: none;">
+        <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
+         <div class="mb-4">
+        <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCriarVaga">Criar Nova Vaga</button>
+         </div> 
+          
+          <!-- Cards de Totais -->
+     <div class="row">
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <h5 class="card-title">Total de Vagas</h5>
+                <p class="card-text fs-2">
+                    <?php include_once '../php/cardTotalVagas.php'; ?>
+                </p>
             </div>
         </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card bg-dark text-white">
+            <div class="card-body">
+                <h5 class="card-title">Vagas Pendentes</h5>
+                <p class="card-text fs-2">
+                    <?php include_once '../php/cardVagasPendentes.php'; ?>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+      <!-- Tabela de Vagas -->
+      <table class="table table-dark">
+        <thead>
+          <tr>
+            <th scope="col">Vaga</th>
+            <th scope="col">Empresa</th>
+            <th scope="col">Curso</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Status</th>
+            <th scope="col">Ações</th>
+          </tr>
+        </thead>
+       <tbody>
+        <?php include_once '../php/tabelaVagas.php'; ?>
+    </tbody>
+
+      </table>
+
+      <!-- Modal de Criar Nova Vaga -->
+      <div class="modal fade" id="modalCriarVaga" tabindex="-1" aria-labelledby="modalCriarVagaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalCriarVagaLabel">Criar Nova Vaga</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              <form action="../php/cadastrarVagas.php" method="POST">
+                <div class="mb-3">
+                    <label for="inputTitulo" class="form-label">Título da Vaga</label>
+                    <input type="text" class="form-control" id="inputTitulo" name="titulo" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputCurso" class="form-label">Curso</label>
+                    <input type="text" class="form-control" id="inputCurso" name="curso" required>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputTipo" class="form-label">Tipo</label>
+                    <select class="form-control" id="inputTurno" name="tipo" required>
+                        <option value="">Selecione</option>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Remoto">Remoto</option>
+                        <option value="Hibrido">Hibrido</option>
+                    </select>  
+                </div>             
+         
+
+                <div class="mb-3">
+                    <label for="inputTurno" class="form-label">Turno</label>
+                    <select class="form-control" id="inputTurno" name="turno" required>
+                    <option value="">Selecione</option>
+                    <option value="Manhã">Manhã</option>
+                    <option value="Tarde">Tarde</option>
+                    <option value="Noite">Noite</option>
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputDescricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="inputDescricao" name="descricao" rows="3" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="inputRequisitos" class="form-label">Requisitos</label>
+                    <textarea class="form-control" id="inputRequisitos" name="requisitos" rows="3" required></textarea>
+                </div>
+
+                <!-- Status pode ser fixo no PHP como "ativa", então não precisa ser preenchido no formulário. -->
+
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Criar Vaga</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                </div>
+              </form>
+
+            </div>
+        </div>
+      </div>
+
+
+      <!-- Modal de Edição de Vaga -->
+      <div class="modal fade" id="modalVaga" tabindex="-1" aria-labelledby="modalVagaLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalVagaLabel">Editar Vaga</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+             <form action="editarVagas.php" method="POST">
+                  <div class="mb-3">
+                    <label for="inputTitulo" class="form-label">Vaga</label>
+                    <input type="text" class="form-control" id="inputTitulo" name="titulo" value="<?= htmlspecialchars($vaga['titulo']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputDescricao" class="form-label">Descrição</label>
+                    <textarea class="form-control" id="inputDescricao" rows="3" name="descricao"><?= htmlspecialchars($vaga['descricao']) ?></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputRequisitos" class="form-label">Requisitos</label>
+                    <textarea class="form-control" id="inputRequisitos" rows="3" name="requisitos"><?= htmlspecialchars($vaga['requisitos']) ?></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputCurso" class="form-label">Curso</label>
+                    <input type="text" class="form-control" id="inputCurso" name="curso" value="<?= htmlspecialchars($vaga['curso']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputTurno" class="form-label">Turno</label>
+                    <input type="text" class="form-control" id="inputTurno" name="turno" value="<?= htmlspecialchars($vaga['turno']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputTipo" class="form-label">Tipo</label>
+                    <input type="text" class="form-control" id="inputTipo" name="tipo" value="<?= htmlspecialchars($vaga['tipo']) ?>">
+                  </div>
+                  <div class="mb-3">
+                    <label for="inputStatus" class="form-label">Status</label>
+                    <input type="text" class="form-control" id="inputStatus" name="status" value="<?= htmlspecialchars($vaga['status']) ?>">
+                  </div>
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+              </form>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+              <button type="button" class="btn btn-primary">Salvar</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Visualização de Candidatos -->
+      <div class="modal fade" id="modalCandidatos" tabindex="-1" aria-labelledby="modalCandidatosLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalCandidatosLabel">Candidatos</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              <table class="table table-dark">
+                <thead>
+                  <tr>
+                    <th scope="col">Nome</th>
+                    <th scope="col">Curso</th>
+                    <th scope="col">Status</th>
+                  </tr>
+                </thead>
+                <tbody id="listaCandidatos">
+                  <!-- Candidatos Dinâmicos -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal de Confirmação de Exclusão -->
+      <div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-labelledby="modalConfirmarExclusaoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content bg-dark text-white">
+            <div class="modal-header">
+              <h5 class="modal-title" id="modalConfirmarExclusaoLabel">Confirmar Exclusão</h5>
+              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+            </div>
+            <div class="modal-body">
+              Tem certeza que deseja excluir esta vaga?
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+              <button type="button" class="btn btn-danger" id="confirmarExclusao">Excluir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+     </div> 
         <!-- seção usuários -->
         <div id="sec-usuarios" class="secao-ocultavel" style="display: none;">
            <h2> <i class="bi bi-person-gear me-2"></i>Usuário</h2>
@@ -1063,128 +1411,158 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'instituicao'
         </div>
           
         <!-- seção mensagens -->
-        <div id="sec-mensagens" class="secao-ocultavel" style="display: none;">
-          <div class="container mt-4">
-            <h3 class="mb-4"><i class="bi bi-chat-dots-fill me-2"></i> MensagensMensagens</h3>
+          <!-- Seção de Mensagens -->
+           <?php
+            session_start();
+            include 'backend/listar_mensagens.php'; 
+            // listar_mensagens.php deve definir $mensagens = array com mensagens do usuário logado
+
+            // Exemplo de listar_mensagens.php (simplificado):
+            // $usuario_id = $_SESSION['id'] ?? 1;
+            // $stmt = $conn->prepare("SELECT m.id, u.email AS remetente, m.assunto, m.data_envio, m.mensagem FROM mensagens m JOIN usuarios u ON m.remetente_id = u.id WHERE m.destinatario_id = ? ORDER BY m.data_envio DESC");
+            // $stmt->bind_param("i", $usuario_id);
+            // $stmt->execute();
+            // $result = $stmt->get_result();
+            // $mensagens = $result->fetch_all(MYSQLI_ASSOC);
+            ?>
+      <div class="container mt-4">
+        <h3 class="mb-4">
+          <i class="bi bi-chat-left-text-fill me-2"></i>Mensagens
+        </h3>
+        <button class="btn btn-dark mb-3" onclick="toggleSection('sec-empresa-mensagens')">Gerenciar Mensagens</button>
+      </div>
+
+      <div id="sec-empresa-mensagens" class="secao-ocultavel" style="display: none;">
+        <div class="container mt-4">
+
+          <!-- Conteúdo das abas -->
+          <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
+            <h3 class="mb-4 text-white">
+              <i class="bi bi-envelope-fill me-2"></i>Mensagens
+            </h3>
 
             <!-- Abas -->
-            <ul class="nav nav-tabs" id="mensagemTab" role="tablist">
-              <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entrada">Caixa de Entrada</button>
+            <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
+              <li class="nav-item bg-light text-dark" role="presentation">
+                <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada" type="button" role="tab" aria-controls="entrada" aria-selected="true">Caixa de Entrada</button>
               </li>
-              <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nova">Nova Mensagem</button>
+              <li class="nav-item bg-light text-dark ms-2" role="presentation">
+                <button class="nav-link" id="nova-tab" data-bs-toggle="tab" data-bs-target="#nova" type="button" role="tab" aria-controls="nova" aria-selected="false">Nova Mensagem</button>
               </li>
             </ul>
 
-        <!-- Conteúdo das abas -->
-            <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
-              
-              <!-- Caixa de Entrada -->
-              <div class="tab-pane fade show active" id="entrada">
-                <div class="d-flex mb-3 gap-2">
-                  <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
-                  <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
-                    <option value="todos">Todos</option>
-                    <option value="aluno">Alunos</option>
-                    <option value="empresa">Empresas</option>
-                  </select>
-                </div>
+            <!-- Caixa de Entrada -->
+            <div class="tab-pane fade show active" id="entrada" role="tabpanel" aria-labelledby="entrada-tab">
+              <div class="d-flex mb-3 gap-2">
+                <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
+                <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
+                  <option value="todos">Todos</option>
+                  <option value="aluno">Alunos</option>
+                  <option value="empresa">Empresas</option>
+                </select>
+              </div>
 
-                <!-- Lista de mensagens -->
-                <div class="list-group" id="listaMensagens">
-                  <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida" 
-                          data-remetente="aluno" 
-                          data-bs-toggle="modal" 
-                          data-bs-target="#modalMensagem1" 
-                          onclick="marcarComoLida(this)">
-                    <strong>📧 Assunto:</strong> Atualização de Dados<br>
-                    <small>De: aluno@email.com | 13/05/2025</small>
+              <!-- Lista de mensagens -->
+              <div class="list-group" id="listaMensagens">
+                <?php foreach ($mensagens as $msg): ?>
+                  <button type="button" class="list-group-item list-group-item-action bg-dark text-white border-bottom" data-bs-toggle="modal" data-bs-target="#modalMensagem<?= $msg['id'] ?>">
+                    <strong>📧 <?= htmlspecialchars($msg['assunto']) ?></strong><br>
+                    <small>De: <?= htmlspecialchars($msg['remetente']) ?> | <?= date('d/m/Y H:i', strtotime($msg['data_envio'])) ?></small>
                   </button>
-
-                  <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem" 
-                          data-remetente="empresa" 
-                          data-bs-toggle="modal" 
-                          data-bs-target="#modalMensagem2" 
-                          onclick="marcarComoLida(this)">
-                    <strong>📧 Assunto:</strong> Nova vaga disponível<br>
-                    <small>De: empresa@corp.com | 12/05/2025</small>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Nova Mensagem -->
-              <div class="tab-pane fade" id="nova">
-                <form>
-                  <div class="mb-3">
-                    <label for="remetente" class="form-label">Seu E-mail</label>
-                    <input type="email" class="form-control bg-light text-dark" id="remetente" placeholder="seu@email.com">
-                  </div>
-                  <div class="mb-3">
-                    <label for="assunto" class="form-label">Assunto</label>
-                    <input type="text" class="form-control bg-light text-dark" id="assunto" placeholder="Assunto da mensagem">
-                  </div>
-                  <div class="mb-3">
-                    <label for="mensagem" class="form-label">Mensagem</label>
-                    <textarea class="form-control bg-light text-dark" id="mensagem" rows="5" placeholder="Escreva sua mensagem aqui..."></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-success">Enviar</button>
-                </form>
-              </div>
-            </div>
-           </div>
-
-      <!-- MODAL MENSAGEM 1 -->
-            <div class="modal fade" id="modalMensagem1" tabindex="-1" aria-labelledby="modalMensagem1Label" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalMensagem1Label">Assunto: Atualização de Dados</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p><strong>Remetente:</strong> aluno@email.com</p>
-                    <p><strong>Data:</strong> 13/05/2025</p>
-                    <hr>
-                    <p>Prezados, gostaria de atualizar meus dados cadastrais conforme solicitado.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta1">Responder</button>
-                  </div>
-                  <div class="collapse p-3" id="resposta1">
-                    <textarea class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..."></textarea>
-                    <button class="btn btn-success">Enviar Resposta</button>
-                  </div>
-                </div>
+                <?php endforeach; ?>
               </div>
             </div>
 
-      <!-- MODAL MENSAGEM 2 -->
-            <div class="modal fade" id="modalMensagem2" tabindex="-1" aria-labelledby="modalMensagem2Label" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalMensagem2Label">Assunto: Nova vaga disponível</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p><strong>Remetente:</strong> empresa@corp.com</p>
-                    <p><strong>Data:</strong> 12/05/2025</p>
-                    <hr>
-                    <p>Estamos disponibilizando uma nova vaga de estágio em nossa empresa. Seguem os detalhes no anexo.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta2">Responder</button>
-                  </div>
-                  <div class="collapse p-3" id="resposta2">
-                    <textarea class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..."></textarea>
-                    <button class="btn btn-success">Enviar Resposta</button>
-                  </div>
+            <!-- Nova Mensagem -->
+            <div class="tab-pane fade text-white" id="nova" role="tabpanel" aria-labelledby="nova-tab">
+              <form method="POST" action="backend/enviar_mensagem.php" enctype="multipart/form-data" novalidate>
+                <div class="mb-3">
+                  <label for="remetente" class="form-label">Seu E-mail</label>
+                  <input 
+                    type="email" 
+                    name="remetente" 
+                    class="form-control bg-light text-dark" 
+                    id="remetente" 
+                    placeholder="seu@email.com"
+                    value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
+                    readonly
+                    required>
                 </div>
-              </div>
+                <div class="mb-3">
+                  <label for="destinatario" class="form-label">Destinatário</label>
+                  <input 
+                    type="email" 
+                    name="destinatario" 
+                    class="form-control bg-light text-dark" 
+                    id="destinatario" 
+                    placeholder="E-mail do destinatário"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="assunto" class="form-label">Assunto</label>
+                  <input 
+                    type="text" 
+                    name="assunto" 
+                    class="form-control bg-light text-dark" 
+                    id="assunto" 
+                    placeholder="Assunto da mensagem"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="mensagem" class="form-label">Mensagem</label>
+                  <textarea 
+                    name="mensagem" 
+                    class="form-control bg-light text-dark" 
+                    id="mensagem" 
+                    rows="5" 
+                    placeholder="Escreva sua mensagem aqui..."
+                    required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="anexo" class="form-label">Anexo</label>
+                  <input type="file" name="anexo" id="anexo" class="form-control bg-light text-dark">
+                </div>
+                <button type="submit" class="btn btn-success">Enviar</button>
+              </form>
             </div>
-
+          </div>
         </div>
+
+        <!-- MODAIS MENSAGENS -->
+        <?php foreach ($mensagens as $mensagem): ?>
+          <div class="modal fade" id="modalMensagem<?= $mensagem['id'] ?>" tabindex="-1" aria-labelledby="modalMensagem<?= $mensagem['id'] ?>Label" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+              <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalMensagem<?= $mensagem['id'] ?>Label">
+                    Assunto: <?= htmlspecialchars($mensagem['assunto']) ?>
+                  </h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                  <p><strong>Remetente:</strong> <?= htmlspecialchars($mensagem['remetente']) ?></p>
+                  <p><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($mensagem['data_envio'])) ?></p>
+                  <hr>
+                  <p><?= nl2br(htmlspecialchars($mensagem['mensagem'])) ?></p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta<?= $mensagem['id'] ?>" aria-expanded="false" aria-controls="resposta<?= $mensagem['id'] ?>">
+                    Responder
+                  </button>
+                </div>
+                <div class="collapse p-3" id="resposta<?= $mensagem['id'] ?>">
+                  <form action="backend/responder_mensagem.php" method="POST" novalidate>
+                    <input type="hidden" name="mensagem_id" value="<?= $mensagem['id'] ?>">
+                    <input type="hidden" name="remetente" value="<?= htmlspecialchars($_SESSION['email'] ?? 'empresa@email.com') ?>">
+                    <textarea name="resposta" class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..." required></textarea>
+                    <button type="submit" class="btn btn-success">Enviar Resposta</button>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        <?php endforeach; ?>
+      </div>
       
         <!-- seção documentos -->
         <div id="sec-documentos" class="secao-ocultavel" style="display: none;">

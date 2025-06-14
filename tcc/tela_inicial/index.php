@@ -1,6 +1,18 @@
 <?php
 session_start();
 ?>
+<?php
+$busca = $_GET['busca'] ?? '';
+
+if (!empty($busca)) {
+    $sql .= " AND (titulo LIKE ? OR empresa LIKE ? OR localidade LIKE ?)";
+    $param[] = "%$busca%";
+    $param[] = "%$busca%";
+    $param[] = "%$busca%";
+    $types .= 'sss';
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -51,11 +63,11 @@ session_start();
                   A melhor plataforma de estagio da atualidade
                 </p>
   
-                <form class="mt-4 mb-4">
+            <form action="vagas.php" method="GET" class="mt-4 mb-4">
                   <div class="input-group input-group-lg">
                     <input type="text" placeholder="Encontre sua vaga de estágio" class="form-control">
                     <div class="input-group-append">
-                      <button onclick="vagas()"  type="button" class="btn btn-primary">Pesquisar</button>
+                      <button type="Submit" class="btn btn-primary">Pesquisar</button>
                     </div>
                   </div>
                 </form>
@@ -89,8 +101,11 @@ session_start();
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <!-- Pode adicionar imagem aqui se quiser -->
-            </div>
+                <div class="embed-responsive embed-responsive-16by9">
+                  <iframe class="embed-responsive-item" src="../img/videoConectme.mp4" allowfullscreen></iframe>
+                </div>
+              </div>
+
         </div>
     </section>
     

@@ -1,0 +1,144 @@
+<?php
+require 'vendor/autoload.php'; // DomPDF
+
+use Dompdf\Dompdf;
+use Dompdf\Options;
+
+ include 'db.php';
+
+// Pega o ID da candidatura pela URL
+$candidatura_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
+if ($candidatura_id <= 0) {
+    die("ID de candidatura inválido.");
+}
+
+// Consulta SQL
+$sql = "SELECT 
+            contratos.inicio,
+            contratos.termino,
+            contratos.carga_horaria,
+            contratos.valor_bolsa,
+            contratos.status AS status_contrato,
+            contratos.data_criacao,
+
+            alunos.nome AS nome_aluno,
+            alunos.data_nascimento,
+            alunos.cpf,
+            alunos.email AS email_aluno,
+            alunos.telefone AS telefone_aluno,
+
+            empresa.nome AS nome_empresa,
+            empresa.cnpj,
+            empresa.endereco,
+            empresa.email AS email_empresa,
+            empresa.telefone AS telefone_empresa,
+            empresa.responsavel,
+
+            instituicoes.nome AS nome_instituicao,
+            instituicoes.cnpj AS cnpj_instituicao,
+            instituicoes.endereco AS endereco_instituicao,
+            instituicoes.telefone AS telefone_instituicao,
+            instituicoes.email AS email_instituicao
+
+        FROM contratos
+        INNER JOIN candidaturas ON contratos.candidatura_id = candidaturas.id
+        INNER JOIN alunos ON candidaturas.aluno_id = alunos.id
+        INNER JOIN empresa ON candidaturas.vaga_id = empresa.id
+        INNER JOIN instituicoes ON candidaturas.instituicao_id = instituicoes.id
+        WHERE contratos.candidatura_id = ?";
+
+
+// Prepare e execute
+$stmt = $mysqli->prepare($sql);
+$stmt->bind_param('i', $candidatura_id);
+$stmt->execute();
+$result = $stmt->get_result();
+$dados = $result->fetch_assoc();
+
+if (!$dados) {
+    die("Dados do contrato não encontrados.");
+}
+
+// HTML do contrato
+ob_start();
+?>
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrato de Estágio</title>
+    <style>
+        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
+        .logo { text-align: center; margin-bottom: 20px; }
+        .section { margin-bottom: 20px; }
+        .assinaturas { margin-top: 50px; text-align: center; }
+        .assinaturas div { margin-top: 40px; }
+    </style>
+</head>
+<body>
+
+<div class="logo">
+    <img src="../img/logo.png" alt="Logo do Site" width="150">
+</div>
+
+<h2 style="text-align:center;">Contrato de Estágio</h2>
+
+<div class="section">
+    <strong>Empresa Concedente:</strong><br>
+    Nome: <?= $dados['nome_empresa'] ?><br>
+    CNPJ: <?= $dados['cnpj'] ?><br>
+    Endereço: <?= $dados['endereco'] ?><br>
+    Telefone: <?= $dados['telefone_empresa'] ?><br>
+    Responsável: <?= $dados['responsavel'] ?>
+</div>
+
+<div class="section">
+    <strong>Estagiário:</strong><br>
+    Nome: <?= $dados['nome_aluno'] ?><br>
+    Nascimento: <?= date('d/m/Y', strtotime($dados['data_nascimento'])) ?><br>
+    CPF: <?= $dados['cpf'] ?><br>
+    E-mail: <?= $dados['email_aluno'] ?><br>
+    Telefone: <?= $dados['telefone_aluno'] ?>
+</div>
+<div class="section">
+    <strong>Instituição de Ensino:</strong><br>
+    Nome: <?= $dados['nome_instituicao'] ?><br>
+    CNPJ: <?= $dados['cnpj_instituicao'] ?><br>
+    Endereço: <?= $dados['endereco_instituicao'] ?><br>
+    Telefone: <?= $dados['telefone_instituicao'] ?><br>
+    E-mail: <?= $dados['email_instituicao'] ?>
+</div>
+
+<div class="section">
+    <strong>Detalhes do Estágio:</strong><br>
+    Início: <?= date('d/m/Y', strtotime($dados['inicio'])) ?><br>
+    Término: <?= date('d/m/Y', strtotime($dados['termino'])) ?><br>
+    Carga Horária: <?= $dados['carga_horaria'] ?> horas/semana<br>
+    Bolsa: R$ <?= number_format($dados['valor_bolsa'], 2, ',', '.') ?>
+</div>
+
+<div class="section">
+    Este contrato é firmado entre as partes acima, com vigência conforme datas estabelecidas e seguindo as normas da Lei do Estágio (Lei nº 11.788/2008).
+</div>
+
+<div class="assinaturas">
+    <div>_______________________________________<br>Estagiário</div>
+    <div>_______________________________________<br>Empresa</div>
+    <div>_______________________________________<br>Instituição de Ensino</div>
+</div>
+
+</body>
+</html>
+<?php
+$html = ob_get_clean();
+
+// Gera o PDF com DomPDF
+$options = new Options();
+$options->set('defaultFont', 'DejaVu Sans');
+$dompdf = new Dompdf($options);
+$dompdf->loadHtml($html);
+$dompdf->setPaper('A4', 'portrait');
+$dompdf->render();
+
+// Exibe ou salva
+$dompdf->stream("contrato_estagio.pdf", ["Attachment" => false]);

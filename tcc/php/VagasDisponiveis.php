@@ -2,51 +2,65 @@
 include_once 'db.php';
 
 $filtro_curso = $_GET['curso'] ?? '';
-$filtro_turno = $_GET['turno'] ?? '';
+$filtro_localidade = $_GET['localidade'] ?? '';
 $filtro_tipo = $_GET['tipo'] ?? '';
 $busca = $_GET['busca'] ?? '';
 
-//Seleciona todas as vagas com status = 'ativa'.
-//$param: Array que armazenará os valores dos filtros.
-//$types: String que define os tipos dos parâmetros (todos s = string).
+// SQL base
 $sql = "SELECT * FROM vagas WHERE status = 'ativa'";
 $param = [];
 $types = '';
 
-// Filtros
+// Filtros dinâmicos
 if (!empty($filtro_curso)) {
     $sql .= " AND curso = ?";
     $param[] = $filtro_curso;
     $types .= 's';
 }
-if (!empty($filtro_turno)) {
-    $sql .= " AND turno = ?";
-    $param[] = $filtro_turno;
+
+if (!empty($filtro_localidade)) {
+    $sql .= " AND localidade = ?";
+    $param[] = $filtro_localidade;
     $types .= 's';
 }
+
 if (!empty($filtro_tipo)) {
     $sql .= " AND tipo = ?";
     $param[] = $filtro_tipo;
     $types .= 's';
 }
+
 if (!empty($busca)) {
-    //LIKE permite buscar por texto parcial no título
-    $sql .= " AND titulo LIKE ?";
-    $param[] = "%" . $busca . "%";
-    $types .= 's';
+    $sql .= " AND (titulo LIKE ? OR empresa LIKE ? OR localidade LIKE ?)";
+    $param[] = "%$busca%";
+    $param[] = "%$busca%";
+    $param[] = "%$busca%";
+    $types .= 'sss';
 }
 
+$sql .= " ORDER BY data_criacao DESC";
+
+// Prepara a query
 $stmt = $conn->prepare($sql);
 
-// Bind dinâmico
+// ⚠️ Verifica se o prepare deu certo
+if (!$stmt) {
+    die("Erro na preparação da consulta: " . $conn->error);
+}
+
+// Se houver parâmetros, faz o bind
 if ($param) {
     $stmt->bind_param($types, ...$param);
 }
 
-$stmt->execute();
+// Executa e trata erros na execução
+if (!$stmt->execute()) {
+    die("Erro na execução da consulta: " . $stmt->error);
+}
+
 $result = $stmt->get_result();
 
-if ($result->num_rows > 0) {
+if ($result && $result->num_rows > 0) {
     while ($vaga = $result->fetch_assoc()) {
         echo '<div class="col-md-6 mb-4">';
         echo '  <div class="card-dark p-3 bg-dark text-white">';

@@ -618,127 +618,158 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
 
           
           <!-- Mensagens -->
-          <div id="mensagens" class="content-section">
-             <div class="container mt-4 ">
-            <h3 class="mb-4"><i class="bi bi-chat-dots-fill me-2"></i> Mensagens</h3>
+         <!-- Seção de Mensagens -->
+           <?php
+            session_start();
+            include '../php/listar_mensagens.php'; 
+            // listar_mensagens.php deve definir $mensagens = array com mensagens do usuário logado
+
+            // Exemplo de listar_mensagens.php (simplificado):
+            // $usuario_id = $_SESSION['id'] ?? 1;
+            // $stmt = $conn->prepare("SELECT m.id, u.email AS remetente, m.assunto, m.data_envio, m.mensagem FROM mensagens m JOIN usuarios u ON m.remetente_id = u.id WHERE m.destinatario_id = ? ORDER BY m.data_envio DESC");
+            // $stmt->bind_param("i", $usuario_id);
+            // $stmt->execute();
+            // $result = $stmt->get_result();
+            // $mensagens = $result->fetch_all(MYSQLI_ASSOC);
+            ?>
+      <div class="container mt-4">
+        <h3 class="mb-4">
+          <i class="bi bi-chat-left-text-fill me-2"></i>Mensagens
+        </h3>
+        <button class="btn btn-dark mb-3" onclick="toggleSection('sec-empresa-mensagens')">Gerenciar Mensagens</button>
+      </div>
+
+      <div id="sec-empresa-mensagens" class="secao-ocultavel" style="display: none;">
+        <div class="container mt-4">
+
+          <!-- Conteúdo das abas -->
+          <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
+            <h3 class="mb-4 text-white">
+              <i class="bi bi-envelope-fill me-2"></i>Mensagens
+            </h3>
 
             <!-- Abas -->
-            <ul class="nav nav-tabs bg-dark text-white" id="mensagemTab" role="tablist">
-              <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entrada">Caixa de Entrada</button>
+            <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
+              <li class="nav-item bg-light text-dark" role="presentation">
+                <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada" type="button" role="tab" aria-controls="entrada" aria-selected="true">Caixa de Entrada</button>
               </li>
-              <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nova">Nova Mensagem</button>
+              <li class="nav-item bg-light text-dark ms-2" role="presentation">
+                <button class="nav-link" id="nova-tab" data-bs-toggle="tab" data-bs-target="#nova" type="button" role="tab" aria-controls="nova" aria-selected="false">Nova Mensagem</button>
               </li>
             </ul>
 
-        <!-- Conteúdo das abas -->
-            <div class="tab-content bg-dark text-white p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
-              
-              <!-- Caixa de Entrada -->
-              <div class="tab-pane fade show active" id="entrada">
-                <div class="d-flex mb-3 gap-2">
-                  <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
-                  <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
-                    <option value="todos">Todos</option>
-                    <option value="aluno">Alunos</option>
-                    <option value="empresa">Empresas</option>
-                  </select>
-                </div>
+            <!-- Caixa de Entrada -->
+            <div class="tab-pane fade show active" id="entrada" role="tabpanel" aria-labelledby="entrada-tab">
+              <div class="d-flex mb-3 gap-2">
+                <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
+                <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
+                  <option value="todos">Todos</option>
+                  <option value="aluno">Alunos</option>
+                  <option value="empresa">Empresas</option>
+                </select>
+              </div>
 
-                <!-- Lista de mensagens -->
-                <div class="list-group" id="listaMensagens">
-                  <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida" 
-                          data-remetente="aluno" 
-                          data-bs-toggle="modal" 
-                          data-bs-target="#modalMensagem1" 
-                          onclick="marcarComoLida(this)">
-                    <strong>📧 Assunto:</strong> Atualização de Dados<br>
-                    <small>De: aluno@email.com | 13/05/2025</small>
+              <!-- Lista de mensagens -->
+              <div class="list-group" id="listaMensagens">
+                <?php foreach ($mensagens as $msg): ?>
+                  <button type="button" class="list-group-item list-group-item-action bg-dark text-white border-bottom" data-bs-toggle="modal" data-bs-target="#modalMensagem<?= $msg['id'] ?>">
+                    <strong>📧 <?= htmlspecialchars($msg['assunto']) ?></strong><br>
+                    <small>De: <?= htmlspecialchars($msg['remetente']) ?> | <?= date('d/m/Y H:i', strtotime($msg['data_envio'])) ?></small>
                   </button>
+                <?php endforeach; ?>
+              </div>
+            </div>
 
-                  <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem" 
-                          data-remetente="empresa" 
-                          data-bs-toggle="modal" 
-                          data-bs-target="#modalMensagem2" 
-                          onclick="marcarComoLida(this)">
-                    <strong>📧 Assunto:</strong> Nova vaga disponível<br>
-                    <small>De: empresa@corp.com | 12/05/2025</small>
+            <!-- Nova Mensagem -->
+            <div class="tab-pane fade text-white" id="nova" role="tabpanel" aria-labelledby="nova-tab">
+              <form method="POST" action="backend/enviar_mensagem.php" enctype="multipart/form-data" novalidate>
+                <div class="mb-3">
+                  <label for="remetente" class="form-label">Seu E-mail</label>
+                  <input 
+                    type="email" 
+                    name="remetente" 
+                    class="form-control bg-light text-dark" 
+                    id="remetente" 
+                    placeholder="seu@email.com"
+                    value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
+                    readonly
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="destinatario" class="form-label">Destinatário</label>
+                  <input 
+                    type="email" 
+                    name="destinatario" 
+                    class="form-control bg-light text-dark" 
+                    id="destinatario" 
+                    placeholder="E-mail do destinatário"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="assunto" class="form-label">Assunto</label>
+                  <input 
+                    type="text" 
+                    name="assunto" 
+                    class="form-control bg-light text-dark" 
+                    id="assunto" 
+                    placeholder="Assunto da mensagem"
+                    required>
+                </div>
+                <div class="mb-3">
+                  <label for="mensagem" class="form-label">Mensagem</label>
+                  <textarea 
+                    name="mensagem" 
+                    class="form-control bg-light text-dark" 
+                    id="mensagem" 
+                    rows="5" 
+                    placeholder="Escreva sua mensagem aqui..."
+                    required></textarea>
+                </div>
+                <div class="mb-3">
+                  <label for="anexo" class="form-label">Anexo</label>
+                  <input type="file" name="anexo" id="anexo" class="form-control bg-light text-dark">
+                </div>
+                <button type="submit" class="btn btn-success">Enviar</button>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <!-- MODAIS MENSAGENS -->
+        <?php foreach ($mensagens as $mensagem): ?>
+          <div class="modal fade" id="modalMensagem<?= $mensagem['id'] ?>" tabindex="-1" aria-labelledby="modalMensagem<?= $mensagem['id'] ?>Label" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-scrollable">
+              <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="modalMensagem<?= $mensagem['id'] ?>Label">
+                    Assunto: <?= htmlspecialchars($mensagem['assunto']) ?>
+                  </h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                  <p><strong>Remetente:</strong> <?= htmlspecialchars($mensagem['remetente']) ?></p>
+                  <p><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($mensagem['data_envio'])) ?></p>
+                  <hr>
+                  <p><?= nl2br(htmlspecialchars($mensagem['mensagem'])) ?></p>
+                </div>
+                <div class="modal-footer">
+                  <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta<?= $mensagem['id'] ?>" aria-expanded="false" aria-controls="resposta<?= $mensagem['id'] ?>">
+                    Responder
                   </button>
                 </div>
-              </div>
-
-              <!-- Nova Mensagem -->
-              <div class="tab-pane fade" id="nova">
-                <form>
-                  <div class="mb-3">
-                    <label for="remetente" class="form-label">Seu E-mail</label>
-                    <input type="email" class="form-control bg-light text-dark" id="remetente" placeholder="seu@email.com">
-                  </div>
-                  <div class="mb-3">
-                    <label for="assunto" class="form-label">Assunto</label>
-                    <input type="text" class="form-control bg-light text-dark" id="assunto" placeholder="Assunto da mensagem">
-                  </div>
-                  <div class="mb-3">
-                    <label for="mensagem" class="form-label">Mensagem</label>
-                    <textarea class="form-control bg-light text-dark" id="mensagem" rows="5" placeholder="Escreva sua mensagem aqui..."></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-success">Enviar</button>
-                </form>
-              </div>
-            </div>
-            </div>
-
-      <!-- MODAL MENSAGEM 1 -->
-            <div class="modal fade" id="modalMensagem1" tabindex="-1" aria-labelledby="modalMensagem1Label" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalMensagem1Label">Assunto: Atualização de Dados</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p><strong>Remetente:</strong> aluno@email.com</p>
-                    <p><strong>Data:</strong> 13/05/2025</p>
-                    <hr>
-                    <p>Prezados, gostaria de atualizar meus dados cadastrais conforme solicitado.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta1">Responder</button>
-                  </div>
-                  <div class="collapse p-3" id="resposta1">
-                    <textarea class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..."></textarea>
-                    <button class="btn btn-success">Enviar Resposta</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-      <!-- MODAL MENSAGEM 2 -->
-            <div class="modal fade" id="modalMensagem2" tabindex="-1" aria-labelledby="modalMensagem2Label" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalMensagem2Label">Assunto: Nova vaga disponível</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p><strong>Remetente:</strong> empresa@corp.com</p>
-                    <p><strong>Data:</strong> 12/05/2025</p>
-                    <hr>
-                    <p>Estamos disponibilizando uma nova vaga de estágio em nossa empresa. Seguem os detalhes no anexo.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta2">Responder</button>
-                  </div>
-                  <div class="collapse p-3" id="resposta2">
-                    <textarea class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..."></textarea>
-                    <button class="btn btn-success">Enviar Resposta</button>
-                  </div>
+                <div class="collapse p-3" id="resposta<?= $mensagem['id'] ?>">
+                  <form action="backend/responder_mensagem.php" method="POST" novalidate>
+                    <input type="hidden" name="mensagem_id" value="<?= $mensagem['id'] ?>">
+                    <input type="hidden" name="remetente" value="<?= htmlspecialchars($_SESSION['email'] ?? 'empresa@email.com') ?>">
+                    <textarea name="resposta" class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..." required></textarea>
+                    <button type="submit" class="btn btn-success">Enviar Resposta</button>
+                  </form>
                 </div>
               </div>
             </div>
           </div>
+        <?php endforeach; ?>
+      </div>
           
 
             <!-- Favoritos -->

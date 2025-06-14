@@ -49,4 +49,25 @@
     background-color: white;
     color: #212529;
   }
+.conteudo-vagas {
+  min-height: 400px;
+}
+
+.conteudo-vagas.sem-vagas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 50%;
+}
+
+.alert-vaga {
+  max-width: 500px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background-color: #fff3cd;
+  color: #856404;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+}
+
   

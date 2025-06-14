@@ -1,12 +1,12 @@
 <?php
 include_once 'db.php';
-session_start();
 
-$id_empresa = $_SESSION['id_usuario'];
+
+$empresa_id = $_SESSION['id_usuario'];
 
 $sql = "SELECT * FROM vagas WHERE id_empresa = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_empresa);
+$stmt->bind_param("i", $empresa_id);
 $stmt->execute();
 $result = $stmt->get_result();
 

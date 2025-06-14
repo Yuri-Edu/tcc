@@ -161,7 +161,9 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                           <div class="card text-white bg-dark">
                               <div class="card-body">
                                   <h5 class="card-title">Total de Estagiários</h5>
-                                  <p id="totalEstagios" class="card-text">10</p>
+                                  <p id="totalEstagios" class="card-text">
+                                    <?php include 'php/totalEstagiarios.php'; ?>
+                                  </p>
                               </div>
                           </div>
                       </div>
@@ -169,7 +171,9 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                           <div class="card text-white bg-dark">
                               <div class="card-body">
                                   <h5 class="card-title">Aprovados</h5>
-                                  <p id="totalAprovados" class="card-text">3</p>
+                                  <p id="totalAprovados" class="card-text">
+                                     <?php include '../php/cardcontratados.php'; ?>
+                                  </p>
                               </div>
                           </div>
                       </div>
@@ -177,7 +181,9 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                           <div class="card text-white bg-dark">
                               <div class="card-body">
                                   <h5 class="card-title">Pendentes</h5>
-                                  <p id="totalPendentes" class="card-text">7</p>
+                                  <p id="totalPendentes" class="card-text">
+                                    <?php include 'php/cardEstagiosPendentes.php'; ?>
+                                  </p>
                               </div>
                           </div>
                       </div>
@@ -199,32 +205,8 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                           </tr>
                       </thead>
                       <tbody>
-                          <tr>
-                              <td>Sig2000</td>
-                              <td>Técnico de Informática</td>
-                              <td>1 ano</td>
-                              <td>Manhã</td>
-                              <td>01/08/2024</td>
-                              <td>01/08/2025</td>
-                              <td>Pendentes</td>
-                              <td> Yuri Eduardo</td>
-                              <td>
-                                <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarEstagio">
-                                  <i class="bi bi-pencil"></i>
-                                </button>
-                                
-                                <button class="btn btn-outline-light btn-sm">
-                                  <i class="bi bi-trash"></i>
-                                </button>
-                                
-                                <button class="btn btn-outline-light btn-sm">
-                                  <i class="bi bi-paperclip"></i>
-                                </button>
-                                
-                                <button class="btn btn-outline-light btn-sm">
-                                  <i class="bi bi-check-circle"></i>
-                                </button>    </td>
-                          </tr>
+                           <!-- Dados serão preenchidos automaticamente via JavaScript -->
+                              <?php include 'php/listarEstagios.php'; ?>
                       </tbody>
                   </table>
               </div>
@@ -300,15 +282,15 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
             <!-- Modal Criar Estágio (DUPLICADO REMOVIDO) -->
 
             <!-- Modal Editar Estágio -->
-            <div class="modal fade" id="modalEditarEstagio" tabindex="-1" aria-labelledby="modalEditarEstagioLabel" aria-hidden="true">
+            <div class="modal fade " id="modalEditarEstagio" tabindex="-1" aria-labelledby="modalEditarEstagioLabel" aria-hidden="true">
                 <div class="modal-dialog modal-lg modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
                             <h5 class="modal-title" id="modalEditarEstagioLabel">Editar Estagiário</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <div class="modal-body">
-                            <form id="formEditarEstagio">
+                        <div class="modal-body bg-dark text-white">
+                            <form action="../php/editarEstagiario.php" method="GET" id="formEditarEstagio">
                                 <div class="mb-3">
                                     <label for="editEmpresa" class="form-label">Empresa</label>
                                     <input type="text" class="form-control" id="editEmpresa" required>
@@ -347,16 +329,16 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                                 </div>
                             </form>
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-outline-primary" id="btnSalvarEdicaoEstagio">Salvar</button>
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <div class="modal-footer bg-dark text-white">
+                            <button type="button" class="btn btn-outline-primary text-white" id="btnSalvarEdicaoEstagio">Salvar</button>
+                            <button type="button" class="btn btn-outline-secondary text-white" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </div>
                 </div>
             </div> 
       </div>
         <!-- Seção de Relatórios -->
-      <div id="sec-empresa-relatorios" class="secao-ocultavel" style="display: none;">
+         <div id="sec-empresa-relatorios" class="secao-ocultavel" style="display: none;">
          <h3 class="mb-4">
           <i class="bi bi-bar-chart-line-fill me-2"></i>Relatórios
         </h3>
@@ -364,98 +346,430 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
           <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
 
       <!-- Aba Relatórios -->
-      <div class="tab-pane fade show active" id="relatorios">
-        <div class="d-flex justify-content-between mb-3">
-          <!-- Filtros -->
-          <div>
-            <input type="text" class="form-control bg-light text-dark mb-2" placeholder="Buscar relatório...">
-            <select class="form-select bg-light text-dark" aria-label="Filtrar por categoria">
-              <option selected>Filtrar por categoria</option>
-              <option value="1">Relatório 1</option>
-              <option value="2">Relatório 2</option>
-              <option value="3">Relatório 3</option>
-            </select>
+
+        <div class="tab-pane fade show active" id="relatorios">
+          <div class="d-flex justify-content-between mb-3">
+            <!-- Filtros -->
+            <div>
+              <input type="text" class="form-control bg-light text-dark mb-2" placeholder="Buscar relatório...">
+              <select class="form-select bg-light text-dark" aria-label="Filtrar por categoria">
+                <option selected>Filtrar por categoria</option>
+                <option value="ativos">Estagiários Ativos</option>
+                <option value="pendentes">Pendentes</option>
+                <option value="curso">Por Curso</option>
+                <option value="periodo">Por Período</option>
+                <option value="empresa">Por Empresa</option>
+                <option value="termino">Com Término Próximo</option>
+                <option value="documentos">Pendência de Documentos</option>
+                <option value="faltas">Faltas / Avaliações</option>
+                <option value="geral">Relatório Geral</option>
+              </select>
+            </div>
+
+            <!-- Botão de Upload -->
+            <div>
+              <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadRelatorioModal">
+                + Novo Relatório
+              </button>
+            </div>
           </div>
 
-          <!-- Botão de Upload -->
-          <div>
-            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadRelatorioModal">+ Novo Relatório</button>
-          </div>
-        </div>
-
-        <!-- Tabela de Relatórios -->
+          <!-- Tabela de Relatórios -->
+          <!-- Tabela de Relatórios Padrão -->
+        <!-- Tabela de Relatórios Padrões -->
         <table class="table table-dark table-bordered">
           <thead>
             <tr>
-              <th scope="col">Nome do Relatório</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">Data de Upload</th>
+              <th scope="col">Relatório</th>
+              <th scope="col">Descrição</th>
               <th scope="col">Ações</th>
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>Relatório Anual 2025.pdf</td>
-              <td>Relatório Financeiro</td>
-              <td>01/05/2025</td>
-              <td>
-                <button class="btn btn-outline-light btn-sm">Visualizar</button>
-                <button class="btn btn-outline-light btn-sm">Excluir</button>
-              </td>
+              <td>Estagiários Ativos</td>
+              <td>Lista de todos os estagiários em atividade</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio1">Preencher</button></td>
             </tr>
             <tr>
-              <td>Relatório de Vagas 2025.pdf</td>
-              <td>Relatório de Vagas</td>
-              <td>02/05/2025</td>
-              <td>
-                <button class="btn btn-outline-light btn-sm">Visualizar</button>
-                <button class="btn btn-outline-light btn-sm">Excluir</button>
-              </td>
+              <td>Estágios Pendentes de Aprovação</td>
+              <td>Estágios que aguardam análise ou assinatura</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio2">Preencher</button></td>
             </tr>
-            <!-- Mais relatórios podem ser listados aqui -->
+            <tr>
+              <td>Estágios por Status</td>
+              <td>Quantidade por status (Em curso, Concluído, etc)</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio3">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estágios por Curso</td>
+              <td>Distribuição dos estágios por curso</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio4">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estágios por Período</td>
+              <td>Turnos dos estágios (Manhã/Tarde/Noite)</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio5">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estágios a Encerrar</td>
+              <td>Estágios com término nos próximos 30 dias</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio6">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Estagiários por Empresa</td>
+              <td>Estagiários agrupados por empresa</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio7">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Documentos Pendentes</td>
+              <td>Estagiários que não entregaram documentos</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio8">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Faltas ou Avaliações</td>
+              <td>Relatório de presença ou avaliações</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio9">Preencher</button></td>
+            </tr>
+            <tr>
+              <td>Geral de Estágios</td>
+              <td>Resumo completo com filtros</td>
+              <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio10">Preencher</button></td>
+            </tr>
           </tbody>
         </table>
-      </div>
-    </div>
-        
 
-          <!-- Modal de Upload de Relatório -->
-          <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
+        <!-- Modais para os 10 relatórios -->
+        <div class="modal fade" id="modalRelatorio1" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h5 class="modal-title">Estagiários Ativos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <form action="php/salvar_relatorio.php" method="POST">
+                <div class="modal-body">
+                  <input type="hidden" name="tipo" value="estagiarios_ativos">
+                  <div class="mb-3">
+                    <label class="form-label">Comentário adicional (opcional)</label>
+                    <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+        <!-- Modal para Relatório 2: Estágios Pendentes -->
+         <div class="modal fade" id="modalRelatorio2" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title">Estágios Pendentes de Aprovação</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <form action="php/salvar_relatorio.php" method="POST">
+        <div class="modal-body">
+          <input type="hidden" name="tipo" value="pendentes_aprovacao">
+          <div class="mb-3">
+            <label class="form-label">Comentário adicional (opcional)</label>
+            <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+        </div>
+      </form>
+    </div>
+  </div>
+        </div>
+        <!-- Modal para Relatório 3: Estágios por Status -->
+          <div class="modal fade" id="modalRelatorio3" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
               <div class="modal-content bg-dark text-white">
                 <div class="modal-header">
-                  <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
+                  <h5 class="modal-title">Estágios por Status</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <div class="modal-body">
-                  <form>
+                <form action="php/salvar_relatorio.php" method="POST">
+                  <div class="modal-body">
+                    <input type="hidden" name="tipo" value="estagios_por_status">
                     <div class="mb-3">
-                      <label for="relatorioName" class="form-label">Nome do Relatório</label>
-                      <input type="text" class="form-control bg-light text-dark" id="relatorioName" placeholder="Nome do Relatório">
-                    </div>
-                    <div class="mb-3">
-                      <label for="relatorioCategory" class="form-label">Categoria</label>
-                      <select class="form-select bg-light text-dark" id="relatorioCategory">
-                        <option selected>Escolha a categoria</option>
-                        <option value="1">Relatório Financeiro</option>
-                        <option value="2">Relatório de Vagas</option>
-                        <option value="3">Relatório de Estágios</option>
+                      <label class="form-label">Filtrar por Status (opcional)</label>
+                      <select class="form-select bg-light text-dark" name="status">
+                        <option value="">Todos</option>
+                        <option value="Em curso">Em curso</option>
+                        <option value="Concluído">Concluído</option>
+                        <option value="Aprovado">Aprovado</option>
+                        <option value="Encerrado">Encerrado</option>
+                        <option value="Pendente">Pendente</option>
                       </select>
                     </div>
-                    <div class="mb-3">
-                      <label for="relatorioFile" class="form-label">Arquivo</label>
-                      <input type="file" class="form-control bg-light text-dark" id="relatorioFile">
-                    </div>
-                  </form>
-                </div>
+                  </div>
+        
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                  <button type="button" class="btn btn-primary">Salvar Relatório</button>
+                  <button type="submit" class="btn btn-primary">Gerar Relatório</button>
                 </div>
+                </form>
               </div>
             </div>
           </div>
+          <!-- Modal para Relatório 4: Estágios por Curso -->
+          <div class="modal fade" id="modalRelatorio4" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                  <h5 class="modal-title">Estágios por Curso</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <form action="php/salvar_relatorio.php" method="POST">
+                  <div class="modal-body">
+                    <input type="hidden" name="tipo" value="estagios_por_curso">
+                    <div class="mb-3">
+                      <label class="form-label">Filtrar por Curso (opcional)</label>
+                      <select class="form-select bg-light text-dark" name="curso">
+                        <option value="">Todos</option>
+                        <option value="Administração">Administração</option>
+                        <option value="Informática">Informática</option>
+                        <option value="Enfermagem">Enfermagem</option>
+                        <option value="Engenharia">Engenharia</option>
+                        <!-- Adicione outros cursos conforme necessário -->
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Comentário adicional (opcional)</label>
+                      <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea> 
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+
+        <!-- Modal para Relatório 5: Estágios por Período -->
+          <div class="modal fade" id="modalRelatorio5" tabindex="-1" aria-hidden="true">
+            <div class="modal-dialog">
+              <div class="modal-content bg-dark text-white">
+                <div class="modal-header">
+                  <h5 class="modal-title">Estágios por Período</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <form action="php/salvar_relatorio.php" method="POST">
+                  <div class="modal-body">
+                    <input type="hidden" name="tipo" value="estagios_por_periodo">
+                    <div class="mb-3">
+                      <label class="form-label">Filtrar por Período (opcional)</label>
+                      <select class="form-select bg-light text-dark" name="periodo">
+                        <option value="">Todos</option>
+                        <option value="Manhã">Manhã</option>
+                        <option value="Tarde">Tarde</option>
+                        <option value="Noite">Noite</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label class="form-label">Comentário adicional (opcional)</label>
+                      <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea>
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+          <!-- Modal para Relatório 6: Estágios a Encerrar -->
+            <div class="modal fade" id="modalRelatorio6" tabindex="-1" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content bg-dark text-white">
+                  <div class="modal-header">
+                    <h5 class="modal-title">Estágios a Encerrar</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                  </div>
+                  <form action="php/salvar_relatorio.php" method="POST">
+                    <div class="modal-body">
+                      <input type="hidden" name="tipo" value="estagios_a_encerrar">
+                      <div class="mb-3">
+                        <label class="form-label">Comentário adicional (opcional)</label>
+                        <textarea class="form-control bg-light text-dark" name="comentario" rows="3"></textarea>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Modal para Relatório 9: Faltas ou Avaliações -->
+                <div class="modal fade" id="modalRelatorio9" tabindex="-1" aria-hidden="true">
+                  <div class="modal-dialog modal-lg">
+                    <div class="modal-content bg-dark text-white">
+                      <div class="modal-header">
+                        <h5 class="modal-title">Faltas ou Avaliações</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                      </div>
+                      <div class="modal-body">
+                        <form action="php/salvar_relatorio.php" method="POST">
+                          <input type="hidden" name="tipo" value="faltas_avaliacoes">
+
+                          <!-- Calendário de Faltas -->
+                          <h6 class="text-white">Data(s) de Falta</h6>
+                          <div class="mb-3">
+                            <input type="date" name="faltas[]" class="form-control bg-light text-dark mb-2">
+                            <input type="date" name="faltas[]" class="form-control bg-light text-dark mb-2">
+                            <input type="date" name="faltas[]" class="form-control bg-light text-dark mb-2">
+                          </div>
+
+                          <!-- Avaliação -->
+                          <h6 class="text-white mt-4">Formulário de Avaliação</h6>
+                          <div class="mb-3">
+                            <label class="form-label">Desempenho</label>
+                            <select name="avaliacao_desempenho" class="form-select bg-light text-dark">
+                              <option value="Excelente">Excelente</option>
+                              <option value="Bom">Bom</option>
+                              <option value="Regular">Regular</option>
+                              <option value="Insatisfatório">Insatisfatório</option>
+                            </select>
+                          </div>
+
+                          <div class="mb-3">
+                            <label class="form-label">Assiduidade</label>
+                            <select name="avaliacao_assiduidade" class="form-select bg-light text-dark">
+                              <option value="Ótima">Ótima</option>
+                              <option value="Boa">Boa</option>
+                              <option value="Razoável">Razoável</option>
+                              <option value="Ruim">Ruim</option>
+                            </select>
+                          </div>
+
+                          <div class="mb-3">
+                            <label class="form-label">Comentário adicional (opcional)</label>
+                            <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+                          </div>
+
+                          <div class="modal-footer d-flex justify-content-between">
+                            <button type="submit" name="gerar_relatorio" class="btn btn-success">Gerar Relatório de Avaliação</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Modal para Relatório 10: Geral de Estágios -->
+                    <div class="modal fade" id="modalRelatorio10" tabindex="-1" aria-hidden="true">
+                      <div class="modal-dialog modal-lg">
+                        <div class="modal-content bg-dark text-white">
+                          <div class="modal-header">
+                            <h5 class="modal-title">Relatório Geral de Estágios</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                          </div>
+                          <form action="php/salvar_relatorio.php" method="POST">
+                            <div class="modal-body">
+                              <input type="hidden" name="tipo" value="geral_estagios">
+
+                              <!-- Filtro por Curso -->
+                              <div class="mb-3">
+                                <label class="form-label">Curso</label>
+                                <select name="curso" class="form-select bg-light text-dark">
+                                  <option value="">Todos</option>
+                                  <option value="Administração">Administração</option>
+                                  <option value="Informática">Informática</option>
+                                  <option value="Enfermagem">Enfermagem</option>
+                                  <option value="Engenharia">Engenharia</option>
+                                  <!-- Adicione outros cursos conforme necessário -->
+                                </select>
+                              </div>
+
+                              <!-- Filtro por Período -->
+                              <div class="mb-3">
+                                <label class="form-label">Período</label>
+                                <select name="periodo" class="form-select bg-light text-dark">
+                                  <option value="">Todos</option>
+                                  <option value="Manhã">Manhã</option>
+                                  <option value="Tarde">Tarde</option>
+                                  <option value="Noite">Noite</option>
+                                </select>
+                              </div>
+
+                              <!-- Filtro por Status -->
+                              <div class="mb-3">
+                                <label class="form-label">Status</label>
+                                <select name="status" class="form-select bg-light text-dark">
+                                  <option value="">Todos</option>
+                                  <option value="Em curso">Em curso</option>
+                                  <option value="Concluído">Concluído</option>
+                                  <option value="Aprovado">Aprovado</option>
+                                  <option value="Encerrado">Encerrado</option>
+                                  <option value="Pendente">Pendente</option>
+                                </select>
+                              </div>
+
+                              <div class="mb-3">
+                                <label class="form-label">Comentário adicional (opcional)</label>
+                                <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
+
+
+
+
+
+        </div>
+        <!-- Modal de Upload de Relatório -->
+        <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <div class="modal-body">
+              <form action="../php/uploadRelatorio.php" method="POST" enctype="multipart/form-data">
+          <div class="mb-3">
+            <label for="relatorioName" class="form-label">Nome do Relatório</label>
+            <input type="text" class="form-control bg-light text-dark" id="relatorioName" name="relatorioName" required>
+          </div>
+          <div class="mb-3">
+            <label for="relatorioCategory" class="form-label">Categoria</label>
+            <select class="form-select bg-light text-dark" id="relatorioCategory" name="relatorioCategory" required>
+              <option selected disabled>Escolha a categoria</option>
+              <option value="Relatório Financeiro">Relatório Financeiro</option>
+              <option value="Relatório de Vagas">Relatório de Vagas</option>
+              <option value="Relatório de Estágios">Relatório de Estágios</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="relatorioFile" class="form-label">Arquivo</label>
+            <input type="file" class="form-control bg-light text-dark" id="relatorioFile" name="relatorioFile" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary">Salvar Relatório</button>
+          </div>
+        </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+          </div>
+
       </div>
+    
         <!-- Seção de Vagas -->
       <div id="sec-empresa-vagas" class="secao-ocultavel" style="display: none;">
         <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
@@ -1044,5 +1358,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
   <!-- Bootstrap e scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../script/script.js"></script> <!-- JS externo -->
+   <script src="../script/tabelaEstagiarios.js"></script> <!-- JS externo -->
 </body>
 </html>
