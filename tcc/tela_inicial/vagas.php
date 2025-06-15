@@ -79,7 +79,7 @@ session_start();
           </div>
            <!-- Botão pesquisar -->
             <div class="mb-3">
-              <button type="submit" class="btn btn-primary w-100">Pesquisar</button>
+              <button type="submit" class="btn btn-primary w">Pesquisar</button>
             </div>        
         </div>
       </div>

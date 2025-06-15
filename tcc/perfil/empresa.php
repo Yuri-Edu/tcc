@@ -768,7 +768,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
         </div>
           </div>
 
-      </div>
+        </div>
     
         <!-- Seção de Vagas -->
       <div id="sec-empresa-vagas" class="secao-ocultavel" style="display: none;">
@@ -1083,130 +1083,65 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
             </div>
       </div>
       <!-- Seção de Mensagens -->
-      <div id="sec-empresa-mensagens" class="secao-ocultavel" style="display: none;">
-            <div class="container mt-4">
-           <h3 class="mb-4">
-            <i class="bi bi-envelope-fill me-2"></i>Mensagens
-          </h3>
+        <div id="sec-empresa-mensagens" class="secao-ocultavel" style="display: none;">
+  <div class="container mt-4">
+    <h3 class="mb-4 text-white">
+      <i class="bi bi-envelope-fill me-2"></i>Mensagens
+    </h3>
 
+    <!-- Abas -->
+    <ul class="nav nav-tabs" id="mensagemTabEmpresa" role="tablist">
+      <li class="nav-item">
+        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entradaEmpresa" type="button">Caixa de Entrada</button>
+      </li>
+      <li class="nav-item">
+        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#novaEmpresa" type="button">Nova Mensagem</button>
+      </li>
+    </ul>
 
-            <!-- Abas -->
-            <ul class="nav nav-tabs" id="mensagemTab" role="tablist">
-              <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entrada">Caixa de Entrada</button>
-              </li>
-              <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nova">Nova Mensagem</button>
-              </li>
-            </ul>
+    <!-- Conteúdo das abas -->
+    <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
 
-        <!-- Conteúdo das abas -->
-            <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
-              
-              <!-- Caixa de Entrada -->
-              <div class="tab-pane fade show active" id="entrada">
-                <div class="d-flex mb-3 gap-2">
-                  <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
-                  <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
-                    <option value="todos">Todos</option>
-                    <option value="aluno">Alunos</option>
-                    <option value="empresa">Empresas</option>
-                  </select>
-                </div>
+      <!-- Caixa de Entrada -->
+      <div class="tab-pane fade show active" id="entradaEmpresa">
+        <div class="d-flex mb-3 gap-2">
+          <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagemEmpresa">
+          <select class="form-select bg-light text-dark" id="filtroRemetenteEmpresa" style="max-width: 200px;">
+            <option value="todos">Todos</option>
+            <option value="aluno">Alunos</option>
+            <option value="instituicao">Instituição</option>
+          </select>
+        </div>
 
-                <!-- Lista de mensagens -->
-                <div class="list-group" id="listaMensagens">
-                  <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida" 
-                          data-remetente="aluno" 
-                          data-bs-toggle="modal" 
-                          data-bs-target="#modalMensagem1" 
-                          onclick="marcarComoLida(this)">
-                    <strong>📧 Assunto:</strong> Atualização de Dados<br>
-                    <small>De: aluno@email.com | 13/05/2025</small>
-                  </button>
+        <!-- Lista de mensagens -->
+        <div class="list-group" id="listaMensagensEmpresa">
+          <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida"
+            data-remetente="instituicao" data-bs-toggle="modal" data-bs-target="#modalMensagemEmpresa1" onclick="marcarComoLida(this)">
+            <strong>📧 Assunto:</strong> Atualização de contrato<br>
+            <small>De: instituicao@email.com | 10/05/2025</small>
+          </button>
 
-                  <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem" 
-                          data-remetente="empresa" 
-                          data-bs-toggle="modal" 
-                          data-bs-target="#modalMensagem2" 
-                          onclick="marcarComoLida(this)">
-                    <strong>📧 Assunto:</strong> Nova vaga disponível<br>
-                    <small>De: empresa@corp.com | 12/05/2025</small>
-                  </button>
-                </div>
-              </div>
-
-              <!-- Nova Mensagem -->
-              <div class="tab-pane fade" id="nova">
-                <form>
-                  <div class="mb-3">
-                    <label for="remetente" class="form-label">Seu E-mail</label>
-                    <input type="email" class="form-control bg-light text-dark" id="remetente" placeholder="seu@email.com">
-                  </div>
-                  <div class="mb-3">
-                    <label for="assunto" class="form-label">Assunto</label>
-                    <input type="text" class="form-control bg-light text-dark" id="assunto" placeholder="Assunto da mensagem">
-                  </div>
-                  <div class="mb-3">
-                    <label for="mensagem" class="form-label">Mensagem</label>
-                    <textarea class="form-control bg-light text-dark" id="mensagem" rows="5" placeholder="Escreva sua mensagem aqui..."></textarea>
-                  </div>
-                  <button type="submit" class="btn btn-success">Enviar</button>
-                </form>
-              </div>
-            </div>
-           </div>
-
-      <!-- MODAL MENSAGEM 1 -->
-            <div class="modal fade" id="modalMensagem1" tabindex="-1" aria-labelledby="modalMensagem1Label" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalMensagem1Label">Assunto: Atualização de Dados</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p><strong>Remetente:</strong> aluno@email.com</p>
-                    <p><strong>Data:</strong> 13/05/2025</p>
-                    <hr>
-                    <p>Prezados, gostaria de atualizar meus dados cadastrais conforme solicitado.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta1">Responder</button>
-                  </div>
-                  <div class="collapse p-3" id="resposta1">
-                    <textarea class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..."></textarea>
-                    <button class="btn btn-success">Enviar Resposta</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-      <!-- MODAL MENSAGEM 2 -->
-            <div class="modal fade" id="modalMensagem2" tabindex="-1" aria-labelledby="modalMensagem2Label" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-scrollable">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="modalMensagem2Label">Assunto: Nova vaga disponível</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                  </div>
-                  <div class="modal-body">
-                    <p><strong>Remetente:</strong> empresa@corp.com</p>
-                    <p><strong>Data:</strong> 12/05/2025</p>
-                    <hr>
-                    <p>Estamos disponibilizando uma nova vaga de estágio em nossa empresa. Seguem os detalhes no anexo.</p>
-                  </div>
-                  <div class="modal-footer">
-                    <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta2">Responder</button>
-                  </div>
-                  <div class="collapse p-3" id="resposta2">
-                    <textarea class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..."></textarea>
-                    <button class="btn btn-success">Enviar Resposta</button>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem"
+            data-remetente="aluno" data-bs-toggle="modal" data-bs-target="#modalMensagemEmpresa2" onclick="marcarComoLida(this)">
+            <strong>📧 Assunto:</strong> Dúvida sobre estágio<br>
+            <small>De: aluno@email.com | 09/05/2025</small>
+          </button>
+        </div>
       </div>
+
+      <!-- Nova Mensagem -->
+      <div class="tab-pane fade" id="novaEmpresa">
+        <form>
+          <div class="mb-3">
+            <label for="destinatarioEmpresa" class="form-label">Destinatário</label>
+            <select class="form-select bg-light text-dark" id="destinatarioEmpresa">
+              <option value="aluno">Aluno</option>
+              <option value="instituicao">Instituição</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="remetenteEmpresa" class="form-label">Seu E-mail</l
+
         <!-- Seção de Configurações da Empresa -->
       <div id="sec-empresa-configuracoes" class="secao-ocultavel" style="display: none;">
         <div class="container mt-4">

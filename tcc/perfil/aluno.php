@@ -73,13 +73,13 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
                   </a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link text-white" href="../tela_login/index.html">
+                  <a class="nav-link text-white" href="../tela_login/index.php ">
                     <i class="bi bi-box-arrow-right me-2"></i> Sair
                   </a>
                 </li>
               </ul>
             </div>
-          </nav>
+        </nav>
           
           <!-- Toggler (para telas pequenas) -->
           <button class="btn btn-dark d-md-none m-2" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
@@ -94,12 +94,12 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
             <div id="cadastro" class="content-section " style="display: block;">
                
                 <div class="container mt-4">
-                    <h3 class="mb-4">
-                      <i class="bi bi-person-lines-fill me-2"></i>Meu Cadastro
-                    </h3>
+                    
 
                     <form class="bg-dark p-4 rounded border border-secondary text-white">
-
+<h3 class="mb-4">
+                      <i class="bi bi-person-lines-fill me-2"></i>Meu Cadastro
+                    </h3>
                       <!-- Nome Completo -->
                       <div class="mb-3 position-relative">
                         <label class="form-label">Nome Completo</label>
@@ -185,7 +185,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
                       <div class="text-end mt-4">
                         <button type="submit" class="btn btn-success">
                           <i class="bi bi-save me-1"></i>Salvar
-
+                        </button>
                       </div> 
                     </form>
                 </div>  
@@ -479,305 +479,252 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
             </div>   
 
           <!-- Vagas -->
-        <div id="vagas" class="content-section bg-dark text-white min-vh-100">
-          <div class="container my-4">
-            <h2 class="mb-4">Encontre a Vaga Ideal</h2>
+        <div id="vagas" class="content-section bg-dark text-white min-vh-100" style="display: none;">
+         <div class="container my-4">
+          <h2 class="mb-4">Encontre a Vaga Ideal</h2>
 
-            <!-- Campo de Busca -->
+          <!-- Formulário de busca -->
+          <form action="vagas.php" method="get">
             <div class="input-group mb-4">
-              <input type="text" id="buscaVaga" class="form-control bg-white text-dark border" placeholder="Digite o nome da vaga...">
-              <button class="btn btn-primary" id="btnBuscar">Buscar</button>
+              <span class="input-group-text bg-dark border-light text-white">
+                <i class="bi bi-search"></i>
+              </span>
+              <input 
+                name="busca" 
+                type="text" 
+                id="buscaVaga" 
+                class="form-control input-dark" 
+                placeholder="Buscar por título, empresa, cidade, estado ou modalidade..."
+                value="<?= htmlspecialchars($_GET['busca'] ?? '') ?>"
+              >
+              <button class="btn btn-primary" type="submit">Buscar</button>
+              <a href="VagasDisponiveis.php" class="btn btn-secondary">Limpar</a>
             </div>
 
             <div class="row">
-              <!-- Filtros Laterais -->
+              <!-- Sidebar filtros -->
               <div class="col-md-3">
-                <div class="bg-dark p-3 rounded-3">
+                <div class="sidebar-dark p-3 bg-dark text-white rounded">
                   <h5>Filtros</h5>
+
+                  <!-- Curso -->
                   <div class="mb-3">
-                    <label for="filtroCurso" class="form-label">Curso</label>
-                    <select id="filtroCurso" class="form-select bg-white text-dark border">
+                    <label class="form-label">Curso</label>
+                    <select name="curso" class="form-select input-dark">
                       <option value="">Todos</option>
-                      <option>Administração</option>
-                      <option>Engenharia</option>
-                      <option>Direito</option>
-                      <option>TI</option>
-                      <option>Marketing</option>
+                      <option <?= ($_GET['curso'] ?? '') == 'Administração' ? 'selected' : '' ?>>Administração</option>
+                      <option <?= ($_GET['curso'] ?? '') == 'Engenharia' ? 'selected' : '' ?>>Engenharia</option>
+                      <option <?= ($_GET['curso'] ?? '') == 'Direito' ? 'selected' : '' ?>>Direito</option>
+                      <option <?= ($_GET['curso'] ?? '') == 'TI' ? 'selected' : '' ?>>TI</option>
+                      <option <?= ($_GET['curso'] ?? '') == 'Marketing' ? 'selected' : '' ?>>Marketing</option>
                     </select>
                   </div>
+
+                  <!-- Localidade -->
                   <div class="mb-3">
-                    <label for="filtroLocalidade" class="form-label">Localidade</label>
-                    <select id="filtroLocalidade" class="form-select bg-white text-dark border">
+                    <label class="form-label">Localidade</label>
+                    <select name="localidade" class="form-select input-dark">
                       <option value="">Todas</option>
-                      <option>São Paulo</option>
-                      <option>Rio de Janeiro</option>
-                      <option>Belo Horizonte</option>
-                      <option>Curitiba</option>
+                      <option <?= ($_GET['localidade'] ?? '') == 'São Paulo' ? 'selected' : '' ?>>São Paulo</option>
+                      <option <?= ($_GET['localidade'] ?? '') == 'Rio de Janeiro' ? 'selected' : '' ?>>Rio de Janeiro</option>
+                      <option <?= ($_GET['localidade'] ?? '') == 'Belo Horizonte' ? 'selected' : '' ?>>Belo Horizonte</option>
+                      <option <?= ($_GET['localidade'] ?? '') == 'Curitiba' ? 'selected' : '' ?>>Curitiba</option>
                     </select>
                   </div>
+
+                  <!-- Modalidade -->
                   <div class="mb-3">
-                    <label for="filtroTipo" class="form-label">Tipo de Estágio</label>
-                    <select id="filtroTipo" class="form-select bg-white text-dark border">
-                      <option value="">Todos</option>
-                      <option>Remoto</option>
-                      <option>Presencial</option>
-                      <option>Híbrido</option>
+                    <label class="form-label">Modalidade</label>
+                    <select name="tipo" class="form-select input-dark">
+                      <option value="">Todas</option>
+                      <option <?= ($_GET['tipo'] ?? '') == 'Remoto' ? 'selected' : '' ?>>Remoto</option>
+                      <option <?= ($_GET['tipo'] ?? '') == 'Presencial' ? 'selected' : '' ?>>Presencial</option>
+                      <option <?= ($_GET['tipo'] ?? '') == 'Híbrido' ? 'selected' : '' ?>>Híbrido</option>
                     </select>
                   </div>
-                  <button class="btn btn-outline-light w-100 mt-2" id="btnFiltrar">Filtrar</button>
+                  <!-- Botão pesquisar -->
+                    <div class="mb-3">
+                      <button type="submit" class="btn btn-primary w-100">Pesquisar</button>
+                    </div>        
                 </div>
               </div>
+            </div>
+            </form>
 
-              <!-- Cards de Vagas -->
+              <!-- Conteúdo (Listagem de Vagas) -->
               <div class="col-md-9">
-                <div class="row" id="vagasContainer">
-
-                  <div class="col-md-6 mb-4">
-                    <div class="card bg-dark text-white card-dark:hover rounded-10 border-success p-3 ">
-                       <button class="btn btn-sm position-absolute top-0 end-0 m-2 text-danger bg-transparent border-0">
-                          <i class="bi bi-heart-fill me-2"></i> <!-- ícone vazio -->
-                        </button>
-
-                      <h5>Estágio em Suporte</h5>
-                      <p class="mb-1">Sig2000</p>
-                      <p class="text-muted mb-2">Três Rios • Híbrido</p>
-                      <small>Curso: Cursando superior em TI</small><br>
-                      <small>Bolsa: R$ 700,00</small>
-                      <div class="d-grid gap-2 mt-3">
-                        <button class="btn btn-primary">Visualizar Vaga</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="col-md-6 mb-4">
-                    <div class="card bg-dark text-white card-dark:hover rounded-10 border-success p-3">
-                      <button class="btn btn-sm position-absolute top-0 end-0 m-2 text-danger bg-transparent border-0">
-                          <i class="bi bi-heart-fill me-2"></i> <!-- ícone vazio -->
-                        </button>
-                      
-                      <h5>Estágio em Desenvolvimento</h5>
-                      <p class="mb-1">Tech Solutions</p>
-                      <p">Remoto</p>
-                       <p>Três Rios • Híbrido</p>
-                      <small>Curso: Cursando superior em TI</small><br>
-                      <small>Bolsa: R$ 700,00</small>
-                      <div class="d-grid gap-2 mt-3">
-                        <button class="btn btn-primary">Visualizar Vaga</button>
-                      </div>
-                    </div>
-                  </div> 
-                </div>  
+                <div class="conteudo-vagas">
+                  <?php include '../php/listarVagasPublicadas.php'; ?>
+                </div>
               </div>
-            </div>  
-          </div>
+         </div>
+     
+          <script>
+            function abrirDetalhes(id) {
+              fetch('buscarDetalhesVaga.php?id=' + id)
+                  .then(response => response.text())
+                  .then(data => {
+                      document.getElementById('conteudoDetalhes').innerHTML = data;
+                      let modal = new bootstrap.Modal(document.getElementById('modalDetalhes'));
+                      modal.show();
+                  })
+                  .catch(error => {
+                      console.error('Erro:', error);
+                      alert('Erro ao carregar os detalhes.');
+                  });
+            }
+          </script>
+
         </div>
 
           <!--  Inscrições -->
-          <div id="inscricoes" class=" content-section bg-dark text-white rounded-3 min-vh-100">
-             <div class="container my-4">
-                <h2 class="mb-4">Minhas Inscrições</h2>
+          <div id="inscricoes" class="content-section bg-dark text-white min-vh-100" style="display: none;">
+              <?php
+                session_start();
+                include_once '../php/db.php';
 
-                <div class="row" id="inscricoesContainer">
+                $aluno_id = $_SESSION['id_usuario'];
 
-                  <!-- Card de Inscrição 1 -->
-                  <div class="col-md-6 mb-4 ">
-                    <div class="card-dark p-3 card-dark:hover rounded-10 border-success">
-                      <h5>Estágio em Suporte</h5>
-                      <p class="mb-1">Sig2000</p>
-                      <p class="text-muted mb-2">Três Rios • Presencial</p>
-                      <small>Curso: Cursando superior em TI</small><br>
-                      <small>Bolsa: R$ 700,00</small><br>
-                      <small><strong>Status:</strong> Aprovado</small><br>
-                      <small><strong>Inscrição em:</strong> 10/05/2025</small>
-                      <div class="d-grid gap-2 mt-3">
-                        <button class="btn btn-outline-light">Visualizar</button>
-                      </div>
-                    </div> 
-                  </div>
+                $sql = "SELECT 
+                  c.id AS candidatura_id,
+                  v.titulo,
+                  v.empresa,
+                  v.localidade,
+                  v.modalidade,
+                  v.curso,
+                  v.valor_bolsa,
+                  c.data_candidatura,
+                  c.status
+              FROM candidaturas c
+              INNER JOIN vagas v ON c.vaga_id = v.id
+              WHERE c.aluno_id = ?
+              ORDER BY c.data_candidatura DESC";
 
-                  <!-- Card de Inscrição 2 -->
-                  <div class="col-md-6 mb-4">
-                    <div class="card-dark p-3 card-dark:hover rounded-10 border-success">
-                      <h5>Estágio em Desenvolvimento</h5>
-                      <p class="mb-1">Dev Conecte</p>
-                      <p class="text-muted mb-2">Remoto</p>
-                      <small>Curso: TI</small><br>
-                      <small>Bolsa: R$ 500,00</small><br>
-                      <small><strong>Status:</strong> Inscrito</small><br>
-                      <small><strong>Inscrição em:</strong> 14/05/2025</small>
-                      <div class="d-grid gap-2 mt-3">
-                        <button class="btn btn-outline-light">Visualizar</button>
-                        <button class="btn btn-danger">Cancelar Inscrição</button>
-                      </div>
+                $stmt = $conn->prepare($sql);
+                $stmt->bind_param("i", $aluno_id);
+                $stmt->execute();
+                $result = $stmt->get_result();
+                ?>
+
+      <div class="container my-4">
+          <h2 class="mb-4">Minhas Inscrições</h2>
+
+          <div class="row" id="inscricoesContainer">
+              <?php if ($result->num_rows > 0) {
+                  while ($inscricao = $result->fetch_assoc()) { ?>
+                <div class="col-md-6 mb-4">
+                    <div class="card bg-dark text-white p-3">
+                              <h5><?php echo htmlspecialchars($inscricao['titulo']); ?></h5>
+                              <p class="mb-1"><?php echo htmlspecialchars($inscricao['empresa']); ?></p>
+                              <p class="text-muted  mb-2">
+                            <?= htmlspecialchars($inscricao['localidade']) ?> • <?= htmlspecialchars($inscricao['modalidade']) ?>
+                        </p>
+                        <small>Curso: <?= htmlspecialchars($inscricao['curso']) ?></small><br>
+                        <small>Bolsa: R$ <?= number_format($inscricao['valor_bolsa'], 2, ',', '.') ?></small><br>
+                        <small><strong>Status:</strong> <?= htmlspecialchars($inscricao['status']) ?></small><br>
+                        <small><strong>Inscrição em:</strong> <?= date('d/m/Y', strtotime($inscricao['data_candidatura'])) ?></small>
+                        <div class="d-grid gap-2 mt-3">
+                            <button class="btn btn-outline-light">Visualizar</button>
+                            <button class="btn btn-danger">Cancelar Inscrição</button>
+                        </div>
                     </div>
-                  </div>
-
                 </div>
-             </div>
+        <?php }
+        } else {
+            echo '<div class="alert alert-info">Você ainda não possui inscrições em vagas.</div>';
+        } ?>
+    </div>
           </div>
 
-          
-          <!-- Mensagens -->
          <!-- Seção de Mensagens -->
-           <?php
-            session_start();
-            include '../php/listar_mensagens.php'; 
-            // listar_mensagens.php deve definir $mensagens = array com mensagens do usuário logado
-
-            // Exemplo de listar_mensagens.php (simplificado):
-            // $usuario_id = $_SESSION['id'] ?? 1;
-            // $stmt = $conn->prepare("SELECT m.id, u.email AS remetente, m.assunto, m.data_envio, m.mensagem FROM mensagens m JOIN usuarios u ON m.remetente_id = u.id WHERE m.destinatario_id = ? ORDER BY m.data_envio DESC");
-            // $stmt->bind_param("i", $usuario_id);
-            // $stmt->execute();
-            // $result = $stmt->get_result();
-            // $mensagens = $result->fetch_all(MYSQLI_ASSOC);
-            ?>
-      <div class="container mt-4">
-        <h3 class="mb-4">
-          <i class="bi bi-chat-left-text-fill me-2"></i>Mensagens
-        </h3>
-        <button class="btn btn-dark mb-3" onclick="toggleSection('sec-empresa-mensagens')">Gerenciar Mensagens</button>
-      </div>
-
-      <div id="sec-empresa-mensagens" class="secao-ocultavel" style="display: none;">
+          <div id="mensagens" class="content-section secao-ocultavel" style="display: none;">
         <div class="container mt-4">
 
+          <!-- Título -->
+          <h3 class="mb-4 text-white">
+            <i class="bi bi-envelope-fill me-2"></i>Mensagens
+          </h3>
+
+ 
           <!-- Conteúdo das abas -->
-          <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
-            <h3 class="mb-4 text-white">
-              <i class="bi bi-envelope-fill me-2"></i>Mensagens
-            </h3>
-
-            <!-- Abas -->
-            <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
-              <li class="nav-item bg-light text-dark" role="presentation">
-                <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada" type="button" role="tab" aria-controls="entrada" aria-selected="true">Caixa de Entrada</button>
-              </li>
-              <li class="nav-item bg-light text-dark ms-2" role="presentation">
-                <button class="nav-link" id="nova-tab" data-bs-toggle="tab" data-bs-target="#nova" type="button" role="tab" aria-controls="nova" aria-selected="false">Nova Mensagem</button>
-              </li>
-            </ul>
-
+          <div class="tab-content bg-dark p-3 text-white rounded-bottom border border-secondary" style="min-height: 400px;">
+                   <ul class="nav nav-tabs text-white mb-4" id="mensagemTabAluno" role="tablist">
+                    <li class="nav-item text-white">
+                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entradaAluno" type="button">Caixa de Entrada</button>
+                    </li>
+                    <li class="nav-item">
+                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#novaAluno" type="button">Nova Mensagem</button>
+                    </li>
+                  </ul>
             <!-- Caixa de Entrada -->
-            <div class="tab-pane fade show active" id="entrada" role="tabpanel" aria-labelledby="entrada-tab">
+            <div class="tab-pane fade show active" id="entradaAluno">
               <div class="d-flex mb-3 gap-2">
                 <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
                 <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
                   <option value="todos">Todos</option>
-                  <option value="aluno">Alunos</option>
                   <option value="empresa">Empresas</option>
+                  <option value="instituicao">Instituição</option>
                 </select>
               </div>
 
-              <!-- Lista de mensagens -->
+              <!-- Lista de mensagens (Exemplos) -->
               <div class="list-group" id="listaMensagens">
-                <?php foreach ($mensagens as $msg): ?>
-                  <button type="button" class="list-group-item list-group-item-action bg-dark text-white border-bottom" data-bs-toggle="modal" data-bs-target="#modalMensagem<?= $msg['id'] ?>">
-                    <strong>📧 <?= htmlspecialchars($msg['assunto']) ?></strong><br>
-                    <small>De: <?= htmlspecialchars($msg['remetente']) ?> | <?= date('d/m/Y H:i', strtotime($msg['data_envio'])) ?></small>
-                  </button>
-                <?php endforeach; ?>
+                <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida"
+                  data-remetente="empresa" data-bs-toggle="modal" data-bs-target="#modalMensagem1"
+                  onclick="marcarComoLida(this)">
+                  <strong>📧 Assunto:</strong> Atualização de Dados<br>
+                  <small>De: empresa@email.com | 13/05/2025</small>
+                </button>
+
+                <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem"
+                  data-remetente="instituicao" data-bs-toggle="modal" data-bs-target="#modalMensagem2"
+                  onclick="marcarComoLida(this)">
+                  <strong>📧 Assunto:</strong> Nova vaga disponível<br>
+                  <small>De: instituicao@email.com | 12/05/2025</small>
+                </button>
               </div>
             </div>
 
             <!-- Nova Mensagem -->
-            <div class="tab-pane fade text-white" id="nova" role="tabpanel" aria-labelledby="nova-tab">
-              <form method="POST" action="backend/enviar_mensagem.php" enctype="multipart/form-data" novalidate>
-                <div class="mb-3">
-                  <label for="remetente" class="form-label">Seu E-mail</label>
-                  <input 
-                    type="email" 
-                    name="remetente" 
-                    class="form-control bg-light text-dark" 
-                    id="remetente" 
-                    placeholder="seu@email.com"
-                    value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
-                    readonly
-                    required>
-                </div>
+            <div class="tab-pane fade" id="novaAluno">
+                <form>
                 <div class="mb-3">
                   <label for="destinatario" class="form-label">Destinatário</label>
-                  <input 
-                    type="email" 
-                    name="destinatario" 
-                    class="form-control bg-light text-dark" 
-                    id="destinatario" 
-                    placeholder="E-mail do destinatário"
-                    required>
+                  <select class="form-select bg-light text-dark" id="destinatario">
+                    <option value="empresa">Empresa</option>
+                    <option value="instituicao">Instituição</option>
+                  </select>
+                </div>
+                <div class="mb-3">
+                  <label for="remetente" class="form-label">Seu E-mail</label>
+                  <input type="email" class="form-control bg-light text-dark" id="remetente"
+                    placeholder="seu@email.com">
                 </div>
                 <div class="mb-3">
                   <label for="assunto" class="form-label">Assunto</label>
-                  <input 
-                    type="text" 
-                    name="assunto" 
-                    class="form-control bg-light text-dark" 
-                    id="assunto" 
-                    placeholder="Assunto da mensagem"
-                    required>
+                  <input type="text" class="form-control bg-light text-dark" id="assunto"
+                    placeholder="Assunto da mensagem">
                 </div>
                 <div class="mb-3">
                   <label for="mensagem" class="form-label">Mensagem</label>
-                  <textarea 
-                    name="mensagem" 
-                    class="form-control bg-light text-dark" 
-                    id="mensagem" 
-                    rows="5" 
-                    placeholder="Escreva sua mensagem aqui..."
-                    required></textarea>
-                </div>
-                <div class="mb-3">
-                  <label for="anexo" class="form-label">Anexo</label>
-                  <input type="file" name="anexo" id="anexo" class="form-control bg-light text-dark">
+                  <textarea class="form-control bg-light text-dark" id="mensagem" rows="5"
+                    placeholder="Escreva sua mensagem aqui..."></textarea>
                 </div>
                 <button type="submit" class="btn btn-success">Enviar</button>
               </form>
             </div>
+
           </div>
         </div>
-
-        <!-- MODAIS MENSAGENS -->
-        <?php foreach ($mensagens as $mensagem): ?>
-          <div class="modal fade" id="modalMensagem<?= $mensagem['id'] ?>" tabindex="-1" aria-labelledby="modalMensagem<?= $mensagem['id'] ?>Label" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-scrollable">
-              <div class="modal-content bg-dark text-white">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="modalMensagem<?= $mensagem['id'] ?>Label">
-                    Assunto: <?= htmlspecialchars($mensagem['assunto']) ?>
-                  </h5>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                  <p><strong>Remetente:</strong> <?= htmlspecialchars($mensagem['remetente']) ?></p>
-                  <p><strong>Data:</strong> <?= date('d/m/Y H:i', strtotime($mensagem['data_envio'])) ?></p>
-                  <hr>
-                  <p><?= nl2br(htmlspecialchars($mensagem['mensagem'])) ?></p>
-                </div>
-                <div class="modal-footer">
-                  <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta<?= $mensagem['id'] ?>" aria-expanded="false" aria-controls="resposta<?= $mensagem['id'] ?>">
-                    Responder
-                  </button>
-                </div>
-                <div class="collapse p-3" id="resposta<?= $mensagem['id'] ?>">
-                  <form action="backend/responder_mensagem.php" method="POST" novalidate>
-                    <input type="hidden" name="mensagem_id" value="<?= $mensagem['id'] ?>">
-                    <input type="hidden" name="remetente" value="<?= htmlspecialchars($_SESSION['email'] ?? 'empresa@email.com') ?>">
-                    <textarea name="resposta" class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..." required></textarea>
-                    <button type="submit" class="btn btn-success">Enviar Resposta</button>
-                  </form>
-                </div>
-              </div>
-            </div>
           </div>
-        <?php endforeach; ?>
-      </div>
           
-
             <!-- Favoritos -->
-        <div id="favoritos" class="content-section">
+        <div id="favoritos" class="content-section" style="display: none;">
           <div class="container my-4">
-            <h2 class="mb-4">Vagas Favoritas</h2>
+           
 
             <div class="row" id="favoritosContainer">
+              <h2 class="mb-4"><i class="bi bi-heart-fill me-2"></i>Vagas Favoritas</h2>
               <!-- Exemplo de Vaga Favoritada -->
               <div class="col-md-6 mb-4">
                 <div class="bg-dark text-white p-3 card-dark:hover rounded-10 border-success">
@@ -796,13 +743,12 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
             </div>
           </div>
         </div>
-
           
           <!-- Notificações -->
-          <div id="notificacoes" class="content-section">
+          <div id="notificacoes" class="content-section" style="display: none;">
               <!-- Aba Notificações -->
            <div class="container my-4">
-              <h2 class="text-dark mb-3">Notificações Recentes</h2>
+              <h2 class="text-dark mb-3"><i class="bi bi-bell-fill me-2"></i>Notificações Recentes</h2>
 
           <!-- Notificação individual -->
                 <div class="card bg-dark text-white mb-2 border border-secondary">
@@ -850,11 +796,13 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
 
           </div>
           <!-- Configurações -->
-          <div id="configuracoes" class="content-section">
+          <div id="configuracoes" class="content-section" style="display: none;">
              <div class="container mt-4">
-  <h3 class="mb-4"> <i class="bi bi-gear-fill me-2"></i> Configurações do Aluno</h3>
 
-  <!-- Abas -->
+  <!-- Conteúdo das abas -->
+  <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
+    <h3 class="mb-4"> <i class="bi bi-gear-fill me-2"></i> Configurações do Aluno</h3>
+    <!-- Abas -->
   <ul class="nav nav-pills mb-3 bg-dark p-2 rounded" id="configAlunoTab" role="tablist">
     <li class="nav-item">
       <a class="nav-link active text-white" data-bs-toggle="pill" href="#dadosPessoais">Dados Pessoais</a>
@@ -869,9 +817,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
       <a class="nav-link text-white" data-bs-toggle="pill" href="#segurancaAluno">Segurança</a>
     </li>
   </ul>
-
-  <!-- Conteúdo das abas -->
-  <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
 
     <!-- Aba Dados Pessoais -->
     <div class="tab-pane fade show active" id="dadosPessoais">
