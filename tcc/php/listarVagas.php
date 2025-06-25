@@ -1,10 +1,14 @@
 <?php
+session_start(); // ✅ Inicia a sessão antes de acessar $_SESSION
 include_once 'db.php';
 
+if (!isset($_SESSION['id_usuario'])) {
+    die("Usuário não autenticado.");
+}
 
 $empresa_id = $_SESSION['id_usuario'];
 
-$sql = "SELECT * FROM vagas WHERE id_empresa = ?";
+$sql = "SELECT * FROM vagas WHERE empresa_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $empresa_id);
 $stmt->execute();

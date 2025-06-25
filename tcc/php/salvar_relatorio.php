@@ -1,8 +1,8 @@
 <?php
-require_once 'conexao.php';
+require_once 'db.php';
 
 // DOMPDF
-require_once 'vendor/autoload.php'; // se usa Composer
+require_once '../vendor/autoload.php'; // se usa Composer
 use Dompdf\Dompdf;
 
 $tipo = $_POST['tipo'] ?? '';

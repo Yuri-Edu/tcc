@@ -1,12 +1,19 @@
 <?php
 session_start();
 
+include_once '../php/dashboard.php';
+include_once '../php/db.php';
+
+$id_empresa = $_SESSION['id_usuario'];
+$dados = obterDadosDashboard($conn, $id_empresa, 'empresa_id');
+
 // Verifica se está logado e se é aluno
 if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
-    header('Location: ../tela_inicial/index.php');
+    header('Location: ../tela_inicia/index.php');
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -27,42 +34,42 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
         <h4 class="text-center">Área da Empresa</h4>
         <ul class="nav flex-column">
           <li class="nav-item">
-            <a class="nav-link text-white" href="#" onclick="mostrarSecao('sec-empresa-painel', event)">
+            <a class="nav-link text-white" href="#" onclick="showSection('sec-empresa-painel')">
               <i class="bi bi-speedometer2 me-2"></i> Dashboard
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#" onclick="mostrarSecao('sec-empresa-estagios', event)">
+            <a class="nav-link text-white" href="#" onclick="showSection('sec-empresa-estagios')">
              <i class="bi bi-people-fill me-2"></i> Estagiários
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#" onclick="mostrarSecao('sec-empresa-relatorios', event)">
+            <a class="nav-link text-white" href="#" onclick="showSection('sec-empresa-relatorios')">
               <i class="bi bi-bar-chart-line-fill me-2"></i> Relatórios
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#" onclick="mostrarSecao('sec-empresa-vagas', event)">
+            <a class="nav-link text-white" href="#" onclick="showSection('sec-empresa-vagas')">
               <i class="bi bi-megaphone-fill me-2"></i> Vagas
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#" onclick="mostrarSecao('sec-empresa-documentos', event)">
+            <a class="nav-link text-white" href="#" onclick="showSection('sec-empresa-documentos')">
               <i class="bi bi-file-earmark-text-fill me-2"></i> Documentos
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#" onclick="mostrarSecao('sec-empresa-mensagens', event)">
+            <a class="nav-link text-white" href="#" onclick="showSection('sec-empresa-mensagens')">
               <i class="bi bi-envelope-fill me-2"></i> Mensagens
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="#" onclick="mostrarSecao('sec-empresa-configuracoes', event)">
+            <a class="nav-link text-white" href="#" onclick="showSection('sec-empresa-configuracoes')">
               <i class="bi bi-gear-fill me-2"></i> Configurações
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link text-white" href="../tela_login/index.html">
+            <a class="nav-link text-white" href="../tela_login/index.php">
               <i class="bi bi-box-arrow-right me-2"></i> Sair
             </a>
           </li>
@@ -73,57 +80,64 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
     <!-- Conteúdo principal -->
     <main class="flex-grow-1 p-4">
          <!-- Seção de Dashboard -->
-        <div id="sec-empresa-painel" class="secao-ocultavel" style="display: block;">
-        <h2>  
-          <i class="bi bi-speedometer2 me-2"></i>Dashboard
-        </h2>
-          <div class="row gx-2 gy-2">
-            <!-- Cards -->
-            <div class="col-md-6 d-flex justify-content-start">
-              <a href="estagios.html" class="card bg-dark text-white border-light rounded-4" style="width: 75%;">
+    <div id="sec-empresa-painel" class="content-section" style="display: block;">
+    <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+    <div class="row gx-2 gy-2">
+        <!-- Estágios Pendentes -->
+        <div class="col-md-6 d-flex justify-content-start">
+            <a href="estagios.html" class="card bg-dark text-white border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
-                  <h5 class="card-title"><i class="bi bi-clock-history me-2"></i>Estágios Pendentes</h5>
-                  <p class="card-text display-6"><?php echo $estagios_pendentes; ?></p>
+                    <h5 class="card-title"><i class="bi bi-clock-history me-2"></i>Estágios Pendentes</h5>
+                     <p class="card-text display-6"><?php echo $dados['estagios_pendentes']; ?></p>
                 </div>
-              </a>
-            </div>
-            <div class="col-md-6 d-flex justify-content-start">
-              <a href="relatorios.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
-                <div class="card-body">
-                  <h5 class="card-title"><i class="bi bi-file-earmark-text me-2"></i>Relatórios Aguardando</h5>
-                  <p class="card-text display-6"><?php echo $relatorio_pendentes; ?></p>
-                </div>
-              </a>
-            </div>
-            <div class="col-md-6 d-flex justify-content-start">
-              <a href="alunos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
-                <div class="card-body">
-                  <h5 class="card-title"><i class="bi bi-people-fill me-2"></i>Estagios Cadastrados</h5>
-                  <p class="card-text display-6"><?php echo $estagios_cadastrados; ?> </p>
-                </div>
-              </a>
-            </div>
-            <div class="col-md-6 d-flex justify-content-start">
-              <a href="vagas.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
-                <div class="card-body">
-                  <h5 class="card-title"><i class="bi bi-megaphone-fill me-2"></i>Vagas Criadas</h5>
-                  <p class="card-text display-6"><?php echo $vagas_criadas; ?></p>
-                </div>
-              </a>
-            </div>
-            <div class="col-md-6 d-flex justify-content-start">
-              <a href="documentos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 70%;">
-                <div class="card-body">
-                  <h5 class="card-title"><i class="bi bi-file-earmark-excel me-2"></i>Documentos Pendentes</h5>
-                  <p class="card-text display-6"><?php echo $documentos_penentes; ?></p>
-                </div>
-              </a>
-            </div>
-          </div>
+            </a>
         </div>
 
+        <!-- Relatórios Aguardando -->
+        <div class="col-md-6 d-flex justify-content-start">
+            <a href="relatorios.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-file-earmark-text me-2"></i>Relatórios Aguardando</h5>
+                    <p class="card-text display-6"><?php echo $dados['relatorios_aguardando']; ?></p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Estágios Cadastrados -->
+        <div class="col-md-6 d-flex justify-content-start">
+            <a href="alunos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-people-fill me-2"></i>Estágios Cadastrados</h5>
+                     <p class="card-text display-6"><?php echo $dados['estagios_cadastrados']; ?></p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Vagas Criadas -->
+        <div class="col-md-6 d-flex justify-content-start">
+            <a href="vagas.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-megaphone-fill me-2"></i>Vagas Criadas</h5>
+                    <p class="card-text display-6"><?php echo $dados['vagas_criadas']; ?></p>
+                </div>
+            </a>
+        </div>
+
+        <!-- Documentos Pendentes -->
+        <div class="col-md-6 d-flex justify-content-start">
+            <a href="documentos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 70%;">
+                <div class="card-body">
+                    <h5 class="card-title"><i class="bi bi-file-earmark-excel me-2"></i>Documentos Pendentes</h5>
+                    <p class="card-text display-6"><?php echo $dados['documentos_pendentes']; ?></p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+
+
       <!-- Seção de Estágios -->
-      <div id="sec-empresa-estagios" class="secao-ocultavel" style="display: none;">
+      <div id="sec-empresa-estagios" class="content-section" style="display: none;">
           <!-- Filtros e Botões -->
               <div class="container my-4">
                   <h3 class="mb-4">
@@ -338,13 +352,13 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
             </div> 
       </div>
         <!-- Seção de Relatórios -->
-         <div id="sec-empresa-relatorios" class="secao-ocultavel" style="display: none;">
-         <h3 class="mb-4">
-          <i class="bi bi-bar-chart-line-fill me-2"></i>Relatórios
-        </h3>
+         <div id="sec-empresa-relatorios" class="content-section" style="display: none;">
+       
 
           <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
-
+              <h3 class="mb-4">
+          <i class="bi bi-bar-chart-line-fill me-2"></i>Relatórios
+        </h3>
       <!-- Aba Relatórios -->
 
         <div class="tab-pane fade show active" id="relatorios">
@@ -771,7 +785,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
         </div>
     
         <!-- Seção de Vagas -->
-      <div id="sec-empresa-vagas" class="secao-ocultavel" style="display: none;">
+      <div id="sec-empresa-vagas" class="content-section" style="display: none;">
         <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
          <div class="mb-4">
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCriarVaga">Criar Nova Vaga</button>
@@ -983,12 +997,12 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
      </div>  
 
       <!-- Seção de Documentos -->
-      <div id="sec-empresa-documentos" class="secao-ocultavel" style="display: none;">
-        <h3 class="mb-4">
-        <i class="bi bi-file-earmark-text-fill me-2"></i>Documentos
-      </h3>  
+      <div id="sec-empresa-documentos" class="content-section" style="display: none;">
+      
         <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
-
+               <h3 class="mb-4">
+        <i class="bi bi-file-earmark-text-fill me-2"></i>Documentos
+      </h3> 
       <!-- Aba Documentos -->
       <div class="tab-pane fade show active" id="documentos">
         <div class="d-flex justify-content-between mb-3">
@@ -1083,71 +1097,158 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
             </div>
       </div>
       <!-- Seção de Mensagens -->
-        <div id="sec-empresa-mensagens" class="secao-ocultavel" style="display: none;">
-  <div class="container mt-4">
-    <h3 class="mb-4 text-white">
-      <i class="bi bi-envelope-fill me-2"></i>Mensagens
-    </h3>
+          <div id="sec-mensagens" class="content-section" style="display: none;">
+          <div class="container mt-4">
 
-    <!-- Abas -->
-    <ul class="nav nav-tabs" id="mensagemTabEmpresa" role="tablist">
-      <li class="nav-item">
-        <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entradaEmpresa" type="button">Caixa de Entrada</button>
-      </li>
-      <li class="nav-item">
-        <button class="nav-link" data-bs-toggle="tab" data-bs-target="#novaEmpresa" type="button">Nova Mensagem</button>
-      </li>
-    </ul>
+            <!-- Conteúdo das abas -->
+            <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
+              <h3 class="mb-4 text-white">
+                <i class="bi bi-envelope-fill me-2"></i>Mensagens
+              </h3>
 
-    <!-- Conteúdo das abas -->
-    <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
+              <!-- Abas -->
+              <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active bg-light text-dark"
+                    id="entrada-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#entrada"
+                    type="button"
+                    role="tab"
+                    aria-controls="entrada"
+                    aria-selected="true"
+                  >Caixa de Entrada</button>
+                </li>
+                <li class="nav-item ms-2" role="presentation">
+                  <button
+                    class="nav-link bg-light text-dark"
+                    id="nova-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nova"
+                    type="button"
+                    role="tab"
+                    aria-controls="nova"
+                    aria-selected="false"
+                  >Nova Mensagem</button>
+                </li>
+              </ul>
 
-      <!-- Caixa de Entrada -->
-      <div class="tab-pane fade show active" id="entradaEmpresa">
-        <div class="d-flex mb-3 gap-2">
-          <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagemEmpresa">
-          <select class="form-select bg-light text-dark" id="filtroRemetenteEmpresa" style="max-width: 200px;">
-            <option value="todos">Todos</option>
-            <option value="aluno">Alunos</option>
-            <option value="instituicao">Instituição</option>
-          </select>
-        </div>
+              <!-- Caixa de Entrada -->
+              <div
+                class="tab-pane fade show active"
+                id="entrada"
+                role="tabpanel"
+                aria-labelledby="entrada-tab"
+              >
+                <div class="d-flex mb-3 gap-2 flex-wrap">
+                  <input
+                    type="text"
+                    class="form-control bg-light text-dark flex-grow-1"
+                    placeholder="Buscar por assunto, remetente..."
+                    id="buscaMensagem"
+                    aria-label="Buscar mensagens"
+                  >
+                  <select
+                    class="form-select bg-light text-dark"
+                    id="filtroRemetente"
+                    style="max-width: 200px;"
+                    aria-label="Filtrar por remetente"
+                  >
+                    <option value="todos">Todos</option>
+                    <option value="aluno">Alunos</option>
+                    <option value="empresa">Empresas</option>
+                  </select>
+                </div>
 
-        <!-- Lista de mensagens -->
-        <div class="list-group" id="listaMensagensEmpresa">
-          <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida"
-            data-remetente="instituicao" data-bs-toggle="modal" data-bs-target="#modalMensagemEmpresa1" onclick="marcarComoLida(this)">
-            <strong>📧 Assunto:</strong> Atualização de contrato<br>
-            <small>De: instituicao@email.com | 10/05/2025</small>
-          </button>
+                <!-- Lista de mensagens - inicialmente vazia -->
+                <div class="list-group" id="listaMensagens" role="list" aria-live="polite" aria-relevant="additions"></div>
+              </div>
 
-          <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem"
-            data-remetente="aluno" data-bs-toggle="modal" data-bs-target="#modalMensagemEmpresa2" onclick="marcarComoLida(this)">
-            <strong>📧 Assunto:</strong> Dúvida sobre estágio<br>
-            <small>De: aluno@email.com | 09/05/2025</small>
-          </button>
-        </div>
-      </div>
-
-      <!-- Nova Mensagem -->
-      <div class="tab-pane fade" id="novaEmpresa">
-        <form>
-          <div class="mb-3">
-            <label for="destinatarioEmpresa" class="form-label">Destinatário</label>
-            <select class="form-select bg-light text-dark" id="destinatarioEmpresa">
-              <option value="aluno">Aluno</option>
-              <option value="instituicao">Instituição</option>
-            </select>
+              <!-- Nova Mensagem -->
+              <div
+                class="tab-pane fade text-white"
+                id="nova"
+                role="tabpanel"
+                aria-labelledby="nova-tab"
+              >
+                <form
+                  method="POST"
+                  action="../php/enviar_mensagem_chat.php"
+                  enctype="multipart/form-data"
+                  novalidate
+                >
+                  <div class="mb-3">
+                    <label for="remetente" class="form-label">Seu E-mail</label>
+                    <input
+                      type="email"
+                      name="remetente"
+                      class="form-control bg-light text-dark"
+                      id="remetente"
+                      placeholder="seu@email.com"
+                      value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
+                      readonly
+                      required
+                      aria-readonly="true"
+                    >
+                  </div>
+                  <div class="mb-3">
+                    <label for="destinatario" class="form-label">Destinatário</label>
+                    <input
+                      type="email"
+                      name="destinatario"
+                      class="form-control bg-light text-dark"
+                      id="destinatario"
+                      placeholder="E-mail do destinatário"
+                      required
+                    >
+                  </div>
+                  <div class="mb-3">
+                    <label for="assunto" class="form-label">Assunto</label>
+                    <input
+                      type="text"
+                      name="assunto"
+                      class="form-control bg-light text-dark"
+                      id="assunto"
+                      placeholder="Assunto da mensagem"
+                      required
+                    >
+                  </div>
+                  <div class="mb-3">
+                    <label for="mensagem" class="form-label">Mensagem</label>
+                    <textarea
+                      name="mensagem"
+                      class="form-control bg-light text-dark"
+                      id="mensagem"
+                      rows="5"
+                      placeholder="Escreva sua mensagem aqui..."
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="anexo" class="form-label">Anexo</label>
+                    <input
+                      type="file"
+                      name="anexo"
+                      id="anexo"
+                      class="form-control bg-light text-dark"
+                      aria-describedby="anexoHelp"
+                    >
+                    <div id="anexoHelp" class="form-text text-white-50">
+                      Tipos permitidos: pdf, jpg, png, docx. Máx: 5MB.
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success">Enviar</button>
+                </form>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="remetenteEmpresa" class="form-label">Seu E-mail</l
+        </div>
 
         <!-- Seção de Configurações da Empresa -->
-      <div id="sec-empresa-configuracoes" class="secao-ocultavel" style="display: none;">
+      <div id="sec-empresa-configuracoes" class="content-section" style="display: none;">
         <div class="container mt-4">
-          <h3 class="mb-4">
-  <i class="bi bi-gear me-2"></i>Configurações da Empresa
-</h3>
+ 
 
 
   <!-- Abas -->
@@ -1155,7 +1256,10 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
 
   <!-- Conteúdo das abas -->
   <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
-     <ul class="nav nav-pills mb-3 bg-dark p-2 rounded" id="configEmpresaTab" role="tablist">
+             <h3 class="mb-4">
+  <i class="bi bi-gear me-2"></i>Configurações da Empresa
+</h3> 
+    <ul class="nav nav-pills mb-3 bg-dark p-2 rounded" id="configEmpresaTab" role="tablist">
     <li class="nav-item"><a class="nav-link active text-white" data-bs-toggle="pill" href="#dadosEmpresa">Dados da Empresa</a></li>
     <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#responsaveis">Responsáveis</a></li>
     <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#documentacao">Documentação</a></li>
@@ -1294,5 +1398,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../script/script.js"></script> <!-- JS externo -->
    <script src="../script/tabelaEstagiarios.js"></script> <!-- JS externo -->
-</body>
+   <script src="../script/mensagens.js"></script> <!-- JS externo -->
+  </body>
 </html>

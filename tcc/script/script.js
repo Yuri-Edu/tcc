@@ -1,24 +1,18 @@
-
 // Função para mostrar uma seção e esconder as outras
 function showSection(id) {
-    // Esconde todas as seções principais
-    document.querySelectorAll('.content-section').forEach(secao => {
-      secao.classList.remove('active');
-      secao.style.display = 'none';
-    });
-  
-    // Mostra a seção correspondente ao botão clicado
-    const secaoSelecionada = document.getElementById(id);
-    if (secaoSelecionada) {
-      secaoSelecionada.classList.add('active');
-      secaoSelecionada.style.display = 'block';
-    }
-  
-    // Se for a seção de vagas, ativa a primeira aba (Disponíveis)
-    if (id === 'vagas') {
-      mostrarSubsecao('disponiveis', document.querySelector('#abas-vagas button:first-child'));
-    }
+  document.querySelectorAll('.content-section').forEach(secao => {
+    secao.classList.remove('active');
+    secao.style.display = 'none';
+  });
+
+  const secaoSelecionada = document.getElementById(id);
+  if (secaoSelecionada) {
+    secaoSelecionada.classList.add('active');
+    secaoSelecionada.style.display = 'block';
   }
+}
+
+window.showSection = showSection; // Disponibiliza a função no escopo global
 
 
 // Aguarda o carregamento completo da página antes de executar qualquer código
@@ -86,15 +80,32 @@ document.addEventListener("DOMContentLoaded", function() {
   /**
    * Função que envia o perfil dinamicamente dependendo da opção selecionada
    */
-     const selectUsuario = document.getElementById('usuario');
-const inputPerfil = document.querySelectorAll('input[name="perfil"]');
+document.addEventListener('DOMContentLoaded', function() {
+    const selectUsuario = document.getElementById('usuario');
+    const inputPerfil = document.querySelectorAll('input[name="perfil"]');
 
-selectUsuario.addEventListener('change', function() {
-    inputPerfil.forEach(input => {
-        input.value = this.value; // Define o perfil selecionado em todos os formulários
-    });
+    if (selectUsuario) {
+        selectUsuario.addEventListener('change', function() {
+            inputPerfil.forEach(input => {
+                input.value = this.value;
+            });
+        });
+    } else {
+        console.warn('Elemento com ID "usuario" não encontrado.');
+    }
 });
- 
+
+
+
+  /**    const selectUsuario = document.getElementById('usuario');
+ *const inputPerfil = document.querySelectorAll('input[name="perfil"]');
+*
+* selectUsuario.addEventListener('change', function() {
+   * inputPerfil.forEach(input => {
+  *      input.value = this.value; // Define o perfil selecionado em todos os formulários
+ *   });
+*});
+ */
   /**
    * Função que exibe formulários dinamicamente dependendo da opção selecionada
    */

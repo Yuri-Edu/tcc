@@ -3,9 +3,9 @@ session_start();
 
 // Verifica se está logado e se é aluno
 if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
-    header('Location: ../tela_inicial/home.php');
+    header('Location: ../tela_inicial/index.php');
     exit();
-}
+} 
 ?>
 
 <!DOCTYPE html>
@@ -558,164 +558,129 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
                 </div>
               </div>
          </div>
-     
-          <script>
-            function abrirDetalhes(id) {
-              fetch('buscarDetalhesVaga.php?id=' + id)
-                  .then(response => response.text())
-                  .then(data => {
-                      document.getElementById('conteudoDetalhes').innerHTML = data;
-                      let modal = new bootstrap.Modal(document.getElementById('modalDetalhes'));
-                      modal.show();
-                  })
-                  .catch(error => {
-                      console.error('Erro:', error);
-                      alert('Erro ao carregar os detalhes.');
-                  });
-            }
-          </script>
-
         </div>
 
           <!--  Inscrições -->
-          <div id="inscricoes" class="content-section bg-dark text-white min-vh-100" style="display: none;">
-              <?php
-                session_start();
-                include_once '../php/db.php';
+    <div id="inscricoes" class="content-section bg-dark text-white min-vh-100" style="display: none;">
+  <div class="container my-4">
+    <h2 class="mb-4"><i class="bi bi-list-check me-2"></i>Minhas Inscrições</h2>
+    <div class="row" id="inscricoesContainer">
+      
+      <?php if (isset($erro)) : ?>
+        <div class="alert alert-danger"><?= htmlspecialchars($erro) ?></div>
+      
+      <?php elseif ($result->num_rows > 0) : ?>
+        <?php while ($inscricao = $result->fetch_assoc()) : ?>
+          <div class="col-md-6 mb-4">
+            <div class="card bg-dark text-white p-3 border border-secondary">
+              <h5><?= htmlspecialchars($inscricao['titulo']) ?></h5>
+              <p class="mb-1"><?= htmlspecialchars($inscricao['empresa']) ?></p>
+              <p class="text-muted mb-2"><?= htmlspecialchars($inscricao['localidade']) ?> • <?= htmlspecialchars($inscricao['modalidade']) ?></p>
+              <small>Curso: <?= htmlspecialchars($inscricao['curso']) ?></small><br>
+              <small>Bolsa: R$ <?= number_format($inscricao['valor_bolsa'], 2, ',', '.') ?></small><br>
+              <small><strong>Status:</strong> <?= htmlspecialchars($inscricao['status']) ?></small><br>
+              <small><strong>Inscrição em:</strong> <?= date('d/m/Y', strtotime($inscricao['data_candidatura'])) ?></small>
 
-                $aluno_id = $_SESSION['id_usuario'];
-
-                $sql = "SELECT 
-                  c.id AS candidatura_id,
-                  v.titulo,
-                  v.empresa,
-                  v.localidade,
-                  v.modalidade,
-                  v.curso,
-                  v.valor_bolsa,
-                  c.data_candidatura,
-                  c.status
-              FROM candidaturas c
-              INNER JOIN vagas v ON c.vaga_id = v.id
-              WHERE c.aluno_id = ?
-              ORDER BY c.data_candidatura DESC";
-
-                $stmt = $conn->prepare($sql);
-                $stmt->bind_param("i", $aluno_id);
-                $stmt->execute();
-                $result = $stmt->get_result();
-                ?>
-
-      <div class="container my-4">
-          <h2 class="mb-4">Minhas Inscrições</h2>
-
-          <div class="row" id="inscricoesContainer">
-              <?php if ($result->num_rows > 0) {
-                  while ($inscricao = $result->fetch_assoc()) { ?>
-                <div class="col-md-6 mb-4">
-                    <div class="card bg-dark text-white p-3">
-                              <h5><?php echo htmlspecialchars($inscricao['titulo']); ?></h5>
-                              <p class="mb-1"><?php echo htmlspecialchars($inscricao['empresa']); ?></p>
-                              <p class="text-muted  mb-2">
-                            <?= htmlspecialchars($inscricao['localidade']) ?> • <?= htmlspecialchars($inscricao['modalidade']) ?>
-                        </p>
-                        <small>Curso: <?= htmlspecialchars($inscricao['curso']) ?></small><br>
-                        <small>Bolsa: R$ <?= number_format($inscricao['valor_bolsa'], 2, ',', '.') ?></small><br>
-                        <small><strong>Status:</strong> <?= htmlspecialchars($inscricao['status']) ?></small><br>
-                        <small><strong>Inscrição em:</strong> <?= date('d/m/Y', strtotime($inscricao['data_candidatura'])) ?></small>
-                        <div class="d-grid gap-2 mt-3">
-                            <button class="btn btn-outline-light">Visualizar</button>
-                            <button class="btn btn-danger">Cancelar Inscrição</button>
-                        </div>
-                    </div>
-                </div>
-        <?php }
-        } else {
-            echo '<div class="alert alert-info">Você ainda não possui inscrições em vagas.</div>';
-        } ?>
-    </div>
+              <div class="d-grid gap-2 mt-3">
+                <button class="btn btn-outline-light">Visualizar</button>
+                <button class="btn btn-danger">Cancelar Inscrição</button>
+              </div>
+            </div>
           </div>
+        <?php endwhile; ?>
+
+      <?php else : ?>
+        <div class="alert alert-info">Você ainda não possui inscrições em vagas.</div>
+      <?php endif; ?>
+
+    </div>
+  </div>
+</div>
+
+<!-- Fecha a div de inscrições -->
+
+
 
          <!-- Seção de Mensagens -->
           <div id="mensagens" class="content-section secao-ocultavel" style="display: none;">
-        <div class="container mt-4">
+            <div class="container mt-4">
 
-          <!-- Título -->
-          <h3 class="mb-4 text-white">
-            <i class="bi bi-envelope-fill me-2"></i>Mensagens
-          </h3>
+              <!-- Título -->
+              <h3 class="mb-4 text-white">
+                <i class="bi bi-envelope-fill me-2"></i>Mensagens
+              </h3>
 
- 
-          <!-- Conteúdo das abas -->
-          <div class="tab-content bg-dark p-3 text-white rounded-bottom border border-secondary" style="min-height: 400px;">
-                   <ul class="nav nav-tabs text-white mb-4" id="mensagemTabAluno" role="tablist">
-                    <li class="nav-item text-white">
-                      <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entradaAluno" type="button">Caixa de Entrada</button>
-                    </li>
-                    <li class="nav-item">
-                      <button class="nav-link" data-bs-toggle="tab" data-bs-target="#novaAluno" type="button">Nova Mensagem</button>
-                    </li>
-                  </ul>
-            <!-- Caixa de Entrada -->
-            <div class="tab-pane fade show active" id="entradaAluno">
-              <div class="d-flex mb-3 gap-2">
-                <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
-                <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
-                  <option value="todos">Todos</option>
-                  <option value="empresa">Empresas</option>
-                  <option value="instituicao">Instituição</option>
-                </select>
-              </div>
+    
+              <!-- Conteúdo das abas -->
+              <div class="tab-content bg-dark p-3 text-white rounded-bottom border border-secondary" style="min-height: 400px;">
+                      <ul class="nav nav-tabs text-white mb-4" id="mensagemTabAluno" role="tablist">
+                        <li class="nav-item text-white">
+                          <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#entradaAluno" type="button">Caixa de Entrada</button>
+                        </li>
+                        <li class="nav-item">
+                          <button class="nav-link" data-bs-toggle="tab" data-bs-target="#novaAluno" type="button">Nova Mensagem</button>
+                        </li>
+                      </ul>
+                <!-- Caixa de Entrada -->
+                <div class="tab-pane fade show active" id="entradaAluno">
+                  <div class="d-flex mb-3 gap-2">
+                    <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
+                    <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
+                      <option value="todos">Todos</option>
+                      <option value="empresa">Empresas</option>
+                      <option value="instituicao">Instituição</option>
+                    </select>
+                  </div>
 
-              <!-- Lista de mensagens (Exemplos) -->
-              <div class="list-group" id="listaMensagens">
-                <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida"
-                  data-remetente="empresa" data-bs-toggle="modal" data-bs-target="#modalMensagem1"
-                  onclick="marcarComoLida(this)">
-                  <strong>📧 Assunto:</strong> Atualização de Dados<br>
-                  <small>De: empresa@email.com | 13/05/2025</small>
-                </button>
+                  <!-- Lista de mensagens (Exemplos) -->
+                  <div class="list-group" id="listaMensagens">
+                    <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem nao-lida"
+                      data-remetente="empresa" data-bs-toggle="modal" data-bs-target="#modalMensagem1"
+                      onclick="marcarComoLida(this)">
+                      <strong>📧 Assunto:</strong> Atualização de Dados<br>
+                      <small>De: empresa@email.com | 13/05/2025</small>
+                    </button>
 
-                <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem"
-                  data-remetente="instituicao" data-bs-toggle="modal" data-bs-target="#modalMensagem2"
-                  onclick="marcarComoLida(this)">
-                  <strong>📧 Assunto:</strong> Nova vaga disponível<br>
-                  <small>De: instituicao@email.com | 12/05/2025</small>
-                </button>
+                    <button class="list-group-item list-group-item-action bg-dark text-white border-bottom mensagem"
+                      data-remetente="instituicao" data-bs-toggle="modal" data-bs-target="#modalMensagem2"
+                      onclick="marcarComoLida(this)">
+                      <strong>📧 Assunto:</strong> Nova vaga disponível<br>
+                      <small>De: instituicao@email.com | 12/05/2025</small>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Nova Mensagem -->
+                <div class="tab-pane fade" id="novaAluno">
+                    <form>
+                    <div class="mb-3">
+                      <label for="destinatario" class="form-label">Destinatário</label>
+                      <select class="form-select bg-light text-dark" id="destinatario">
+                        <option value="empresa">Empresa</option>
+                        <option value="instituicao">Instituição</option>
+                      </select>
+                    </div>
+                    <div class="mb-3">
+                      <label for="remetente" class="form-label">Seu E-mail</label>
+                      <input type="email" class="form-control bg-light text-dark" id="remetente"
+                        placeholder="seu@email.com">
+                    </div>
+                    <div class="mb-3">
+                      <label for="assunto" class="form-label">Assunto</label>
+                      <input type="text" class="form-control bg-light text-dark" id="assunto"
+                        placeholder="Assunto da mensagem">
+                    </div>
+                    <div class="mb-3">
+                      <label for="mensagem" class="form-label">Mensagem</label>
+                      <textarea class="form-control bg-light text-dark" id="mensagem" rows="5"
+                        placeholder="Escreva sua mensagem aqui..."></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-success">Enviar</button>
+                  </form>
+                </div>
+
               </div>
             </div>
-
-            <!-- Nova Mensagem -->
-            <div class="tab-pane fade" id="novaAluno">
-                <form>
-                <div class="mb-3">
-                  <label for="destinatario" class="form-label">Destinatário</label>
-                  <select class="form-select bg-light text-dark" id="destinatario">
-                    <option value="empresa">Empresa</option>
-                    <option value="instituicao">Instituição</option>
-                  </select>
-                </div>
-                <div class="mb-3">
-                  <label for="remetente" class="form-label">Seu E-mail</label>
-                  <input type="email" class="form-control bg-light text-dark" id="remetente"
-                    placeholder="seu@email.com">
-                </div>
-                <div class="mb-3">
-                  <label for="assunto" class="form-label">Assunto</label>
-                  <input type="text" class="form-control bg-light text-dark" id="assunto"
-                    placeholder="Assunto da mensagem">
-                </div>
-                <div class="mb-3">
-                  <label for="mensagem" class="form-label">Mensagem</label>
-                  <textarea class="form-control bg-light text-dark" id="mensagem" rows="5"
-                    placeholder="Escreva sua mensagem aqui..."></textarea>
-                </div>
-                <button type="submit" class="btn btn-success">Enviar</button>
-              </form>
-            </div>
-
-          </div>
-        </div>
           </div>
           
             <!-- Favoritos -->
@@ -919,8 +884,24 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
       </div>
     </div>
 
+<script>
 
-    <script src="../script/script.js"></script>
+    function abrirDetalhes(id) {
+              fetch('buscarDetalhesVaga.php?id=' + id)
+                  .then(response => response.text())
+                  .then(data => {
+                      document.getElementById('conteudoDetalhes').innerHTML = data;
+                      let modal = new bootstrap.Modal(document.getElementById('modalDetalhes'));
+                      modal.show();
+                  })
+                  .catch(error => {
+                      console.error('Erro:', error);
+                      alert('Erro ao carregar os detalhes.');
+                  });
+            }
+</script>
+<script src="../script/script.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <!-- Biblioteca html2pdf para gerar PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 

@@ -5,7 +5,7 @@ session_start();
 
 $id_empresa = $_SESSION['id_usuario'];
 
-$sql = "SELECT * FROM estagiarios WHERE id_empresa = ?";
+$sql = "SELECT * FROM estagios WHERE empresa_id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id_empresa);
 $stmt->execute();

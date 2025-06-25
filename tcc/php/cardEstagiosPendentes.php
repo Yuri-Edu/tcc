@@ -4,7 +4,7 @@ session_start();
 
 $id_empresa = $_SESSION['id_usuario'];  // ou $_SESSION['id_empresa'] conforme seu sistema
 
-$sql = "SELECT COUNT(*) AS total FROM estagiarios WHERE id_empresa = ? AND status = 'Pendente'";
+$sql = "SELECT COUNT(*) AS total FROM estagios WHERE empresa_id = ? AND status = 'Pendente'";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id_empresa);
 $stmt->execute();

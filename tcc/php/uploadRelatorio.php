@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_FILES['relatorioFile']) && $_FILES['relatorioFile']['error'] === 0) {
         $arquivo = $_FILES['relatorioFile'];
         $nomeArquivo = basename($arquivo['name']);
-        $caminhoDestino = '../uploads/' . $nomeArquivo;
+        $caminhoDestino = '../relatorios/' . $nomeArquivo;
 
         // Cria a pasta uploads se não existir
         if (!is_dir('../uploads')) {
