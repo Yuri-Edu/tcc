@@ -24,6 +24,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="../css/estilo.css" rel="stylesheet" /> <!-- CSS externo -->
+  <script src="../script/script.js" defer></script>
 </head>
 <body>
 
@@ -176,7 +177,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                               <div class="card-body">
                                   <h5 class="card-title">Total de Estagiários</h5>
                                   <p id="totalEstagios" class="card-text">
-                                    <?php include 'php/totalEstagiarios.php'; ?>
+                                    <?php include '../php/cardTotalEstagiarios.php'; ?>
                                   </p>
                               </div>
                           </div>
@@ -186,7 +187,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                               <div class="card-body">
                                   <h5 class="card-title">Aprovados</h5>
                                   <p id="totalAprovados" class="card-text">
-                                     <?php include '../php/cardcontratados.php'; ?>
+                                     <?php include '../php/cardContratados.php'; ?>
                                   </p>
                               </div>
                           </div>
@@ -196,7 +197,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                               <div class="card-body">
                                   <h5 class="card-title">Pendentes</h5>
                                   <p id="totalPendentes" class="card-text">
-                                    <?php include 'php/cardEstagiosPendentes.php'; ?>
+                                    <?php include '../php/cardEstagiosPendentes.php'; ?>
                                   </p>
                               </div>
                           </div>
@@ -220,7 +221,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                       </thead>
                       <tbody>
                            <!-- Dados serão preenchidos automaticamente via JavaScript -->
-                              <?php include 'php/listarEstagios.php'; ?>
+                              <?php include '../php/listarEstagiarios.php'; ?>
                       </tbody>
                   </table>
               </div>
@@ -1097,7 +1098,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
             </div>
       </div>
       <!-- Seção de Mensagens -->
-          <div id="sec-mensagens" class="content-section" style="display: none;">
+          <div id="sec-empresa-mensagens" class="content-section" style="display: none;">
           <div class="container mt-4">
 
             <!-- Conteúdo das abas -->

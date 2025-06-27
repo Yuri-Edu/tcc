@@ -1,6 +1,6 @@
 <?php
 include_once 'db.php';
-session_start();
+
 
 $id_empresa = $_SESSION['id_usuario'];  // ou id_empresa, dependendo da sua sessão
 
@@ -18,5 +18,5 @@ if ($result) {
 }
 
 $stmt->close();
-$conn->close();
+
 ?>

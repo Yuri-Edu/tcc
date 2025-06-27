@@ -1,12 +1,19 @@
 <?php
 session_start();
 
+include_once '../php/dashboard.php';
+include_once '../php/db.php';
+
+$id_empresa = $_SESSION['id_usuario'];
+$dados = obterDadosDashboard($conn, $id_empresa, 'empresa_id');
+
 // Verifica se está logado e se é aluno
 if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
-    header('Location: ../tela_inicial/index.php');
+    header('Location: ../tela_inicia/index.php');
     exit();
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="pt-BR">
@@ -17,6 +24,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="../css/estilo.css" rel="stylesheet" /> <!-- CSS externo -->
+  <script src="../script/script.js" defer></script>
 </head>
 <body>
 
@@ -73,56 +81,60 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
     <!-- Conteúdo principal -->
     <main class="flex-grow-1 p-4">
          <!-- Seção de Dashboard -->
-      <div id="sec-empresa-painel" class="content-section" style="display: block;">
+    <div id="sec-empresa-painel" class="content-section" style="display: block;">
     <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
     <div class="row gx-2 gy-2">
-        <!-- Cards -->
+        <!-- Estágios Pendentes -->
         <div class="col-md-6 d-flex justify-content-start">
             <a href="estagios.html" class="card bg-dark text-white border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-clock-history me-2"></i>Estágios Pendentes</h5>
-                    <p class="card-text display-6"><?php echo $estagios_pendentes; ?></p>
+                     <p class="card-text display-6"><?php echo $dados['estagios_pendentes']; ?></p>
                 </div>
             </a>
         </div>
 
+        <!-- Relatórios Aguardando -->
         <div class="col-md-6 d-flex justify-content-start">
             <a href="relatorios.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-file-earmark-text me-2"></i>Relatórios Aguardando</h5>
-                    <p class="card-text display-6"><?php echo $relatorios_aguardando; ?></p>
+                    <p class="card-text display-6"><?php echo $dados['relatorios_aguardando']; ?></p>
                 </div>
             </a>
         </div>
 
+        <!-- Estágios Cadastrados -->
         <div class="col-md-6 d-flex justify-content-start">
             <a href="alunos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-people-fill me-2"></i>Estágios Cadastrados</h5>
-                    <p class="card-text display-6"><?php echo $estagios_cadastrados; ?></p>
+                     <p class="card-text display-6"><?php echo $dados['estagios_cadastrados']; ?></p>
                 </div>
             </a>
         </div>
 
+        <!-- Vagas Criadas -->
         <div class="col-md-6 d-flex justify-content-start">
             <a href="vagas.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 75%;">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-megaphone-fill me-2"></i>Vagas Criadas</h5>
-                    <p class="card-text display-6"><?php echo $vagas_criadas; ?></p>
+                    <p class="card-text display-6"><?php echo $dados['vagas_criadas']; ?></p>
                 </div>
             </a>
         </div>
 
+        <!-- Documentos Pendentes -->
         <div class="col-md-6 d-flex justify-content-start">
             <a href="documentos.html" class="card bg-dark text-white shadow-sm border-light rounded-4" style="width: 70%;">
                 <div class="card-body">
                     <h5 class="card-title"><i class="bi bi-file-earmark-excel me-2"></i>Documentos Pendentes</h5>
-                    <p class="card-text display-6"><?php echo $documentos_pendentes; ?></p>
+                    <p class="card-text display-6"><?php echo $dados['documentos_pendentes']; ?></p>
                 </div>
             </a>
         </div>
     </div>
-      </div>
+</div>
 
 
       <!-- Seção de Estágios -->
@@ -165,7 +177,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                               <div class="card-body">
                                   <h5 class="card-title">Total de Estagiários</h5>
                                   <p id="totalEstagios" class="card-text">
-                                    <?php include 'php/totalEstagiarios.php'; ?>
+                                    <?php include '../php/cardTotalEstagiarios.php'; ?>
                                   </p>
                               </div>
                           </div>
@@ -175,7 +187,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                               <div class="card-body">
                                   <h5 class="card-title">Aprovados</h5>
                                   <p id="totalAprovados" class="card-text">
-                                     <?php include '../php/cardcontratados.php'; ?>
+                                     <?php include '../php/cardContratados.php'; ?>
                                   </p>
                               </div>
                           </div>
@@ -185,7 +197,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                               <div class="card-body">
                                   <h5 class="card-title">Pendentes</h5>
                                   <p id="totalPendentes" class="card-text">
-                                    <?php include 'php/cardEstagiosPendentes.php'; ?>
+                                    <?php include '../php/cardEstagiosPendentes.php'; ?>
                                   </p>
                               </div>
                           </div>
@@ -209,7 +221,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                       </thead>
                       <tbody>
                            <!-- Dados serão preenchidos automaticamente via JavaScript -->
-                              <?php include 'php/listarEstagios.php'; ?>
+                              <?php include '../php/listarEstagiarios.php'; ?>
                       </tbody>
                   </table>
               </div>
@@ -1057,219 +1069,181 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                   </div>
                   <div class="modal-body">
-                   <form action="upload_documento.php" method="POST" enctype="multipart/form-data">
-                    <div class="mb-3">
+                    <form>
+                      <div class="mb-3">
                         <label for="documentName" class="form-label">Nome do Documento</label>
-                        <input type="text" class="form-control bg-light text-dark" id="documentName" name="documentName" required>
-                    </div>
-                    <div class="mb-3">
+                        <input type="text" class="form-control bg-light text-dark" id="documentName" placeholder="Nome do Documento">
+                      </div>
+                      <div class="mb-3">
                         <label for="documentCategory" class="form-label">Categoria</label>
-                        <select class="form-select bg-light text-dark" id="documentCategory" name="documentCategory" required>
-                        <option selected disabled>Escolha a categoria</option>
-                        <option value="1">Categoria 1</option>
-                        <option value="2">Categoria 2</option>
-                        <option value="3">Categoria 3</option>
+                        <select class="form-select bg-light text-dark" id="documentCategory">
+                          <option selected>Escolha a categoria</option>
+                          <option value="1">Categoria 1</option>
+                          <option value="2">Categoria 2</option>
+                          <option value="3">Categoria 3</option>
                         </select>
-                    </div>
-                    <div class="mb-3">
+                      </div>
+                      <div class="mb-3">
                         <label for="documentFile" class="form-label">Arquivo</label>
-                        <input type="file" class="form-control bg-light text-dark" id="documentFile" name="documentFile" required>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                        <button type="submit" class="btn btn-primary">Salvar Documento</button>
-                    </div>
+                        <input type="file" class="form-control bg-light text-dark" id="documentFile">
+                      </div>
                     </form>
-
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="submit" class="btn btn-primary">Salvar Documento</button>
+                    <button type="button" class="btn btn-primary">Salvar Documento</button>
                   </div>
                 </div>
               </div>
             </div>
       </div>
       <!-- Seção de Mensagens -->
-        <div id="sec-empresa-mensagens" class="content-section" style="display: none;">
-  <div class="container mt-4">
+          <div id="sec-mensagens" class="content-section" style="display: none;">
+          <div class="container mt-4">
 
-    <!-- Conteúdo das abas -->
-    <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
-      <h3 class="mb-4 text-white">
-        <i class="bi bi-envelope-fill me-2"></i>Mensagens
-      </h3>
+            <!-- Conteúdo das abas -->
+            <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
+              <h3 class="mb-4 text-white">
+                <i class="bi bi-envelope-fill me-2"></i>Mensagens
+              </h3>
 
-      <!-- Abas -->
-      <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
-        <li class="nav-item bg-light text-dark" role="presentation">
-          <button class="nav-link active" id="entrada-tab" data-bs-toggle="tab" data-bs-target="#entrada" type="button" role="tab" aria-controls="entrada" aria-selected="true">Caixa de Entrada</button>
-        </li>
-        <li class="nav-item bg-light text-dark ms-2" role="presentation">
-          <button class="nav-link" id="nova-tab" data-bs-toggle="tab" data-bs-target="#nova" type="button" role="tab" aria-controls="nova" aria-selected="false">Nova Mensagem</button>
-        </li>
-      </ul>
+              <!-- Abas -->
+              <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                  <button
+                    class="nav-link active bg-light text-dark"
+                    id="entrada-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#entrada"
+                    type="button"
+                    role="tab"
+                    aria-controls="entrada"
+                    aria-selected="true"
+                  >Caixa de Entrada</button>
+                </li>
+                <li class="nav-item ms-2" role="presentation">
+                  <button
+                    class="nav-link bg-light text-dark"
+                    id="nova-tab"
+                    data-bs-toggle="tab"
+                    data-bs-target="#nova"
+                    type="button"
+                    role="tab"
+                    aria-controls="nova"
+                    aria-selected="false"
+                  >Nova Mensagem</button>
+                </li>
+              </ul>
 
-      <!-- Caixa de Entrada -->
-      <div class="tab-pane fade show active" id="entrada" role="tabpanel" aria-labelledby="entrada-tab">
-        <div class="d-flex mb-3 gap-2">
-          <input type="text" class="form-control bg-light text-dark" placeholder="Buscar por assunto, remetente..." id="buscaMensagem">
-          <select class="form-select bg-light text-dark" id="filtroRemetente" style="max-width: 200px;">
-            <option value="todos">Todos</option>
-            <option value="aluno">Alunos</option>
-            <option value="empresa">Empresas</option>
-          </select>
-        </div>
+              <!-- Caixa de Entrada -->
+              <div
+                class="tab-pane fade show active"
+                id="entrada"
+                role="tabpanel"
+                aria-labelledby="entrada-tab"
+              >
+                <div class="d-flex mb-3 gap-2 flex-wrap">
+                  <input
+                    type="text"
+                    class="form-control bg-light text-dark flex-grow-1"
+                    placeholder="Buscar por assunto, remetente..."
+                    id="buscaMensagem"
+                    aria-label="Buscar mensagens"
+                  >
+                  <select
+                    class="form-select bg-light text-dark"
+                    id="filtroRemetente"
+                    style="max-width: 200px;"
+                    aria-label="Filtrar por remetente"
+                  >
+                    <option value="todos">Todos</option>
+                    <option value="aluno">Alunos</option>
+                    <option value="empresa">Empresas</option>
+                  </select>
+                </div>
 
-        <!-- Lista de mensagens - inicialmente vazia -->
-        <div class="list-group" id="listaMensagens">
-        </div>
-      </div>
+                <!-- Lista de mensagens - inicialmente vazia -->
+                <div class="list-group" id="listaMensagens" role="list" aria-live="polite" aria-relevant="additions"></div>
+              </div>
 
-      <!-- Nova Mensagem -->
-      <div class="tab-pane fade text-white" id="nova" role="tabpanel" aria-labelledby="nova-tab">
-        <form method="POST" action="../php/enviar_mensagem_chat.php" enctype="multipart/form-data" novalidate>
-          <div class="mb-3">
-            <label for="remetente" class="form-label">Seu E-mail</label>
-            <input 
-              type="email" 
-              name="remetente" 
-              class="form-control bg-light text-dark" 
-              id="remetente" 
-              placeholder="seu@email.com"
-              value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
-              readonly
-              required>
-          </div>
-          <div class="mb-3">
-            <label for="destinatario" class="form-label">Destinatário</label>
-            <input 
-              type="email" 
-              name="destinatario" 
-              class="form-control bg-light text-dark" 
-              id="destinatario" 
-              placeholder="E-mail do destinatário"
-              required>
-          </div>
-          <div class="mb-3">
-            <label for="assunto" class="form-label">Assunto</label>
-            <input 
-              type="text" 
-              name="assunto" 
-              class="form-control bg-light text-dark" 
-              id="assunto" 
-              placeholder="Assunto da mensagem"
-              required>
-          </div>
-          <div class="mb-3">
-            <label for="mensagem" class="form-label">Mensagem</label>
-            <textarea 
-              name="mensagem" 
-              class="form-control bg-light text-dark" 
-              id="mensagem" 
-              rows="5" 
-              placeholder="Escreva sua mensagem aqui..."
-              required></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="anexo" class="form-label">Anexo</label>
-            <input type="file" name="anexo" id="anexo" class="form-control bg-light text-dark">
-          </div>
-          <button type="submit" class="btn btn-success">Enviar</button>
-        </form>
-      </div>
-    </div>
-  </div>
-
-  <!-- Script para carregar mensagens e criar modais dinamicamente -->
-  <script>
-    const listaMensagens = document.getElementById('listaMensagens');
-    const buscaInput = document.getElementById('buscaMensagem');
-    const filtroSelect = document.getElementById('filtroRemetente');
-
-    function escapeHtml(text) {
-      const div = document.createElement('div');
-      div.textContent = text;
-      return div.innerHTML;
-    }
-
-    function criarModalMensagem(msg) {
-      // Evita criar modais duplicados
-      if (document.getElementById(`modalMensagem${msg.id}`)) return;
-
-      const modalHtml = `
-      <div class="modal fade" id="modalMensagem${msg.id}" tabindex="-1" aria-labelledby="modalMensagem${msg.id}Label" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-scrollable">
-          <div class="modal-content bg-dark text-white">
-            <div class="modal-header">
-              <h5 class="modal-title" id="modalMensagem${msg.id}Label">Assunto: ${escapeHtml(msg.assunto)}</h5>
-              <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              <!-- Nova Mensagem -->
+              <div
+                class="tab-pane fade text-white"
+                id="nova"
+                role="tabpanel"
+                aria-labelledby="nova-tab"
+              >
+                <form
+                  method="POST"
+                  action="../php/enviar_mensagem_chat.php"
+                  enctype="multipart/form-data"
+                  novalidate
+                >
+                  <div class="mb-3">
+                    <label for="remetente" class="form-label">Seu E-mail</label>
+                    <input
+                      type="email"
+                      name="remetente"
+                      class="form-control bg-light text-dark"
+                      id="remetente"
+                      placeholder="seu@email.com"
+                      value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
+                      readonly
+                      required
+                      aria-readonly="true"
+                    >
+                  </div>
+                  <div class="mb-3">
+                    <label for="destinatario" class="form-label">Destinatário</label>
+                    <input
+                      type="email"
+                      name="destinatario"
+                      class="form-control bg-light text-dark"
+                      id="destinatario"
+                      placeholder="E-mail do destinatário"
+                      required
+                    >
+                  </div>
+                  <div class="mb-3">
+                    <label for="assunto" class="form-label">Assunto</label>
+                    <input
+                      type="text"
+                      name="assunto"
+                      class="form-control bg-light text-dark"
+                      id="assunto"
+                      placeholder="Assunto da mensagem"
+                      required
+                    >
+                  </div>
+                  <div class="mb-3">
+                    <label for="mensagem" class="form-label">Mensagem</label>
+                    <textarea
+                      name="mensagem"
+                      class="form-control bg-light text-dark"
+                      id="mensagem"
+                      rows="5"
+                      placeholder="Escreva sua mensagem aqui..."
+                      required
+                    ></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <label for="anexo" class="form-label">Anexo</label>
+                    <input
+                      type="file"
+                      name="anexo"
+                      id="anexo"
+                      class="form-control bg-light text-dark"
+                      aria-describedby="anexoHelp"
+                    >
+                    <div id="anexoHelp" class="form-text text-white-50">
+                      Tipos permitidos: pdf, jpg, png, docx. Máx: 5MB.
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-success">Enviar</button>
+                </form>
+              </div>
             </div>
-            <div class="modal-body">
-              <p><strong>Remetente:</strong> ${escapeHtml(msg.remetente)}</p>
-              <p><strong>Data:</strong> ${new Date(msg.data_envio).toLocaleString()}</p>
-              <hr>
-              <p>${escapeHtml(msg.mensagem).replace(/\n/g, '<br>')}</p>
-            </div>
-            <div class="modal-footer">
-              <button class="btn btn-outline-success" data-bs-toggle="collapse" data-bs-target="#resposta${msg.id}" aria-expanded="false" aria-controls="resposta${msg.id}">
-                Responder
-              </button>
-            </div>
-            <div class="collapse p-3" id="resposta${msg.id}">
-              <form action="../php/responder_mensagem_chat.php" method="POST" novalidate>
-                <input type="hidden" name="mensagem_id" value="${msg.id}">
-                <input type="hidden" name="remetente" value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>">
-                <textarea name="resposta" class="form-control bg-light text-dark mb-2" rows="4" placeholder="Digite sua resposta..." required></textarea>
-                <button type="submit" class="btn btn-success">Enviar Resposta</button>
-              </form>
-            </div>
           </div>
-        </div>
-      </div>`;
-
-      document.body.insertAdjacentHTML('beforeend', modalHtml);
-    }
-
-    function carregarMensagens() {
-      const busca = encodeURIComponent(buscaInput.value);
-      const filtro = encodeURIComponent(filtroSelect.value);
-
-      fetch(`../php/listar_mensagens_chat.php?busca=${busca}&filtro=${filtro}`)
-        .then(res => res.json())
-        .then(data => {
-          listaMensagens.innerHTML = '';
-
-          if (data.length === 0) {
-            listaMensagens.innerHTML = '<p class="text-white">Nenhuma mensagem encontrada.</p>';
-            return;
-          }
-
-          data.forEach(msg => {
-            const btn = document.createElement('button');
-            btn.type = 'button';
-            btn.className = 'list-group-item list-group-item-action bg-dark text-white border-bottom';
-            btn.dataset.bsToggle = 'modal';
-            btn.dataset.bsTarget = `#modalMensagem${msg.id}`;
-            btn.innerHTML = `<strong>📧 ${escapeHtml(msg.assunto)}</strong><br>
-                             <small>De: ${escapeHtml(msg.remetente)} | ${new Date(msg.data_envio).toLocaleString()}</small>`;
-            listaMensagens.appendChild(btn);
-
-            criarModalMensagem(msg);
-          });
-        })
-        .catch(err => {
-          console.error('Erro ao carregar mensagens:', err);
-          listaMensagens.innerHTML = '<p class="text-danger">Erro ao carregar mensagens.</p>';
-        });
-    }
-
-    buscaInput.addEventListener('input', carregarMensagens);
-    filtroSelect.addEventListener('change', carregarMensagens);
-
-    // Carrega as mensagens ao abrir a página
-    carregarMensagens();
-  </script>
         </div>
 
         <!-- Seção de Configurações da Empresa -->
@@ -1425,5 +1399,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="../script/script.js"></script> <!-- JS externo -->
    <script src="../script/tabelaEstagiarios.js"></script> <!-- JS externo -->
-</body>
+   <script src="../script/mensagens.js"></script> <!-- JS externo -->
+  </body>
 </html>

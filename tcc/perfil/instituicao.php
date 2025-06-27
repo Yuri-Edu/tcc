@@ -42,13 +42,21 @@ $stmt->close();
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
   <link href="../css/estilo.css" rel="stylesheet" /> <!-- CSS externo aqui -->
- 
+  <script src="../script/script.js"></script>
 </head>
 <body>
 
   <div class="d-flex">
+    <!-- Botão toggle do menu (visível em telas pequenas) -->
+   <button class="btn btn-dark d-md-none mb-3" type="button"
+  data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
+  aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+  <i class="bi bi-list"></i>
+</button>
+
+
   <!-- Sidebar -->
-      <nav class="col-md-3 col-lg-2 d-md-block bg-dark text-white sidebar collapse" id="sidebarMenu">
+<nav class="collapse d-md-block bg-dark text-white p-3" id="sidebarMenu">
         <div class="p-3">
           <h4 class="justify-content-center">Área da Instituição</h4>
           <ul class="nav flex-column">
@@ -88,7 +96,7 @@ $stmt->close();
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="('sec-mensagens')">
+              <a class="nav-link text-white" href="#" onclick="showSection('sec-mensagens')">
                 <i class="bi bi-chat-dots-fill me-2"></i> Mensagens
               </a>
             </li>
@@ -341,7 +349,9 @@ $stmt->close();
         <div class="card text-white bg-dark">
           <div class="card-body">
             <h5 class="card-title">Total de Estágios</h5>
-            <p id="totalEstagios" class="card-text">10</p>
+            <p id="totalEstagios" class="card-text">
+               <?php include '../php/cardTotalEstagiarios.php'; ?>
+            </p>
           </div>
         </div>
       </div>
@@ -349,7 +359,9 @@ $stmt->close();
         <div class="card text-white bg-dark">
           <div class="card-body">
             <h5 class="card-title">Aprovados</h5>
-            <p id="totalAprovados" class="card-text">3</p>
+            <p id="totalAprovados" class="card-text">
+                <?php include '../php/cardContratados.php'; ?>
+            </p>
           </div>
         </div>
       </div>
@@ -357,7 +369,9 @@ $stmt->close();
         <div class="card text-white bg-dark">
           <div class="card-body">
             <h5 class="card-title">Pendentes</h5>
-            <p id="totalPendentes" class="card-text">7</p>
+            <p id="totalPendentes" class="card-text">
+              <?php include '../php/cardEstagiosPendentes.php'; ?>
+            </p>
           </div>
         </div>
       </div>
@@ -380,30 +394,7 @@ $stmt->close();
       </thead>
       <tbody>
         <!-- Preencher via PHP ou JS -->
-        <tr>
-          <td>Empresa Teste</td>
-          <td>Engenharia</td>
-          <td>360h</td>
-          <td>Manhã</td>
-          <td>01/08/2024</td>
-          <td>01/02/2025</td>
-          <td>Pendente</td>
-          <td>Yuri Eduardo</td>
-          <td>
-            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalEditarEstagio">
-              <i class="bi bi-pencil"></i>
-            </button>
-            <button class="btn btn-outline-light btn-sm">
-              <i class="bi bi-trash"></i>
-            </button>
-            <button class="btn btn-outline-light btn-sm">
-              <i class="bi bi-paperclip"></i>
-            </button>
-            <button class="btn btn-outline-light btn-sm">
-              <i class="bi bi-check-circle"></i>
-            </button>
-          </td>
-        </tr>
+       <?php include '../php/listarEstagiarios.php'; ?>
       </tbody>
     </table>
   </div>
@@ -555,8 +546,7 @@ $stmt->close();
             </div>
           </div>
 
-          <!-- Tabela de Relatórios -->
-          <!-- Tabela de Relatórios Padrão -->
+ 
         <!-- Tabela de Relatórios Padrões -->
         <table class="table table-dark table-bordered">
           <thead>
@@ -645,26 +635,26 @@ $stmt->close();
         </div>
         <!-- Modal para Relatório 2: Estágios Pendentes -->
          <div class="modal fade" id="modalRelatorio2" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark text-white">
-      <div class="modal-header">
-        <h5 class="modal-title">Estágios Pendentes de Aprovação</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <form action="php/salvar_relatorio.php" method="POST">
-        <div class="modal-body">
-          <input type="hidden" name="tipo" value="pendentes_aprovacao">
-          <div class="mb-3">
-            <label class="form-label">Comentário adicional (opcional)</label>
-            <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+          <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h5 class="modal-title">Estágios Pendentes de Aprovação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <form action="php/salvar_relatorio.php" method="POST">
+                <div class="modal-body">
+                  <input type="hidden" name="tipo" value="pendentes_aprovacao">
+                  <div class="mb-3">
+                    <label class="form-label">Comentário adicional (opcional)</label>
+                    <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Gerar Relatório</button>
-        </div>
-      </form>
-    </div>
-  </div>
         </div>
         <!-- Modal para Relatório 3: Estágios por Status -->
           <div class="modal fade" id="modalRelatorio3" tabindex="-1" aria-hidden="true">
@@ -904,11 +894,6 @@ $stmt->close();
                         </div>
                       </div>
                     </div>
-
-
-
-
-
         </div>
         <!-- Modal de Upload de Relatório -->
         <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
@@ -950,349 +935,356 @@ $stmt->close();
           </div>
 
       </div>
+      <!-- Fim da Aba Relatórios -->
         <!-- seção vagas -->
-      <div id="sec-vagas" class="content-section" style="display: none;">
-  <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
+            <div id="sec-vagas" class="content-section" style="display: none;">
+                    <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
 
-  <!-- Botão Nova Vaga -->
-  <div class="mb-4">
-    <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCriarVaga">Criar Nova Vaga</button>
-  </div>
+                        <!-- Botão Nova Vaga -->
+                        <div class="mb-4">
+                          <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCriarVaga">Criar Nova Vaga</button>
+                        </div>
 
-  <!-- Cards Totais -->
-  <div class="row mb-4">
-    <div class="col-md-6">
-      <div class="card bg-dark text-white">
-        <div class="card-body">
-          <h5 class="card-title">Total de Vagas</h5>
-          <p class="card-text fs-2"><?php include_once '../php/cardTotalVagas.php'; ?></p>
-        </div>
-      </div>
-    </div>
-    <div class="col-md-6">
-      <div class="card bg-dark text-white">
-        <div class="card-body">
-          <h5 class="card-title">Vagas Pendentes</h5>
-          <p class="card-text fs-2"><?php include_once '../php/cardVagasPendentes.php'; ?></p>
-        </div>
-      </div>
-    </div>
-  </div>
+                      <!-- Cards Totais -->
+                      <div class="row mb-4">
+                        <div class="col-md-6">
+                          <div class="card bg-dark text-white">
+                            <div class="card-body">
+                              <h5 class="card-title">Total de Vagas</h5>
+                              <p class="card-text fs-2"><?php include_once '../php/cardTotalVagas.php'; ?></p>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card bg-dark text-white">
+                            <div class="card-body">
+                              <h5 class="card-title">Vagas Pendentes</h5>
+                              <p class="card-text fs-2"><?php include_once '../php/cardVagasPendentes.php'; ?></p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
 
-  <!-- Tabela de Vagas -->
-  <table class="table table-dark table-bordered">
-    <thead>
-      <tr>
-        <th>Vaga</th>
-        <th>Empresa</th>
-        <th>Curso</th>
-        <th>Tipo</th>
-        <th>Status</th>
-        <th>Ações</th>
-      </tr>
-    </thead>
-    <tbody>
-      <?php include_once '../php/tabelaVagas.php'; ?>
-    </tbody>
-  </table>
+                    <!-- Tabela de Vagas -->
+                    <table class="table table-dark table-bordered">
+                      <thead>
+                        <tr>
+                          <th>Vaga</th>
+                          <th>Empresa</th>
+                          <th>Curso</th>
+                          <th>Tipo</th>
+                          <th>Status</th>
+                          <th>Ações</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <?php include_once '../php/tabelaVagas.php'; ?>
+                      </tbody>
+                    </table>
 
-  <!-- Modal Criar Vaga -->
-  <div class="modal fade" id="modalCriarVaga" tabindex="-1" aria-labelledby="modalCriarVagaLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content bg-dark text-white">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalCriarVagaLabel">Criar Nova Vaga</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <form action="../php/cadastrarVagas.php" method="POST">
-          <div class="modal-body">
-            <div class="mb-3">
-              <label class="form-label">Título da Vaga</label>
-              <input type="text" class="form-control" name="titulo" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Curso</label>
-              <input type="text" class="form-control" name="curso" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Tipo</label>
-              <select class="form-select" name="tipo" required>
-                <option value="">Selecione</option>
-                <option value="Presencial">Presencial</option>
-                <option value="Remoto">Remoto</option>
-                <option value="Híbrido">Híbrido</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Turno</label>
-              <select class="form-select" name="turno" required>
-                <option value="">Selecione</option>
-                <option value="Manhã">Manhã</option>
-                <option value="Tarde">Tarde</option>
-                <option value="Noite">Noite</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Descrição</label>
-              <textarea class="form-control" name="descricao" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Requisitos</label>
-              <textarea class="form-control" name="requisitos" rows="3" required></textarea>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Criar Vaga</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+                    <!-- Modal Criar Vaga -->
+                    <div class="modal fade" id="modalCriarVaga" tabindex="-1" aria-labelledby="modalCriarVagaLabel" aria-hidden="true">
+                      <div class="modal-dialog">
+                        <div class="modal-content bg-dark text-white">
+                          <div class="modal-header">
+                            <h5 class="modal-title" id="modalCriarVagaLabel">Criar Nova Vaga</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                          </div>
+                          <form action="../php/cadastrarVagas.php" method="POST">
+                            <div class="modal-body">
+                              <div class="mb-3">
+                                <label class="form-label">Título da Vaga</label>
+                                <input type="text" class="form-control" name="titulo" required>
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label">Curso</label>
+                                <input type="text" class="form-control" name="curso" required>
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label">Tipo</label>
+                                <select class="form-select" name="tipo" required>
+                                  <option value="">Selecione</option>
+                                  <option value="Presencial">Presencial</option>
+                                  <option value="Remoto">Remoto</option>
+                                  <option value="Híbrido">Híbrido</option>
+                                </select>
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label">Turno</label>
+                                <select class="form-select" name="turno" required>
+                                  <option value="">Selecione</option>
+                                  <option value="Manhã">Manhã</option>
+                                  <option value="Tarde">Tarde</option>
+                                  <option value="Noite">Noite</option>
+                                </select>
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label">Descrição</label>
+                                <textarea class="form-control" name="descricao" rows="3" required></textarea>
+                              </div>
+                              <div class="mb-3">
+                                <label class="form-label">Requisitos</label>
+                                <textarea class="form-control" name="requisitos" rows="3" required></textarea>
+                              </div>
+                            </div>
+                            <div class="modal-footer">
+                              <button type="submit" class="btn btn-primary">Criar Vaga</button>
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                            </div>
+                          </form>
+                        </div>
+                      </div>
+                    </div>
 
-  <!-- Modal Editar Vaga -->
-  <div class="modal fade" id="modalEditarVaga" tabindex="-1" aria-labelledby="modalEditarVagaLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content bg-dark text-white">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalEditarVagaLabel">Editar Vaga</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <form action="../php/editarVagas.php" method="POST">
-          <div class="modal-body">
-            <input type="hidden" id="editarId" name="id">
+                  <!-- Modal Editar Vaga -->
+                  <div class="modal fade" id="modalEditarVaga" tabindex="-1" aria-labelledby="modalEditarVagaLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                      <div class="modal-content bg-dark text-white">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="modalEditarVagaLabel">Editar Vaga</h5>
+                          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                        </div>
+                        <form action="../php/editarVagas.php" method="POST">
+                          <div class="modal-body">
+                            <input type="hidden" id="editarId" name="id">
 
-            <div class="mb-3">
-              <label class="form-label">Título da Vaga</label>
-              <input type="text" class="form-control" id="editarTitulo" name="titulo" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Curso</label>
-              <input type="text" class="form-control" id="editarCurso" name="curso" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Tipo</label>
-              <input type="text" class="form-control" id="editarTipo" name="tipo" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Turno</label>
-              <input type="text" class="form-control" id="editarTurno" name="turno" required>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Descrição</label>
-              <textarea class="form-control" id="editarDescricao" name="descricao" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Requisitos</label>
-              <textarea class="form-control" id="editarRequisitos" name="requisitos" rows="3" required></textarea>
-            </div>
-            <div class="mb-3">
-              <label class="form-label">Status</label>
-              <input type="text" class="form-control" id="editarStatus" name="status" required>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-primary">Salvar</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
+                            <div class="mb-3">
+                              <label class="form-label">Título da Vaga</label>
+                              <input type="text" class="form-control" id="editarTitulo" name="titulo" required>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Curso</label>
+                              <input type="text" class="form-control" id="editarCurso" name="curso" required>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Tipo</label>
+                              <input type="text" class="form-control" id="editarTipo" name="tipo" required>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Turno</label>
+                              <input type="text" class="form-control" id="editarTurno" name="turno" required>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Descrição</label>
+                              <textarea class="form-control" id="editarDescricao" name="descricao" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Requisitos</label>
+                              <textarea class="form-control" id="editarRequisitos" name="requisitos" rows="3" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                              <label class="form-label">Status</label>
+                              <input type="text" class="form-control" id="editarStatus" name="status" required>
+                            </div>
+                          </div>
+                          <div class="modal-footer">
+                            <button type="submit" class="btn btn-primary">Salvar</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
 
-  <!-- Modal Candidatos -->
-  <div class="modal fade" id="modalCandidatos" tabindex="-1" aria-labelledby="modalCandidatosLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content bg-dark text-white">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalCandidatosLabel">Candidatos</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          <table class="table table-dark">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Curso</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="listaCandidatos">
-              <!-- Candidatos carregados dinamicamente -->
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </div>
-  </div>
+                <!-- Modal Candidatos -->
+                <div class="modal fade" id="modalCandidatos" tabindex="-1" aria-labelledby="modalCandidatosLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-white">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalCandidatosLabel">Candidatos</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                      </div>
+                      <div class="modal-body">
+                        <table class="table table-dark">
+                          <thead>
+                            <tr>
+                              <th>Nome</th>
+                              <th>Curso</th>
+                              <th>Status</th>
+                            </tr>
+                          </thead>
+                          <tbody id="listaCandidatos">
+                            <!-- Candidatos carregados dinamicamente -->
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
 
-  <!-- Modal Confirmar Exclusão -->
-  <div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-labelledby="modalConfirmarExclusaoLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content bg-dark text-white">
-        <div class="modal-header">
-          <h5 class="modal-title" id="modalConfirmarExclusaoLabel">Confirmar Exclusão</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-        </div>
-        <div class="modal-body">
-          Tem certeza que deseja excluir esta vaga?
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" id="confirmarExclusao">Excluir</button>
-        </div>
-      </div>
-    </div>
-  </div>
-      </div>
+                <!-- Modal Confirmar Exclusão -->
+                <div class="modal fade" id="modalConfirmarExclusao" tabindex="-1" aria-labelledby="modalConfirmarExclusaoLabel" aria-hidden="true">
+                  <div class="modal-dialog">
+                    <div class="modal-content bg-dark text-white">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="modalConfirmarExclusaoLabel">Confirmar Exclusão</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                      </div>
+                      <div class="modal-body">
+                        Tem certeza que deseja excluir esta vaga?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger" id="confirmarExclusao">Excluir</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+            </div>
+          <!-- #sec-vagas -->  
 
         <!-- seção usuários -->
-       <div id="sec-usuarios" class="content-section" style="display: none;">
-  <h2><i class="bi bi-person-gear me-2"></i>Usuário</h2>
-  <div class="container mt-4">
+          <div id="sec-usuarios" class="content-section" style="display: none;">
+            <h2><i class="bi bi-person-gear me-2"></i>Usuário</h2>
+            <div class="container mt-4">
 
-    <!-- Abas Usuários e Perfis -->
-    <div class="bg-dark text-white p-3 rounded">
-      <div class="d-flex mb-3">
-        <button class="btn btn-dark me-2 active" id="btnUsuarios" onclick="toggleSection('usuarios')">Usuários</button>
-        <button class="btn btn-dark" id="btnPerfis" onclick="toggleSection('perfis')">Perfis</button>
-      </div>
+              <!-- Abas Usuários e Perfis -->
+              <div class="bg-dark text-white p-3 rounded">
+                <div class="d-flex mb-3">
+                  <button class="btn btn-dark me-2 active" id="btnUsuarios" onclick="toggleSection('usuarios')">Usuários</button>
+                  <button class="btn btn-dark" id="btnPerfis" onclick="toggleSection('perfis')">Perfis</button>
+                </div>
 
-      <!-- Aba Usuários -->
-      <div id="usuariosSection">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5>Lista de Usuários</h5>
-          <div>
-            <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#novoUsuarioModal">Novo Usuário</button>
-            <button class="btn btn-primary me-2">Modificar Dados</button>
-            <button class="btn btn-danger">Apagar Usuário</button>
-          </div>
-        </div>
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Nome do Usuário</th>
-              <th>Nome Completo</th>
-              <th>Perfil</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Yuri</td>
-              <td>yuri@gmail.com</td>
-              <td>Administrador</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+                <!-- Aba Usuários -->
+                <div id="usuariosSection">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>Lista de Usuários</h5>
+                    <div>
+                      <button class="btn btn-success me-2" data-bs-toggle="modal" data-bs-target="#novoUsuarioModal">Novo Usuário</button>
+                      <button class="btn btn-primary me-2">Modificar Dados</button>
+                      <button class="btn btn-danger">Apagar Usuário</button>
+                    </div>
+                  </div>
+                  <table class="table table-dark table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Nome do Usuário</th>
+                        <th>Email</th>
+                        <th>Perfil</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>Yuri</td>
+                        <td>yuri@gmail.com</td>
+                        <td>Administrador</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
 
-      <!-- Aba Perfis -->
-      <div id="perfisSection" style="display: none;">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-          <h5>Lista de Perfis</h5>
-          <div>
-            <button class="btn btn-success me-2">Novo Perfil</button>
-            <button class="btn btn-primary me-2">Modificar Dados</button>
-            <button class="btn btn-secondary me-2" onclick="abrirPermissoesPerfil('APOIADOR')">Permissões</button>
-            <button class="btn btn-danger">Apagar Perfil</button>
-          </div>
-        </div>
-        <table class="table table-dark table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Nome do Perfil</th>
-              <th>Descrição</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>APOIADOR</td>
-              <td>Perfil de apoio operacional</td>
-            </tr>
-            <tr>
-              <td>ASSISTENTE 2</td>
-              <td>Suporte nível 2</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <!-- Modal Novo Usuário -->
-    <div class="modal fade" id="novoUsuarioModal" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content bg-dark text-white">
-          <div class="modal-header">
-            <h5 class="modal-title">Criar Novo Usuário</h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <form>
-              <div class="mb-3">
-                <label class="form-label">Nome</label>
-                <input type="text" class="form-control bg-secondary text-white" placeholder="Digite o nome">
+                <!-- Aba Perfis -->
+                <div id="perfisSection" style="display: none;">
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h5>Lista de Perfis</h5>
+                    <div>
+                      <button class="btn btn-success me-2">Novo Perfil</button>
+                      <button class="btn btn-primary me-2">Modificar Dados</button>
+                      <button class="btn btn-secondary me-2" onclick="abrirPermissoesPerfil('APOIADOR')">Permissões</button>
+                      <button class="btn btn-danger">Apagar Perfil</button>
+                    </div>
+                  </div>
+                  <table class="table table-dark table-hover table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Nome do Perfil</th>
+                        <th>Descrição</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>APOIADOR</td>
+                        <td>Perfil de apoio operacional</td>
+                      </tr>
+                      <tr>
+                        <td>ASSISTENTE 2</td>
+                        <td>Suporte nível 2</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
-              <div class="mb-3">
-                <label class="form-label">Usuário</label>
-                <input type="text" class="form-control bg-secondary text-white" placeholder="Digite o usuário">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Senha</label>
-                <input type="password" class="form-control bg-secondary text-white" placeholder="Digite a senha">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control bg-secondary text-white" placeholder="Digite o email">
-              </div>
-              <div class="mb-3">
-                <label class="form-label">Perfil</label>
-                <select class="form-select bg-secondary text-white">
-                  <option>Administrador</option>
-                  <option>Editor</option>
-                  <option>Leitor</option>
-                </select>
-              </div>
-            </form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-            <button type="submit" class="btn btn-primary">Salvar</button>
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <!-- Modal de Permissões -->
-    <div class="modal fade" id="modalPermissoes" tabindex="-1">
-      <div class="modal-dialog">
-        <div class="modal-content bg-dark text-white">
-          <div class="modal-header">
-            <h5 class="modal-title">Permissões do Perfil: <span id="nomePerfilModal"></span></h5>
-            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-          </div>
-          <div class="modal-body">
-            <form id="formPermissoes" class="form-check"></form>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-light" onclick="salvarPermissoes()">Salvar</button>
-          </div>
-        </div>
-      </div>
-    </div>
+              <!-- Modal Novo Usuário -->
+              <div class="modal fade" id="novoUsuarioModal" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content bg-dark text-white">
+                    <form action="salvar_usuario.php" method="POST" id="formNovoUsuario" novalidate>
+                      <div class="modal-header">
+                        <h5 class="modal-title">Criar Novo Usuário</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                      </div>
+                      <div class="modal-body">
+                        <div class="mb-3">
+                          <label class="form-label">Nome</label>
+                          <input type="text" name="nome" class="form-control bg-secondary text-white" placeholder="Digite o nome" required>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Usuário</label>
+                          <input type="text" name="usuario" class="form-control bg-secondary text-white" placeholder="Digite o usuário" required>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Senha</label>
+                          <input type="password" name="senha" class="form-control bg-secondary text-white" placeholder="Digite a senha" required>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Email</label>
+                          <input type="email" name="email" class="form-control bg-secondary text-white" placeholder="Digite o email" required>
+                        </div>
+                        <div class="mb-3">
+                          <label class="form-label">Perfil</label>
+                          <select name="perfil" class="form-select bg-secondary text-white" required>
+                            <option value="">Selecione um perfil</option>
+                            <option value="Administrador">Administrador</option>
+                            <option value="Editor">Editor</option>
+                            <option value="Leitor">Leitor</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
 
-  </div>
-      </div>
+              <!-- Modal de Permissões -->
+              <div class="modal fade" id="modalPermissoes" tabindex="-1">
+                <div class="modal-dialog">
+                  <div class="modal-content bg-dark text-white">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Permissões do Perfil: <span id="nomePerfilModal"></span></h5>
+                      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                      <form id="formPermissoes" class="form-check"></form>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-light" onclick="salvarPermissoes()">Salvar</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-          <!-- Seção de Documentos -->
-        <div id="sec-documentos" class="content-section" style="display: none;">
+            </div> <!-- .container -->
+          </div>
+         <!-- #sec-usuarios -->
+
+
+
+
+         <!-- Seção de Documentos -->
+           <div id="sec-documentos" class="content-section" style="display: none;">
   <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
     <h3 class="mb-4">
       <i class="bi bi-file-earmark-text-fill me-2"></i>Documentos
     </h3> 
 
-    <div class="d-flex justify-content-between mb-3">
+    <div class="d-flex justify-content-between mb-3 flex-wrap">
       <!-- Filtros -->
-      <div>
+      <div class="me-2">
         <input type="text" class="form-control bg-light text-dark mb-2" placeholder="Buscar documentos...">
         <select class="form-select bg-light text-dark">
           <option selected>Filtrar por categoria</option>
@@ -1304,7 +1296,9 @@ $stmt->close();
 
       <!-- Botão de Upload -->
       <div>
-        <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">+ Novo Documento</button>
+        <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+          + Novo Documento
+        </button>
       </div>
     </div>
 
@@ -1324,8 +1318,8 @@ $stmt->close();
           <td>Categoria 1</td>
           <td>01/05/2025</td>
           <td>
-            <button class="btn btn-outline-light btn-sm">Visualizar</button>
-            <button class="btn btn-outline-light btn-sm">Excluir</button>
+            <button type="button" class="btn btn-outline-light btn-sm">Visualizar</button>
+            <button type="button" class="btn btn-outline-light btn-sm">Excluir</button>
           </td>
         </tr>
         <tr>
@@ -1333,8 +1327,8 @@ $stmt->close();
           <td>Categoria 2</td>
           <td>02/05/2025</td>
           <td>
-            <button class="btn btn-outline-light btn-sm">Visualizar</button>
-            <button class="btn btn-outline-light btn-sm">Excluir</button>
+            <button type="button" class="btn btn-outline-light btn-sm">Visualizar</button>
+            <button type="button" class="btn btn-outline-light btn-sm">Excluir</button>
           </td>
         </tr>
       </tbody>
@@ -1377,156 +1371,160 @@ $stmt->close();
       </div>
     </div>
   </div>
-       </div>
+           </div>
+       <!-- <-- fechamento da div principal -->
+
           
-        <!-- seção mensagens -->
-      <div id="sec-mensagens" class="content-section" style="display: none;">
-          <div class="container mt-4">
+      <!-- seção mensagens -->
+        <div id="sec-mensagens" class="content-section" style="display: none;">
+  <div class="container mt-4">
+    <div class="tab-content bg-dark p-3 rounded border border-secondary text-white" style="min-height: 400px;">
+      <h3 class="mb-4">
+        <i class="bi bi-envelope-fill me-2"></i>Mensagens
+      </h3>
 
-            <!-- Conteúdo das abas -->
-            <div class="tab-content bg-dark p-3 rounded-bottom border border-secondary" style="min-height: 400px;">
-              <h3 class="mb-4 text-white">
-                <i class="bi bi-envelope-fill me-2"></i>Mensagens
-              </h3>
+      <!-- Abas -->
+      <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button
+            class="nav-link active bg-light text-dark"
+            id="entrada-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#entrada"
+            type="button"
+            role="tab"
+            aria-controls="entrada"
+            aria-selected="true"
+          >Caixa de Entrada</button>
+        </li>
+        <li class="nav-item ms-2" role="presentation">
+          <button
+            class="nav-link bg-light text-dark"
+            id="nova-tab"
+            data-bs-toggle="tab"
+            data-bs-target="#nova"
+            type="button"
+            role="tab"
+            aria-controls="nova"
+            aria-selected="false"
+          >Nova Mensagem</button>
+        </li>
+      </ul>
 
-              <!-- Abas -->
-              <ul class="nav nav-tabs mb-4" id="mensagemTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                  <button
-                    class="nav-link active bg-light text-dark"
-                    id="entrada-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#entrada"
-                    type="button"
-                    role="tab"
-                    aria-controls="entrada"
-                    aria-selected="true"
-                  >Caixa de Entrada</button>
-                </li>
-                <li class="nav-item ms-2" role="presentation">
-                  <button
-                    class="nav-link bg-light text-dark"
-                    id="nova-tab"
-                    data-bs-toggle="tab"
-                    data-bs-target="#nova"
-                    type="button"
-                    role="tab"
-                    aria-controls="nova"
-                    aria-selected="false"
-                  >Nova Mensagem</button>
-                </li>
-              </ul>
+      <div class="tab-content">
+        <!-- Caixa de Entrada -->
+        <div
+          class="tab-pane fade show active"
+          id="entrada"
+          role="tabpanel"
+          aria-labelledby="entrada-tab"
+        >
+          <div class="d-flex mb-3 gap-2 flex-wrap">
+            <input
+              type="text"
+              class="form-control bg-light text-dark flex-grow-1"
+              placeholder="Buscar por assunto, remetente..."
+              id="buscaMensagem"
+              aria-label="Buscar mensagens"
+            >
+            <select
+              class="form-select bg-light text-dark"
+              id="filtroRemetente"
+              style="max-width: 200px;"
+              aria-label="Filtrar por remetente"
+            >
+              <option value="todos">Todos</option>
+              <option value="aluno">Alunos</option>
+              <option value="empresa">Empresas</option>
+            </select>
+          </div>
 
-              <!-- Caixa de Entrada -->
-              <div
-                class="tab-pane fade show active"
-                id="entrada"
-                role="tabpanel"
-                aria-labelledby="entrada-tab"
+          <div class="list-group" id="listaMensagens" role="list" aria-live="polite" aria-relevant="additions">
+          </div>
+        </div>
+
+        <!-- Nova Mensagem -->
+        <div
+          class="tab-pane fade text-white"
+          id="nova"
+          role="tabpanel"
+          aria-labelledby="nova-tab"
+        >
+          <form
+            method="POST"
+            action="../php/enviar_mensagem_chat.php"
+            enctype="multipart/form-data"
+            novalidate
+          >
+            <div class="mb-3">
+              <label for="remetente" class="form-label">Seu E-mail</label>
+              <input
+                type="email"
+                name="remetente"
+                class="form-control bg-light text-dark"
+                id="remetente"
+                placeholder="seu@email.com"
+                value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
+                readonly
+                required
+                aria-readonly="true"
               >
-                <div class="d-flex mb-3 gap-2 flex-wrap">
-                  <input
-                    type="text"
-                    class="form-control bg-light text-dark flex-grow-1"
-                    placeholder="Buscar por assunto, remetente..."
-                    id="buscaMensagem"
-                    aria-label="Buscar mensagens"
-                  >
-                  <select
-                    class="form-select bg-light text-dark"
-                    id="filtroRemetente"
-                    style="max-width: 200px;"
-                    aria-label="Filtrar por remetente"
-                  >
-                    <option value="todos">Todos</option>
-                    <option value="aluno">Alunos</option>
-                    <option value="empresa">Empresas</option>
-                  </select>
-                </div>
-
-                <!-- Lista de mensagens - inicialmente vazia -->
-                <div class="list-group" id="listaMensagens" role="list" aria-live="polite" aria-relevant="additions"></div>
-              </div>
-
-              <!-- Nova Mensagem -->
-              <div
-                class="tab-pane fade text-white"
-                id="nova"
-                role="tabpanel"
-                aria-labelledby="nova-tab"
+            </div>
+            <div class="mb-3">
+              <label for="destinatario" class="form-label">Destinatário</label>
+              <input
+                type="email"
+                name="destinatario"
+                class="form-control bg-light text-dark"
+                id="destinatario"
+                placeholder="E-mail do destinatário"
+                required
               >
-                <form
-                  method="POST"
-                  action="../php/enviar_mensagem_chat.php"
-                  enctype="multipart/form-data"
-                  novalidate
-                >
-                  <div class="mb-3">
-                    <label for="remetente" class="form-label">Seu E-mail</label>
-                    <input
-                      type="email"
-                      name="remetente"
-                      class="form-control bg-light text-dark"
-                      id="remetente"
-                      placeholder="seu@email.com"
-                      value="<?= htmlspecialchars($_SESSION['email'] ?? '') ?>"
-                      readonly
-                      required
-                      aria-readonly="true"
-                    >
-                  </div>
-                  <div class="mb-3">
-                    <label for="destinatario" class="form-label">Destinatário</label>
-                    <input
-                      type="email"
-                      name="destinatario"
-                      class="form-control bg-light text-dark"
-                      id="destinatario"
-                      placeholder="E-mail do destinatário"
-                      required
-                    >
-                  </div>
-                  <div class="mb-3">
-                    <label for="assunto" class="form-label">Assunto</label>
-                    <input
-                      type="text"
-                      name="assunto"
-                      class="form-control bg-light text-dark"
-                      id="assunto"
-                      placeholder="Assunto da mensagem"
-                      required
-                    >
-                  </div>
-                  <div class="mb-3">
-                    <label for="mensagem" class="form-label">Mensagem</label>
-                    <textarea
-                      name="mensagem"
-                      class="form-control bg-light text-dark"
-                      id="mensagem"
-                      rows="5"
-                      placeholder="Escreva sua mensagem aqui..."
-                      required
-                    ></textarea>
-                  </div>
-                  <div class="mb-3">
-                    <label for="anexo" class="form-label">Anexo</label>
-                    <input
-                      type="file"
-                      name="anexo"
-                      id="anexo"
-                      class="form-control bg-light text-dark"
-                      aria-describedby="anexoHelp"
-                    >
-                    <div id="anexoHelp" class="form-text text-white-50">
-                      Tipos permitidos: pdf, jpg, png, docx. Máx: 5MB.
-                    </div>
-                  </div>
-                  <button type="submit" class="btn btn-success">Enviar</button>
-                </form>
+            </div>
+            <div class="mb-3">
+              <label for="assunto" class="form-label">Assunto</label>
+              <input
+                type="text"
+                name="assunto"
+                class="form-control bg-light text-dark"
+                id="assunto"
+                placeholder="Assunto da mensagem"
+                required
+              >
+            </div>
+            <div class="mb-3">
+              <label for="mensagem" class="form-label">Mensagem</label>
+              <textarea
+                name="mensagem"
+                class="form-control bg-light text-dark"
+                id="mensagem"
+                rows="5"
+                placeholder="Escreva sua mensagem aqui..."
+                required
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="anexo" class="form-label">Anexo</label>
+              <input
+                type="file"
+                name="anexo"
+                id="anexo"
+                class="form-control bg-light text-dark"
+                aria-describedby="anexoHelp"
+              >
+              <div id="anexoHelp" class="form-text text-secondary">
+                Tipos permitidos: pdf, jpg, png, docx. Máx: 5MB.
               </div>
             </div>
-          </div>
+            <button type="submit" class="btn btn-success">Enviar</button>
+          </form>
+        </div>
       </div>
+    </div>
+  </div>
+        </div>
+      <!-- fechamento da div principal -->
+
 
         <!-- seção configurações -->
         <div id="sec-configuracoes" class="content-section" style="display: none;">
@@ -1694,8 +1692,8 @@ $stmt->close();
       </main>
   </div>
   <!-- Scripts -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../script/script.js"></script> <!-- JS externo aqui -->
-  <script src="../script/mensagens.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
+  <script src="../script/script.js" defer></script> <!-- JS externo aqui -->
+  <script src="../script/mensagens.js" defer></script>
 </body>
 </html>

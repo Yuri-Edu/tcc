@@ -16,36 +16,36 @@ window.showSection = showSection; // Disponibiliza a função no escopo global
 
 
 // Aguarda o carregamento completo da página antes de executar qualquer código
-document.addEventListener("DOMContentLoaded", function() {
-    // Ao carregar a página, exibe apenas a aba "Disponíveis" e esconde "Candidatadas"
-    document.getElementById('disponiveis').style.display = 'block';
-    document.getElementById('candidatadas').style.display = 'none';
-  });
+// document.addEventListener("DOMContentLoaded", function() {
+//     // Ao carregar a página, exibe apenas a aba "Disponíveis" e esconde "Candidatadas"
+//     document.getElementById('disponiveis').style.display = 'block';
+//     document.getElementById('candidatadas').style.display = 'none';
+//   });
   
   /**
    * Função para alternar entre as abas de vagas
    * @param {string} id - O ID da subseção a ser exibida ("disponiveis" ou "candidatadas")
    * @param {HTMLElement} btnClicado - O botão que foi clicado para ativar a aba
    */
-  function mostrarSubsecao(id, btnClicado) {
-    // Esconde todas as subseções de vagas
-    document.querySelectorAll('.subsecao').forEach(secao => {
-      secao.style.display = 'none';
-    });
+  // function mostrarSubsecao(id, btnClicado) {
+  //   // Esconde todas as subseções de vagas
+  //   document.querySelectorAll('.subsecao').forEach(secao => {
+  //     secao.style.display = 'none';
+  //   });
   
-    // Mostra a subseção correspondente ao botão clicado
-    document.getElementById(id).style.display = 'block';
+  //   // Mostra a subseção correspondente ao botão clicado
+  //   document.getElementById(id).style.display = 'block';
   
-    // Atualiza a aparência dos botões para refletir a aba ativa
-    document.querySelectorAll('#abas-vagas button').forEach(btn => {
-      btn.classList.remove('btn-primary', 'active'); // Remove estilo de botão ativo
-      btn.classList.add('btn-outline-primary'); // Adiciona estilo de botão inativo
-    });
+  //   // Atualiza a aparência dos botões para refletir a aba ativa
+  //   document.querySelectorAll('#abas-vagas button').forEach(btn => {
+  //     btn.classList.remove('btn-primary', 'active'); // Remove estilo de botão ativo
+  //     btn.classList.add('btn-outline-primary'); // Adiciona estilo de botão inativo
+  //   });
   
-    // Ativa visualmente o botão que foi clicado
-    btnClicado.classList.remove('btn-outline-primary');
-    btnClicado.classList.add('btn-primary', 'active');
-  }
+  //   // Ativa visualmente o botão que foi clicado
+  //   btnClicado.classList.remove('btn-outline-primary');
+  //   btnClicado.classList.add('btn-primary', 'active');
+  // }
   
   /**
    * Função para redirecionar para a tela de login

@@ -11,5 +11,5 @@ if ($result) {
     echo "0";
 }
 
-$conn->close();
+
 ?>

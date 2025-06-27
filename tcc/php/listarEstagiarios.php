@@ -1,7 +1,7 @@
 
 <?php
 include_once 'db.php';
-session_start();
+
 
 $id_empresa = $_SESSION['id_usuario'];
 
@@ -35,5 +35,5 @@ if ($result->num_rows > 0) {
 }
 
 $stmt->close();
-$conn->close();
+
 ?>
