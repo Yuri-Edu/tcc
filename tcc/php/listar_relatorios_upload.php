@@ -1,20 +1,22 @@
 <?php
 require_once 'db.php';
 
-$sql = "SELECT id, nome, categoria, caminho_arquivo FROM relatorios ORDER BY data_upload DESC";
+$sql = "SELECT id, titulo, descricao, caminho_arquivo, data_envio FROM relatorios ORDER BY data_envio DESC";
 $result = $conn->query($sql);
 
 if ($result && $result->num_rows > 0) {
     while ($relatorio = $result->fetch_assoc()) {
         $id = $relatorio['id'];
-        $nome = htmlspecialchars($relatorio['nome']);
-        $categoria = htmlspecialchars($relatorio['descricao']);
-        $caminho = htmlspecialchars($relatorio['caminho_arquivo']);
+        $titulo = htmlspecialchars($relatorio['titulo']);
+        $descricao = htmlspecialchars($relatorio['descricao']);
+        $caminho = htmlspecialchars(str_replace('../', '', $relatorio['caminho_arquivo'])); // remove "../" se necessário
+        $data = htmlspecialchars($relatorio['data_envio']);
 
         echo "
         <tr>
-            <td>$nome</td>
-            <td>$categoria</td>
+            <td>$titulo</td>
+            <td>$descricao</td>
+            <td>$data</td>
             <td>
                 <a href='$caminho' target='_blank' class='btn btn-outline-light btn-sm me-1'>Visualizar</a>
                 <a href='$caminho' download class='btn btn-outline-success btn-sm me-1'>Gerar PDF</a>
@@ -27,6 +29,6 @@ if ($result && $result->num_rows > 0) {
         </tr>";
     }
 } else {
-    echo "<tr><td colspan='3'>Nenhum relatório enviado via upload ainda.</td></tr>";
+    echo "<tr><td colspan='4'>Nenhum relatório enviado ainda.</td></tr>";
 }
 ?>
