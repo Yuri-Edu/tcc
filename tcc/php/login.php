@@ -36,7 +36,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['email'] = $usuario['email'];
             $_SESSION['tipo_usuario'] = $usuario['tipo_usuario'];
 
-            // Redirecionamento baseado no tipo de usuário
+            if ($usuario['tipo_usuario'] === 'instituicao') {
+                // Busca o id da instituição associada a este usuário
+                $sqlInst = "SELECT id FROM instituicao WHERE usuario = ?";
+                $stmtInst = $conn->prepare($sqlInst);
+                if ($stmtInst) {
+                    $stmtInst->bind_param("i", $usuario['id']);
+                    $stmtInst->execute();
+                    $resultInst = $stmtInst->get_result();
+                    if ($resultInst->num_rows === 1) {
+                        $inst = $resultInst->fetch_assoc();
+                        $_SESSION['id_instituicao'] = $inst['id'];
+                    } else {
+                        // Se não encontrar instituição, seta null ou trate o erro conforme precisar
+                        $_SESSION['id_instituicao'] = null;
+                    }
+                    $stmtInst->close();
+                } else {
+                    // Erro ao preparar consulta
+                    $_SESSION['erro'] = "Erro ao buscar dados da instituição.";
+                    header("Location: ../tela_login/index.php");
+                    exit();
+                }
+            }
+
+            // Redireciona conforme o tipo do usuário
             switch ($usuario['tipo_usuario']) {
                 case 'aluno':
                     header("Location: ../perfil/aluno.php");
@@ -71,4 +95,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header("Location: ../tela_login/index.php");
     exit();
 }
-?>

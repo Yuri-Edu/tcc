@@ -9,6 +9,11 @@ function showSection(id) {
   if (secaoSelecionada) {
     secaoSelecionada.classList.add('active');
     secaoSelecionada.style.display = 'block';
+
+      // Se estiver abrindo a seção de alunos, carrega os dados
+    if (id === 'sec-alunos') {
+      carregarAlunos();
+    }
   }
 }
 
@@ -791,5 +796,151 @@ const modal = document.getElementById('modalConfirmarExclusao');
     const confirmar = document.getElementById('confirmarExclusao');
     confirmar.href = 'excluir_vaga.php?id=' + id; // monta o link de exclusão
   });
+
+
+  // Função para carregar os alunos no menu da instituição
+document.getElementById("formAluno").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  if (!this.checkValidity()) {
+    this.classList.add("was-validated");
+    return;
+  }
+
+  const formData = new FormData(this);
+
+  fetch("php/salvar_aluno_modal.php", {
+    method: "POST",
+    body: formData
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (data.sucesso) {
+      alert("Aluno cadastrado com sucesso!");
+      const modal = bootstrap.Modal.getInstance(document.getElementById("modalCadastroAluno"));
+      modal.hide();
+      this.reset();
+      this.classList.remove("was-validated");
+      carregarAlunos(); // atualiza a tabela
+    } else {
+      alert(data.erro || "Erro ao salvar aluno.");
+    }
+  })
+  .catch(err => {
+    console.error("Erro:", err);
+    alert("Erro na requisição.");
+  });
+});
+
+// Função para carregar os estagiarios da instituição e empresa
+function carregarEstagios() {
+  const status = document.getElementById("filtroStatus").value;
+
+  fetch(`../php/listar_estagios.php?status=${encodeURIComponent(status)}`)
+    .then((res) => res.json())
+    .then((dados) => {
+      const tbody = document.querySelector("#tabelaEstagios tbody");
+      tbody.innerHTML = "";
+
+      if (dados.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="9" class="text-center text-white">Nenhum estágio encontrado.</td></tr>`;
+        return;
+      }
+
+      dados.forEach((estagio) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${estagio.empresa_nome}</td>
+          <td>${estagio.curso}</td>
+          <td>${estagio.carga_horaria}h</td>
+          <td>${estagio.periodo}</td>
+          <td>${estagio.inicio}</td>
+          <td>${estagio.termino}</td>
+          <td>${estagio.status}</td>
+          <td>${estagio.aluno_nome}</td>
+          <td>
+            <button class="btn btn-sm btn-outline-light" onclick="abrirModalEditar(${estagio.contrato_id})">
+              <i class="bi bi-pencil"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch((erro) => {
+      console.error("Erro ao carregar estágios:", erro);
+    });
+}
+
+document.addEventListener("DOMContentLoaded", carregarEstagios);
+
+// função para  Loading spinner no carregamento de relatórios e documentos
+document.getElementById('formUploadRelatorio').addEventListener('submit', function(e) {
+    const inputFile = document.getElementById('relatorioFile');
+    const file = inputFile.files[0];
+
+    if (!file) {
+        alert('Por favor, selecione um arquivo.');
+        e.preventDefault();
+        return;
+    }
+
+    const maxSize = 5 * 1024 * 1024; // 5MB
+
+    if (file.type !== 'application/pdf') {
+        alert('Apenas arquivos PDF são permitidos.');
+        e.preventDefault();
+        return;
+    }
+
+    if (file.size > maxSize) {
+        alert('O arquivo deve ter no máximo 5MB.');
+        e.preventDefault();
+        return;
+    }
+
+    // Se passar aqui, pode mostrar spinner e desabilitar botão (como antes)
+    document.getElementById('spinnerUpload').classList.remove('d-none');
+    e.target.querySelector('button[type="submit"]').disabled = true;
+});
+
+// Função para o carregamento do upload
+
+// document.querySelector("form").addEventListener("submit", function (e) {
+//   e.preventDefault(); // impede o envio normal
+
+//   const form = e.target;
+//   const formData = new FormData(form);
+//   const spinner = document.getElementById("spinnerUpload");
+//   const mensagem = document.getElementById("mensagemUpload");
+
+//   spinner.classList.remove("d-none");
+//   mensagem.innerHTML = ""; // limpa mensagens antigas
+
+//   fetch("../php/uploadRelatorio.php", {
+//     method: "POST",
+//     body: formData
+//   })
+//   .then(res => res.json())
+//   .then(data => {
+//     spinner.classList.add("d-none");
+//     if (data.success) {
+//       mensagem.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+//       form.reset(); // limpa o formulário
+//     } else {
+//       mensagem.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+//     }
+//   })
+//   .catch(err => {
+//     spinner.classList.add("d-none");
+//     mensagem.innerHTML = `<div class="alert alert-danger">Erro inesperado. Tente novamente.</div>`;
+//     console.error(err);
+//   });
+// });
+
+
+
+
+
 
 

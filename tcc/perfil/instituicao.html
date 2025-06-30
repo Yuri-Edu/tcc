@@ -2,6 +2,7 @@
 session_start();
 include_once '../php/db.php';
 include_once '../php/dashboard.php';
+include_once '../php/uploadRelatorio.php';
 
 // Verifica se está logado como instituição
 if (!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] !== 'instituicao') {
@@ -9,16 +10,17 @@ if (!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] !== 'instituica
     exit();
 }
 
-$id_instituicao = $_SESSION['id_usuario'];
-$email = $_SESSION['email'];
+$id_usuario     = $_SESSION['id_usuario'];     // ID da conta logada (login)
+$id_instituicao = $_SESSION['id_instituicao']; // ID da instituição na tabela `instituicoes`
+$email          = $_SESSION['email'];
 
-// Dados do dashboard
+// Dados do dashboard (usa o ID real da instituição)
 $dados = obterDadosDashboard($conn, $id_instituicao, 'instituicao_id');
 
-// Busca mensagens recebidas pela instituição (assumindo que destinatário é o ID do usuário)
+// Busca mensagens (ainda podem vir pelo ID do usuário da conta logada)
 $sql = "SELECT * FROM mensagens WHERE destinatario_id = ? ORDER BY data_envio DESC";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $id_instituicao); // alterado para "i" se destinatario_id for inteiro
+$stmt->bind_param("i", $id_usuario); // Aqui, continua usando id_usuario se as mensagens são por login
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -29,7 +31,27 @@ while ($row = $result->fetch_assoc()) {
 }
 
 $stmt->close();
+
+
+if (isset($_GET['upload']) && $_GET['upload'] === 'sucesso') {
+    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        Relatório enviado com sucesso!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>';
+} elseif (isset($_GET['excluido']) && $_GET['excluido'] === 'ok') {
+    echo '<div class="alert alert-success alert-dismissible fade show" role="alert">
+        Relatório excluído com sucesso!
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+    </div>';
+} elseif (isset($_GET['erro'])) {
+    $msgErro = htmlspecialchars($_GET['erro']);
+    echo "<div class='alert alert-danger alert-dismissible fade show' role='alert'>
+        Erro: $msgErro
+        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Fechar'></button>
+    </div>";
+}
 ?>
+
 
 
 
@@ -56,62 +78,62 @@ $stmt->close();
 
 
   <!-- Sidebar -->
-<nav class="collapse d-md-block bg-dark text-white p-3" id="sidebarMenu">
-        <div class="p-3">
-          <h4 class="justify-content-center">Área da Instituição</h4>
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-dashboard')">
-                <i class="bi bi-speedometer2 me-2"></i> Dashboard
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-alunos')">
-                <i class="bi bi-people-fill me-2"></i> Alunos
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-estagios')">
-                <i class="bi bi-briefcase-fill me-2"></i> Estágios
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-relatorios')">
-                <i class="bi bi-file-earmark-bar-graph-fill me-2"></i> Relatórios
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-vagas')">
-                <i class="bi bi-megaphone-fill me-2"></i> Vagas
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-usuarios')">
-                <i class="bi bi-person-gear me-2"></i> Usuários
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-documentos')">
-                <i class="bi bi-file-earmark-text-fill me-2"></i> Documentos
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-mensagens')">
-                <i class="bi bi-chat-dots-fill me-2"></i> Mensagens
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="#" onclick="showSection('sec-configuracoes')">
-                <i class="bi bi-gear-fill me-2"></i> Configurações
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link text-white" href="../tela_login/index.php">
-                <i class="bi bi-box-arrow-right me-2"></i> Sair
-              </a>
-            </li>
-          </ul>
-        </div>
+      <nav class="collapse d-md-block bg-dark text-white p-3" id="sidebarMenu">
+              <div class="p-3">
+                <h4 class="justify-content-center">Área da Instituição</h4>
+                <ul class="nav flex-column">
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-dashboard')">
+                      <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-alunos')">
+                      <i class="bi bi-people-fill me-2"></i> Alunos
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-estagios')">
+                      <i class="bi bi-briefcase-fill me-2"></i> Estágios
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-relatorios')">
+                      <i class="bi bi-file-earmark-bar-graph-fill me-2"></i> Relatórios
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-vagas')">
+                      <i class="bi bi-megaphone-fill me-2"></i> Vagas
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-usuarios')">
+                      <i class="bi bi-person-gear me-2"></i> Usuários
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-documentos')">
+                      <i class="bi bi-file-earmark-text-fill me-2"></i> Documentos
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-mensagens')">
+                      <i class="bi bi-chat-dots-fill me-2"></i> Mensagens
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="#" onclick="showSection('sec-configuracoes')">
+                      <i class="bi bi-gear-fill me-2"></i> Configurações
+                    </a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link text-white" href="../tela_login/index.php">
+                      <i class="bi bi-box-arrow-right me-2"></i> Sair
+                    </a>
+                  </li>
+                </ul>
+              </div>
       </nav>
 
   <!-- Conteúdo principal -->
@@ -174,171 +196,155 @@ $stmt->close();
 </div>
 
         <!-- seção alunos -->
-<div id="sec-alunos" class="content-section" style="display: none;">
-  <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2><i class="bi bi-people-fill me-2"></i>Alunos</h2>
-    <button class="btn btn-success rounded-pill" onclick="abrirCadastroAluno()">
-      <i class="bi bi-person-plus-fill me-1"></i> Novo Aluno
-    </button>
-  </div>
-
-  <!-- Filtros -->
-  <div class="row mb-4">
-    <div class="col-md-4">
-      <label for="filtroCurso" class="form-label">Curso</label>
-      <select id="filtroCurso" class="form-select bg-dark text-white border-light">
-        <option value="" selected>Todos</option>
-        <option>Técnico em Administração</option>
-        <option>Técnico em Informática</option>
-        <option>Técnico em Edificações</option>
-      </select>
-    </div>
-    <div class="col-md-4">
-      <label for="filtroPeriodo" class="form-label">Período</label>
-      <select id="filtroPeriodo" class="form-select bg-dark text-white border-light">
-        <option value="" selected>Todos</option>
-        <option>1º</option>
-        <option>2º</option>
-        <option>3º</option>
-      </select>
-    </div>
-    <div class="col-md-4">
-      <label for="filtroTurno" class="form-label">Turno</label>
-      <select id="filtroTurno" class="form-select bg-dark text-white border-light">
-        <option value="" selected>Todos</option>
-        <option>Manhã</option>
-        <option>Tarde</option>
-        <option>Noite</option>
-      </select>
-    </div>
-  </div>
-
-  <!-- Tabela de Alunos -->
-  <div class="table-responsive rounded-3 border border-light">
-    <table class="table table-dark table-hover table-bordered align-middle mb-0">
-      <thead>
-        <tr>
-          <th>Nome</th>
-          <th>Matrícula</th>
-          <th>Curso</th>
-          <th>Período</th>
-          <th>Turno</th>
-          <th>Email</th>
-          <th class="text-center">Ações</th>
-        </tr>
-      </thead>
-      <tbody id="tabelaAlunos">
-        <tr>
-          <td>Yuri Eduardo</td>
-          <td>202301</td>
-          <td>Técnico em Informática</td>
-          <td>3º</td>
-          <td>Noite</td>
-          <td>yuri@email.com</td>
-          <td class="text-center">
-            <button class="btn btn-sm btn-outline-light me-1" title="Visualizar">
-              <i class="bi bi-eye-fill"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-warning me-1" title="Editar">
-              <i class="bi bi-pencil-fill"></i>
-            </button>
-            <button class="btn btn-sm btn-outline-danger" title="Excluir">
-              <i class="bi bi-trash-fill"></i>
-            </button>
-          </td>
-        </tr>
-        <!-- Adicione mais alunos aqui ou via backend/JS -->
-      </tbody>
-    </table>
-  </div>
-
-  <!-- Modal Cadastro de Aluno -->
-  <div class="modal fade" id="modalCadastroAluno" tabindex="-1" aria-labelledby="modalCadastroAlunoLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-      <div class="modal-content bg-dark text-white border-light rounded-4">
-        <div class="modal-header border-bottom border-light">
-          <h5 class="modal-title" id="modalCadastroAlunoLabel">Cadastro de Novo Aluno</h5>
-          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      <div id="sec-alunos" class="content-section" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2><i class="bi bi-people-fill me-2"></i>Alunos</h2>
+          <button class="btn btn-success rounded-pill" onclick="abrirCadastroAluno()">
+            <i class="bi bi-person-plus-fill me-1"></i> Novo Aluno
+          </button>
         </div>
-        <div class="modal-body">
-          <form id="formAluno" novalidate>
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="nome" class="form-label">Nome completo</label>
-                <input type="text" class="form-control bg-dark text-white border-light" id="nome" required>
-                <div class="invalid-feedback">Por favor, insira o nome completo.</div>
-              </div>
-              <div class="col-md-3">
-                <label for="matricula" class="form-label">Matrícula</label>
-                <input type="text" class="form-control bg-dark text-white border-light" id="matricula" required>
-                <div class="invalid-feedback">Informe a matrícula do aluno.</div>
-              </div>
-              <div class="col-md-3">
-                <label for="email" class="form-label">E-mail</label>
-                <input type="email" class="form-control bg-dark text-white border-light" id="email" required>
-                <div class="invalid-feedback">Informe um e-mail válido.</div>
-              </div>
-              <div class="col-md-4">
-                <label for="curso" class="form-label">Curso</label>
-                <select class="form-select bg-dark text-white border-light" id="curso" required>
-                  <option value="" disabled selected>Selecione</option>
-                  <option>Técnico em Administração</option>
-                  <option>Técnico em Informática</option>
-                  <option>Técnico em Edificações</option>
-                </select>
-                <div class="invalid-feedback">Selecione um curso.</div>
-              </div>
-              <div class="col-md-4">
-                <label for="periodo" class="form-label">Período</label>
-                <select class="form-select bg-dark text-white border-light" id="periodo" required>
-                  <option value="" disabled selected>Selecione</option>
-                  <option>1º</option>
-                  <option>2º</option>
-                  <option>3º</option>
-                </select>
-                <div class="invalid-feedback">Selecione um período.</div>
-              </div>
-              <div class="col-md-4">
-                <label for="turno" class="form-label">Turno</label>
-                <select class="form-select bg-dark text-white border-light" id="turno" required>
-                  <option value="" disabled selected>Selecione</option>
-                  <option>Manhã</option>
-                  <option>Tarde</option>
-                  <option>Noite</option>
-                </select>
-                <div class="invalid-feedback">Selecione um turno.</div>
+
+        <!-- Filtros -->
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <label for="filtroCurso" class="form-label">Curso</label>
+            <select id="filtroCurso" class="form-select bg-dark text-white border-light">
+              <option value="" selected>Todos</option>
+              <option>Técnico em Administração</option>
+              <option>Técnico em Informática</option>
+              <option>Técnico em Edificações</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="filtroPeriodo" class="form-label">Período</label>
+            <select id="filtroPeriodo" class="form-select bg-dark text-white border-light">
+              <option value="" selected>Todos</option>
+              <option>1º</option>
+              <option>2º</option>
+              <option>3º</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="filtroTurno" class="form-label">Turno</label>
+            <select id="filtroTurno" class="form-select bg-dark text-white border-light">
+              <option value="" selected>Todos</option>
+              <option>Manhã</option>
+              <option>Tarde</option>
+              <option>Noite</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Tabela de Alunos -->
+        <div class="table-responsive rounded-3 border border-light">
+          <table class="table table-dark table-hover table-bordered align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Matrícula</th>
+                <th>Curso</th>
+                <th>Período</th>
+                <th>Turno</th>
+                <th>Email</th>
+                <th class="text-center">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaAlunos">
+           
+              <!-- Adicione mais alunos aqui ou via backend/JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal Cadastro de Aluno -->
+           <!-- Modal Cadastro de Aluno -->
+          <div class="modal fade" id="modalCadastroAluno" tabindex="-1" aria-labelledby="modalCadastroAlunoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content bg-dark text-white border-light rounded-4">
+                <div class="modal-header border-bottom border-light">
+                  <h5 class="modal-title" id="modalCadastroAlunoLabel">Cadastro de Novo Aluno</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="formAluno" novalidate>
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="nome" class="form-label">Nome completo</label>
+                        <input type="text" class="form-control bg-dark text-white border-light" id="nome" name="nome" required>
+                        <div class="invalid-feedback">Por favor, insira o nome completo.</div>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="matricula" class="form-label">Matrícula</label>
+                        <input type="text" class="form-control bg-dark text-white border-light" id="matricula" name="matricula" required>
+                        <div class="invalid-feedback">Informe a matrícula do aluno.</div>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control bg-dark text-white border-light" id="email" name="email" required>
+                        <div class="invalid-feedback">Informe um e-mail válido.</div>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="curso" class="form-label">Curso</label>
+                        <select class="form-select bg-dark text-white border-light" id="curso" name="curso" required>
+                          <option value="" disabled selected>Selecione</option>
+                          <option>Técnico em Administração</option>
+                          <option>Técnico em Informática</option>
+                          <option>Técnico em Edificações</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione um curso.</div>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="periodo" class="form-label">Período</label>
+                        <select class="form-select bg-dark text-white border-light" id="periodo" name="periodo" required>
+                          <option value="" disabled selected>Selecione</option>
+                          <option>1º</option>
+                          <option>2º</option>
+                          <option>3º</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione um período.</div>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="turno" class="form-label">Turno</label>
+                        <select class="form-select bg-dark text-white border-light" id="turno" name="turno" required>
+                          <option value="" disabled selected>Selecione</option>
+                          <option>Manhã</option>
+                          <option>Tarde</option>
+                          <option>Noite</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione um turno.</div>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer border-top border-light">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-success" form="formAluno">Salvar</button>
+                </div>
               </div>
             </div>
-          </form>
-        </div>
-        <div class="modal-footer border-top border-light">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="submit" class="btn btn-success" form="formAluno">Salvar</button>
-        </div>
+          </div>
+
       </div>
-    </div>
-  </div>
-</div>
+
         <!-- seção estágios -->
-        <div id="sec-estagios" class="content-section" style="display: none;">
+     <div id="sec-estagios" class="content-section" style="display: none;">
   <h2><i class="bi bi-briefcase-fill me-2"></i>Estágios</h2>
 
   <div class="container my-4">
-
     <!-- Botão e Filtro -->
     <div class="d-flex justify-content-between align-items-center mb-3">
       <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCriarEstagio">
         <i class="bi bi-plus-circle me-2"></i> Criar Estágio
       </button>
       <div style="width: 200px;">
-        <label for="filtroStatus" class="form-label">Status</label>
-        <select id="filtroStatus" class="form-select bg-dark text-white border-secondary">
+        <label for="filtroStatus" class="form-label text-white">Status</label>
+        <select id="filtroStatus" class="form-select bg-dark text-white border-secondary" onchange="carregarEstagios()">
           <option value="">Todos</option>
-          <option value="Em Curso">Em Curso</option>
-          <option value="Concluído">Concluído</option>
-          <option value="Aprovado">Aprovado</option>
-          <option value="Encerrado">Encerrado</option>
-          <option value="Pendentes">Pendentes</option>
+          <option value="em curso">Em Curso</option>
+          <option value="concluído">Concluído</option>
+          <option value="aprovado">Aprovado</option>
+          <option value="encerrado">Encerrado</option>
+          <option value="pendente">Pendente</option>
         </select>
       </div>
     </div>
@@ -350,7 +356,7 @@ $stmt->close();
           <div class="card-body">
             <h5 class="card-title">Total de Estágios</h5>
             <p id="totalEstagios" class="card-text">
-               <?php include '../php/cardTotalEstagiarios.php'; ?>
+              <?php include '../php/cardTotalEstagiarios.php'; ?>
             </p>
           </div>
         </div>
@@ -360,7 +366,7 @@ $stmt->close();
           <div class="card-body">
             <h5 class="card-title">Aprovados</h5>
             <p id="totalAprovados" class="card-text">
-                <?php include '../php/cardContratados.php'; ?>
+              <?php include '../php/cardContratados.php'; ?>
             </p>
           </div>
         </div>
@@ -393,8 +399,7 @@ $stmt->close();
         </tr>
       </thead>
       <tbody>
-        <!-- Preencher via PHP ou JS -->
-       <?php include '../php/listarEstagiarios.php'; ?>
+        <!-- Preenchido via JavaScript -->
       </tbody>
     </table>
   </div>
@@ -439,10 +444,10 @@ $stmt->close();
             <div class="mb-3">
               <label class="form-label">Status</label>
               <select class="form-select" id="status" required>
-                <option value="Pendentes">Pendentes</option>
-                <option value="Aprovado">Aprovado</option>
-                <option value="Concluído">Concluído</option>
-                <option value="Encerrado">Encerrado</option>
+                <option value="pendente">Pendente</option>
+                <option value="aprovado">Aprovado</option>
+                <option value="concluído">Concluído</option>
+                <option value="encerrado">Encerrado</option>
               </select>
             </div>
           </form>
@@ -495,10 +500,10 @@ $stmt->close();
             <div class="mb-3">
               <label class="form-label">Status</label>
               <select class="form-select" id="editStatus" required>
-                <option value="Pendentes">Pendentes</option>
-                <option value="Aprovado">Aprovado</option>
-                <option value="Concluído">Concluído</option>
-                <option value="Encerrado">Encerrado</option>
+                <option value="pendente">Pendente</option>
+                <option value="aprovado">Aprovado</option>
+                <option value="concluído">Concluído</option>
+                <option value="encerrado">Encerrado</option>
               </select>
             </div>
           </form>
@@ -510,8 +515,8 @@ $stmt->close();
       </div>
     </div>
   </div>
-        </div>
- 
+    </div>
+
         <!-- seção relatórios -->
         <div id="sec-relatorios" class="content-section" style="display: none;">
           <h2><i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Relatórios</h2>
@@ -607,6 +612,8 @@ $stmt->close();
               <td>Resumo completo com filtros</td>
               <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio10">Preencher</button></td>
             </tr>
+            <?php include '../php/listar_relatorios_upload.php'; ?>
+
           </tbody>
         </table>
 
@@ -618,7 +625,7 @@ $stmt->close();
                 <h5 class="modal-title">Estagiários Ativos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
               </div>
-              <form action="php/salvar_relatorio.php" method="POST">
+              <form action="../php/salvar_relatorio.php" method="POST">
                 <div class="modal-body">
                   <input type="hidden" name="tipo" value="estagiarios_ativos">
                   <div class="mb-3">
@@ -641,7 +648,7 @@ $stmt->close();
                 <h5 class="modal-title">Estágios Pendentes de Aprovação</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
               </div>
-              <form action="php/salvar_relatorio.php" method="POST">
+              <form action="../php/salvar_relatorio.php" method="POST">
                 <div class="modal-body">
                   <input type="hidden" name="tipo" value="pendentes_aprovacao">
                   <div class="mb-3">
@@ -664,7 +671,7 @@ $stmt->close();
                   <h5 class="modal-title">Estágios por Status</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form action="php/salvar_relatorio.php" method="POST">
+                <form action="../php/salvar_relatorio.php" method="POST">
                   <div class="modal-body">
                     <input type="hidden" name="tipo" value="estagios_por_status">
                     <div class="mb-3">
@@ -695,7 +702,7 @@ $stmt->close();
                   <h5 class="modal-title">Estágios por Curso</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form action="php/salvar_relatorio.php" method="POST">
+                <form action="../php/salvar_relatorio.php" method="POST">
                   <div class="modal-body">
                     <input type="hidden" name="tipo" value="estagios_por_curso">
                     <div class="mb-3">
@@ -721,7 +728,6 @@ $stmt->close();
               </div>
             </div>
           </div>
-
         <!-- Modal para Relatório 5: Estágios por Período -->
           <div class="modal fade" id="modalRelatorio5" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -730,7 +736,7 @@ $stmt->close();
                   <h5 class="modal-title">Estágios por Período</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form action="php/salvar_relatorio.php" method="POST">
+                <form action="../php/salvar_relatorio.php" method="POST">
                   <div class="modal-body">
                     <input type="hidden" name="tipo" value="estagios_por_periodo">
                     <div class="mb-3">
@@ -762,7 +768,7 @@ $stmt->close();
                     <h5 class="modal-title">Estágios a Encerrar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                   </div>
-                  <form action="php/salvar_relatorio.php" method="POST">
+                  <form action="../php/salvar_relatorio.php" method="POST">
                     <div class="modal-body">
                       <input type="hidden" name="tipo" value="estagios_a_encerrar">
                       <div class="mb-3">
@@ -786,7 +792,7 @@ $stmt->close();
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="php/salvar_relatorio.php" method="POST">
+                        <form action="../php/salvar_relatorio.php" method="POST">
                           <input type="hidden" name="tipo" value="faltas_avaliacoes">
 
                           <!-- Calendário de Faltas -->
@@ -832,7 +838,6 @@ $stmt->close();
                     </div>
                   </div>
                 </div>
-
                 <!-- Modal para Relatório 10: Geral de Estágios -->
                     <div class="modal fade" id="modalRelatorio10" tabindex="-1" aria-hidden="true">
                       <div class="modal-dialog modal-lg">
@@ -841,7 +846,7 @@ $stmt->close();
                             <h5 class="modal-title">Relatório Geral de Estágios</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                           </div>
-                          <form action="php/salvar_relatorio.php" method="POST">
+                          <form action="../php/salvar_relatorio.php" method="POST">
                             <div class="modal-body">
                               <input type="hidden" name="tipo" value="geral_estagios">
 
@@ -896,19 +901,20 @@ $stmt->close();
                     </div>
         </div>
         <!-- Modal de Upload de Relatório -->
-        <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content bg-dark text-white">
-              <div class="modal-header">
-                <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-              </div>
-              <div class="modal-body">
-              <form action="../php/uploadRelatorio.php" method="POST" enctype="multipart/form-data">
+      <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formUploadRelatorio" method="POST" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="relatorioName" class="form-label">Nome do Relatório</label>
             <input type="text" class="form-control bg-light text-dark" id="relatorioName" name="relatorioName" required>
           </div>
+
           <div class="mb-3">
             <label for="relatorioCategory" class="form-label">Categoria</label>
             <select class="form-select bg-light text-dark" id="relatorioCategory" name="relatorioCategory" required>
@@ -918,23 +924,72 @@ $stmt->close();
               <option value="Relatório de Estágios">Relatório de Estágios</option>
             </select>
           </div>
+
           <div class="mb-3">
             <label for="relatorioFile" class="form-label">Arquivo</label>
-            <input type="file" class="form-control bg-light text-dark" id="relatorioFile" name="relatorioFile" required>
+            <input type="file" class="form-control bg-light text-dark" id="relatorioFile" name="relatorioFile" required accept="application/pdf">
           </div>
+
+          <!-- Feedback e Spinner -->
+          <div class="mt-3">
+            <div id="spinnerUpload" class="spinner-border text-primary d-none" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+            <div id="mensagemUpload" class="mt-2"></div>
+          </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             <button type="submit" class="btn btn-primary">Salvar Relatório</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+      </div>
 
-              </div>
-            </div>
+<!-- JS -->
+  <script>
+document.getElementById("formUploadRelatorio").addEventListener("submit", function (e) {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+  const spinner = document.getElementById("spinnerUpload");
+  const mensagem = document.getElementById("mensagemUpload");
+
+  spinner.classList.remove("d-none");
+  mensagem.innerHTML = "";
+
+  fetch("../php/uploadRelatorio.php", {  // caminho corrigido aqui
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    spinner.classList.add("d-none");
+    if (data.success) {
+      mensagem.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+      form.reset();
+    } else {
+      mensagem.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+    }
+  })
+  .catch(error => {
+    spinner.classList.add("d-none");
+    mensagem.innerHTML = `<div class="alert alert-danger">Erro inesperado. Tente novamente.</div>`;
+    console.error(error);
+  });
+});
+
+</script>
+
+
+
+
+
           </div>
         </div>
-          </div>
-
-      </div>
       <!-- Fim da Aba Relatórios -->
         <!-- seção vagas -->
             <div id="sec-vagas" class="content-section" style="display: none;">
@@ -1271,9 +1326,6 @@ $stmt->close();
             </div> <!-- .container -->
           </div>
          <!-- #sec-usuarios -->
-
-
-
 
          <!-- Seção de Documentos -->
            <div id="sec-documentos" class="content-section" style="display: none;">

@@ -7,7 +7,7 @@ include_once '../php/db.php';
 $id_empresa = $_SESSION['id_usuario'];
 $dados = obterDadosDashboard($conn, $id_empresa, 'empresa_id');
 
-// Verifica se está logado e se é aluno
+// Verifica se está logado e se é empresa
 if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
     header('Location: ../tela_inicia/index.php');
     exit();
@@ -134,223 +134,138 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
             </a>
         </div>
     </div>
-</div>
+    </div>
 
 
       <!-- Seção de Estágios -->
       <div id="sec-empresa-estagios" class="content-section" style="display: none;">
           <!-- Filtros e Botões -->
-              <div class="container my-4">
-                  <h3 class="mb-4">
-                  <i class="bi bi-people-fill me-2"></i>Estagiários
-                </h3>
+             <div class="d-flex justify-content-between align-items-center mb-3">
+          <h2><i class="bi bi-people-fill me-2"></i>Alunos</h2>
+          <button class="btn btn-success rounded-pill" onclick="abrirCadastroAluno()">
+            <i class="bi bi-person-plus-fill me-1"></i> Novo Aluno
+          </button>
+        </div>
 
-                  <!-- Botão Criar Estágio -->
-                      <!-- Linha de Botão + Filtro Status -->
-                  <div class="d-flex justify-content-between align-items-center mb-3">
-                    <!-- Botão Criar Estágio à esquerda -->
-                    <div>
-                        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCriarEstagio">
-                            <i class="bi bi-plus-circle me-2"></i> Criar Estagiário
-                        </button>
-                    </div>
+        <!-- Filtros -->
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <label for="filtroCurso" class="form-label">Curso</label>
+            <select id="filtroCurso" class="form-select bg-dark text-white border-light">
+              <option value="" selected>Todos</option>
+              <option>Técnico em Administração</option>
+              <option>Técnico em Informática</option>
+              <option>Técnico em Edificações</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="filtroPeriodo" class="form-label">Período</label>
+            <select id="filtroPeriodo" class="form-select bg-dark text-white border-light">
+              <option value="" selected>Todos</option>
+              <option>1º</option>
+              <option>2º</option>
+              <option>3º</option>
+            </select>
+          </div>
+          <div class="col-md-4">
+            <label for="filtroTurno" class="form-label">Turno</label>
+            <select id="filtroTurno" class="form-select bg-dark text-white border-light">
+              <option value="" selected>Todos</option>
+              <option>Manhã</option>
+              <option>Tarde</option>
+              <option>Noite</option>
+            </select>
+          </div>
+        </div>
 
-                    <!-- Filtro Status à direita -->
-                    <div style="width: 200px;"> <!-- controla a largura -->
-                        <label for="filtroStatus" class="form-label">Status</label>
-                        <select id="filtroStatus" class="form-select bg-dark text-white border-secondary">
-                            <option value="">Todos</option>
-                            <option value="Em Curso">Em Curso</option>
-                            <option value="Concluído">Concluído</option>
-                            <option value="Aprovado">Aprovado</option>
-                            <option value="Encerrado">Encerrado</option>
-                            <option value="Pendentes">Pendentes</option>
+        <!-- Tabela de Alunos -->
+        <div class="table-responsive rounded-3 border border-light">
+          <table class="table table-dark table-hover table-bordered align-middle mb-0">
+            <thead>
+              <tr>
+                <th>Nome</th>
+                <th>Matrícula</th>
+                <th>Curso</th>
+                <th>Período</th>
+                <th>Turno</th>
+                <th>Email</th>
+                <th class="text-center">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaAlunos">
+           
+              <!-- Adicione mais alunos aqui ou via backend/JS -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Modal Cadastro de Aluno -->
+           <!-- Modal Cadastro de Aluno -->
+          <div class="modal fade" id="modalCadastroAluno" tabindex="-1" aria-labelledby="modalCadastroAlunoLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+              <div class="modal-content bg-dark text-white border-light rounded-4">
+                <div class="modal-header border-bottom border-light">
+                  <h5 class="modal-title" id="modalCadastroAlunoLabel">Cadastro de Novo Aluno</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                  <form id="formAluno" novalidate>
+                    <div class="row g-3">
+                      <div class="col-md-6">
+                        <label for="nome" class="form-label">Nome completo</label>
+                        <input type="text" class="form-control bg-dark text-white border-light" id="nome" name="nome" required>
+                        <div class="invalid-feedback">Por favor, insira o nome completo.</div>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="matricula" class="form-label">Matrícula</label>
+                        <input type="text" class="form-control bg-dark text-white border-light" id="matricula" name="matricula" required>
+                        <div class="invalid-feedback">Informe a matrícula do aluno.</div>
+                      </div>
+                      <div class="col-md-3">
+                        <label for="email" class="form-label">E-mail</label>
+                        <input type="email" class="form-control bg-dark text-white border-light" id="email" name="email" required>
+                        <div class="invalid-feedback">Informe um e-mail válido.</div>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="curso" class="form-label">Curso</label>
+                        <select class="form-select bg-dark text-white border-light" id="curso" name="curso" required>
+                          <option value="" disabled selected>Selecione</option>
+                          <option>Técnico em Administração</option>
+                          <option>Técnico em Informática</option>
+                          <option>Técnico em Edificações</option>
                         </select>
+                        <div class="invalid-feedback">Selecione um curso.</div>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="periodo" class="form-label">Período</label>
+                        <select class="form-select bg-dark text-white border-light" id="periodo" name="periodo" required>
+                          <option value="" disabled selected>Selecione</option>
+                          <option>1º</option>
+                          <option>2º</option>
+                          <option>3º</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione um período.</div>
+                      </div>
+                      <div class="col-md-4">
+                        <label for="turno" class="form-label">Turno</label>
+                        <select class="form-select bg-dark text-white border-light" id="turno" name="turno" required>
+                          <option value="" disabled selected>Selecione</option>
+                          <option>Manhã</option>
+                          <option>Tarde</option>
+                          <option>Noite</option>
+                        </select>
+                        <div class="invalid-feedback">Selecione um turno.</div>
+                      </div>
                     </div>
-                  </div>
-
-
-                  <!-- Card de Totais -->
-                  <div class="row mb-3">
-                      <div class="col-md-4">
-                          <div class="card text-white bg-dark">
-                              <div class="card-body">
-                                  <h5 class="card-title">Total de Estagiários</h5>
-                                  <p id="totalEstagios" class="card-text">
-                                    <?php include '../php/cardTotalEstagiarios.php'; ?>
-                                  </p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-4">
-                          <div class="card text-white bg-dark">
-                              <div class="card-body">
-                                  <h5 class="card-title">Aprovados</h5>
-                                  <p id="totalAprovados" class="card-text">
-                                     <?php include '../php/cardContratados.php'; ?>
-                                  </p>
-                              </div>
-                          </div>
-                      </div>
-                      <div class="col-md-4">
-                          <div class="card text-white bg-dark">
-                              <div class="card-body">
-                                  <h5 class="card-title">Pendentes</h5>
-                                  <p id="totalPendentes" class="card-text">
-                                    <?php include '../php/cardEstagiosPendentes.php'; ?>
-                                  </p>
-                              </div>
-                          </div>
-                      </div>
-                  </div>
-
-                  <!-- Tabela de Estágios -->
-                  <table id="tabelaEstagios" class="table table-dark table-bordered">
-                      <thead>
-                          <tr>
-                              <th>Empresa</th>
-                              <th>Curso</th>
-                              <th>Duração</th>
-                              <th>Período</th>
-                              <th>Início</th>
-                              <th>Término</th>
-                              <th>Status</th>
-                              <th>Estagiário</th>
-                              <th>Ações</th>
-                          </tr>
-                      </thead>
-                      <tbody>
-                           <!-- Dados serão preenchidos automaticamente via JavaScript -->
-                              <?php include '../php/listarEstagiarios.php'; ?>
-                      </tbody>
-                  </table>
-              </div>
-            <!-- Modal Criar Estágio -->
-            <div class="modal fade" id="modalCriarEstagio" tabindex="-1" aria-labelledby="modalCriarEstagioLabel" aria-hidden="true">
-              <div class="modal-dialog modal-lg modal-dialog-centered">
-                  <div class="modal-content">
-                      <div class="modal-header">
-                          <h5 class="modal-title" id="modalCriarEstagioLabel">Criar Estágio</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                      </div>
-                      <div class="modal-body bg-dark text-white">
-                          <form action="../php/cadastrarEstagiarios.php" method="POST" id="formCriarEstagio">
-          
-          <div class="mb-3">
-            <label for="empresa" class="form-label">Empresa</label>
-            <input type="text" class="form-control" id="empresa" name="empresa" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="curso" class="form-label">Curso</label>
-            <input type="text" class="form-control" id="curso" name="curso" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="duracao" class="form-label">Duração</label>
-            <input type="text" class="form-control" id="duracao" name="duracao" placeholder="Em meses" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="periodo" class="form-label">Período</label>
-            <select class="form-select" id="periodo" name="periodo" required>
-              <option value="Manhã">Manhã</option>
-              <option value="Tarde">Tarde</option>
-            </select>
-          </div>
-
-          <div class="mb-3">
-            <label for="inicio" class="form-label">Início</label>
-            <input type="date" class="form-control" id="inicio" name="inicio" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="termino" class="form-label">Término</label>
-            <input type="date" class="form-control" id="termino" name="termino" required>
-          </div>
-
-          <div class="mb-3">
-            <label for="status" class="form-label">Status</label>
-            <select class="form-select" id="status" name="status" required>
-              <option value="Pendentes">Pendentes</option>
-              <option value="Em curso">Em curso</option>
-              <option value="Concluído">Concluído</option>
-              <option value="Encerrado">Encerrado</option>
-            </select>
-          </div>
-
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">Cadastrar</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          </div>
-
-        </form>
-                      </div>
-                      <div class="modal-footer bg-dark text-white">
-                          <button type="button" class="btn btn-outline-light " id="btnCriarEstagio">Criar Estágio</button>
-                          <button type="button" class="btn btn-outline-light" data-bs-dismiss="modal">Cancelar</button>
-                      </div>
-                  </div>
+                  </form>
+                </div>
+                <div class="modal-footer border-top border-light">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-success" form="formAluno">Salvar</button>
+                </div>
               </div>
             </div>
-
-            <!-- Modal Criar Estágio (DUPLICADO REMOVIDO) -->
-
-            <!-- Modal Editar Estágio -->
-            <div class="modal fade " id="modalEditarEstagio" tabindex="-1" aria-labelledby="modalEditarEstagioLabel" aria-hidden="true">
-                <div class="modal-dialog modal-lg modal-dialog-centered">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modalEditarEstagioLabel">Editar Estagiário</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body bg-dark text-white">
-                            <form action="../php/editarEstagiario.php" method="GET" id="formEditarEstagio">
-                                <div class="mb-3">
-                                    <label for="editEmpresa" class="form-label">Empresa</label>
-                                    <input type="text" class="form-control" id="editEmpresa" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editCurso" class="form-label">Curso</label>
-                                    <input type="text" class="form-control" id="editCurso" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editCarga" class="form-label">Carga Horária</label>
-                                    <input type="text" class="form-control" id="editCarga" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editPeriodo" class="form-label">Período</label>
-                                    <select class="form-select" id="editPeriodo" required>
-                                        <option value="Manhã">Manhã</option>
-                                        <option value="Tarde">Tarde</option>
-                                    </select>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editInicio" class="form-label">Início</label>
-                                    <input type="date" class="form-control" id="editInicio" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editTermino" class="form-label">Término</label>
-                                    <input type="date" class="form-control" id="editTermino" required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="editStatus" class="form-label">Status</label>
-                                    <select class="form-select" id="editStatus" required>
-                                        <option value="Pendentes">Pendentes</option>
-                                        <option value="Aprovado">Em curso</option>
-                                        <option value="Concluído">Concluído</option>
-                                        <option value="Encerrado">Encerrado</option>
-                                    </select>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer bg-dark text-white">
-                            <button type="button" class="btn btn-outline-primary text-white" id="btnSalvarEdicaoEstagio">Salvar</button>
-                            <button type="button" class="btn btn-outline-secondary text-white" data-bs-dismiss="modal">Cancelar</button>
-                        </div>
-                    </div>
-                </div>
-            </div> 
+          </div>
       </div>
         <!-- Seção de Relatórios -->
          <div id="sec-empresa-relatorios" class="content-section" style="display: none;">

@@ -168,6 +168,34 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
                             </div>
                         </div>
 
+                        <!-- Instituição -->
+                        <div class="mb-3 position-relative">
+                          <label class="form-label" for="select-instituicao">Instituição</label>
+                          <div class="input-group">
+                            <select id="select-instituicao" name="id_instituicao" class="form-select bg-light text-dark" disabled onchange="verificarOutraInstituicao()">
+                              <option value="">Selecione a instituição</option>
+                              <?php
+                                include '../php/db.php';
+                                $resultado = $conn->query("SELECT id, nome FROM instituicoes ORDER BY nome");
+                                while ($row = $resultado->fetch_assoc()) {
+                                  echo "<option value='{$row['id']}'>{$row['nome']}</option>";
+                                }
+                              ?>
+                              <option value="outra">Outra instituição</option>
+                            </select>
+                            <span class="input-group-text bg-secondary text-white toggle-edit" role="button" data-target="select-instituicao">
+                              <i class="bi bi-pencil-fill"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Campo extra para nova instituição -->
+                        <div class="mb-3" id="campoOutraInstituicao" style="display: none;">
+                          <label class="form-label" for="input-outra-instituicao">Digite o nome da nova instituição</label>
+                          <input type="text" id="input-outra-instituicao" name="outra_instituicao" class="form-control bg-light text-dark" placeholder="Nome da instituição" disabled>
+                        </div>
+
+
                         <!-- Curso -->
                         <div class="mb-3 position-relative">
                             <label class="form-label" for="input-curso">Curso</label>
