@@ -1,0 +1,3 @@
+[03-Jul-2025 06:42:01 Europe/Berlin] PHP Warning:  file_put_contents(../curriculos/curriculo_1751517720.pdf): Failed to open stream: No such file or directory in C:\xampp\htdocs\tcc\php\gerar_curriculo.php on line 165
+[03-Jul-2025 06:47:09 Europe/Berlin] PHP Warning:  file_put_contents(../curriculos/curriculo_1751518028.pdf): Failed to open stream: No such file or directory in C:\xampp\htdocs\tcc\php\gerar_curriculo.php on line 165
+[03-Jul-2025 06:51:57 Europe/Berlin] PHP Warning:  file_put_contents(../../curriculos/curriculo_1751518317.pdf): Failed to open stream: No such file or directory in C:\xampp\htdocs\tcc\php\gerar_curriculo.php on line 165

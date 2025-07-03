@@ -96,7 +96,9 @@ if (!empty($busca)) {
                 <div class="col-md-6 d-flex">
                     <div class="align-self-center">
                         <h2>Por que devo usar essa plataforma?</h2>
-                        <p>Está em busca do primeiro passo para sua carreira? No [Nome do Seu Site], conectamos estudantes a oportunidades incríveis em empresas que valorizam talentos em formação!</p>
+                        <p>Está em busca do primeiro passo para sua carreira? 
+              No Connect.me, conectamos estudantes a oportunidades incríveis em empresas que valorizam 
+              talentos em formação!</p>
                         
                     </div>
                 </div>
@@ -142,7 +144,7 @@ if (!empty($busca)) {
                 </div> 
                 <div class="col-md-4">
                     <h4>Rápido</h4>
-                    <p>O Conect.me vai além do básico, permitindo que você localize vagas de estágio de forma rápida. Simples como deve ser!</p>
+                    <p>O Connect.me vai além do básico, permitindo que você localize vagas de estágio de forma rápida. Simples como deve ser!</p>
                 </div>
                 <div class="col-md-4">
                     <h4>Faça seu currículo</h4>
@@ -155,12 +157,15 @@ if (!empty($busca)) {
       <div class="container">
         <div class="row">
           <div class="col-md-4">
-            <h2>Conect.me</h2>
+            <h2>Connect.me</h2>
             <p>Conectando estudantes a oportunidades de estágio</p>
           </div>
           <div class="col-md-4">
             <h2>Contato</h2>
             <p>(24)98812-4748</p>
+            <p>(24)99259-6809</p>
+            <p>(24)98116-3527</p>
+            <p>(24)99222-5729</p>
           </div>
           <div class="col-md-4">
             <h2>Redes Sociais</h2>

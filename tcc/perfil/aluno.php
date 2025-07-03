@@ -970,5 +970,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'aluno'){
     <!-- Biblioteca html2pdf para gerar PDF -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="../script/cadastroAluno.js"></script>
+    <script src="../script/gerar_curriculo.js"></script>
   </body>
 </html>
