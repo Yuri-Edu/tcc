@@ -269,12 +269,9 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
       </div>
         <!-- Seção de Relatórios -->
          <div id="sec-empresa-relatorios" class="content-section" style="display: none;">
-       
-
+            
           <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
-              <h3 class="mb-4">
-          <i class="bi bi-bar-chart-line-fill me-2"></i>Relatórios
-        </h3>
+             <h2><i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Relatórios</h2>
       <!-- Aba Relatórios -->
 
         <div class="tab-pane fade show active" id="relatorios">
@@ -304,8 +301,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
             </div>
           </div>
 
-          <!-- Tabela de Relatórios -->
-          <!-- Tabela de Relatórios Padrão -->
+ 
         <!-- Tabela de Relatórios Padrões -->
         <table class="table table-dark table-bordered">
           <thead>
@@ -366,6 +362,8 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               <td>Resumo completo com filtros</td>
               <td><button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#modalRelatorio10">Preencher</button></td>
             </tr>
+            <?php include '../php/listar_relatorios_upload.php'; ?>
+
           </tbody>
         </table>
 
@@ -377,7 +375,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                 <h5 class="modal-title">Estagiários Ativos</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
               </div>
-              <form action="php/salvar_relatorio.php" method="POST">
+              <form action="../php/salvar_relatorio.php" method="POST">
                 <div class="modal-body">
                   <input type="hidden" name="tipo" value="estagiarios_ativos">
                   <div class="mb-3">
@@ -394,26 +392,26 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
         </div>
         <!-- Modal para Relatório 2: Estágios Pendentes -->
          <div class="modal fade" id="modalRelatorio2" tabindex="-1" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content bg-dark text-white">
-      <div class="modal-header">
-        <h5 class="modal-title">Estágios Pendentes de Aprovação</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-      </div>
-      <form action="php/salvar_relatorio.php" method="POST">
-        <div class="modal-body">
-          <input type="hidden" name="tipo" value="pendentes_aprovacao">
-          <div class="mb-3">
-            <label class="form-label">Comentário adicional (opcional)</label>
-            <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+          <div class="modal-dialog">
+            <div class="modal-content bg-dark text-white">
+              <div class="modal-header">
+                <h5 class="modal-title">Estágios Pendentes de Aprovação</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+              </div>
+              <form action="../php/salvar_relatorio.php" method="POST">
+                <div class="modal-body">
+                  <input type="hidden" name="tipo" value="pendentes_aprovacao">
+                  <div class="mb-3">
+                    <label class="form-label">Comentário adicional (opcional)</label>
+                    <textarea name="comentario" rows="3" class="form-control bg-light text-dark"></textarea>
+                  </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="submit" class="btn btn-primary">Gerar Relatório</button>
+                </div>
+              </form>
+            </div>
           </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Gerar Relatório</button>
-        </div>
-      </form>
-    </div>
-  </div>
         </div>
         <!-- Modal para Relatório 3: Estágios por Status -->
           <div class="modal fade" id="modalRelatorio3" tabindex="-1" aria-hidden="true">
@@ -423,7 +421,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                   <h5 class="modal-title">Estágios por Status</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form action="php/salvar_relatorio.php" method="POST">
+                <form action="../php/salvar_relatorio.php" method="POST">
                   <div class="modal-body">
                     <input type="hidden" name="tipo" value="estagios_por_status">
                     <div class="mb-3">
@@ -454,7 +452,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                   <h5 class="modal-title">Estágios por Curso</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form action="php/salvar_relatorio.php" method="POST">
+                <form action="../php/salvar_relatorio.php" method="POST">
                   <div class="modal-body">
                     <input type="hidden" name="tipo" value="estagios_por_curso">
                     <div class="mb-3">
@@ -480,7 +478,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               </div>
             </div>
           </div>
-
         <!-- Modal para Relatório 5: Estágios por Período -->
           <div class="modal fade" id="modalRelatorio5" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog">
@@ -489,7 +486,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                   <h5 class="modal-title">Estágios por Período</h5>
                   <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
-                <form action="php/salvar_relatorio.php" method="POST">
+                <form action="../php/salvar_relatorio.php" method="POST">
                   <div class="modal-body">
                     <input type="hidden" name="tipo" value="estagios_por_periodo">
                     <div class="mb-3">
@@ -521,7 +518,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                     <h5 class="modal-title">Estágios a Encerrar</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                   </div>
-                  <form action="php/salvar_relatorio.php" method="POST">
+                  <form action="../php/salvar_relatorio.php" method="POST">
                     <div class="modal-body">
                       <input type="hidden" name="tipo" value="estagios_a_encerrar">
                       <div class="mb-3">
@@ -545,7 +542,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                       </div>
                       <div class="modal-body">
-                        <form action="php/salvar_relatorio.php" method="POST">
+                        <form action="../php/salvar_relatorio.php" method="POST">
                           <input type="hidden" name="tipo" value="faltas_avaliacoes">
 
                           <!-- Calendário de Faltas -->
@@ -591,7 +588,6 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                     </div>
                   </div>
                 </div>
-
                 <!-- Modal para Relatório 10: Geral de Estágios -->
                     <div class="modal fade" id="modalRelatorio10" tabindex="-1" aria-hidden="true">
                       <div class="modal-dialog modal-lg">
@@ -600,7 +596,7 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                             <h5 class="modal-title">Relatório Geral de Estágios</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
                           </div>
-                          <form action="php/salvar_relatorio.php" method="POST">
+                          <form action="../php/salvar_relatorio.php" method="POST">
                             <div class="modal-body">
                               <input type="hidden" name="tipo" value="geral_estagios">
 
@@ -653,26 +649,22 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
                         </div>
                       </div>
                     </div>
-
-
-
-
-
         </div>
         <!-- Modal de Upload de Relatório -->
-        <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
-          <div class="modal-dialog">
-            <div class="modal-content bg-dark text-white">
-              <div class="modal-header">
-                <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-              </div>
-              <div class="modal-body">
-              <form action="../php/uploadRelatorio.php" method="POST" enctype="multipart/form-data">
+      <div class="modal fade" id="uploadRelatorioModal" tabindex="-1" aria-labelledby="uploadRelatorioModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="uploadRelatorioModalLabel">Upload de Relatório</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formUploadRelatorio" method="POST" enctype="multipart/form-data">
           <div class="mb-3">
             <label for="relatorioName" class="form-label">Nome do Relatório</label>
             <input type="text" class="form-control bg-light text-dark" id="relatorioName" name="relatorioName" required>
           </div>
+
           <div class="mb-3">
             <label for="relatorioCategory" class="form-label">Categoria</label>
             <select class="form-select bg-light text-dark" id="relatorioCategory" name="relatorioCategory" required>
@@ -682,22 +674,71 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
               <option value="Relatório de Estágios">Relatório de Estágios</option>
             </select>
           </div>
+
           <div class="mb-3">
             <label for="relatorioFile" class="form-label">Arquivo</label>
-            <input type="file" class="form-control bg-light text-dark" id="relatorioFile" name="relatorioFile" required>
+            <input type="file" class="form-control bg-light text-dark" id="relatorioFile" name="relatorioFile" required accept="application/pdf">
           </div>
+
+          <!-- Feedback e Spinner -->
+          <div class="mt-3">
+            <div id="spinnerUpload" class="spinner-border text-primary d-none" role="status">
+              <span class="visually-hidden">Carregando...</span>
+            </div>
+            <div id="mensagemUpload" class="mt-2"></div>
+          </div>
+
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
             <button type="submit" class="btn btn-primary">Salvar Relatório</button>
           </div>
         </form>
+      </div>
+    </div>
+  </div>
+      </div>
 
-              </div>
-            </div>
-          </div>
-        </div>
-          </div>
+<!-- JS -->
+  <script>
+document.getElementById("formUploadRelatorio").addEventListener("submit", function (e) {
+  e.preventDefault();
 
+  const form = e.target;
+  const formData = new FormData(form);
+  const spinner = document.getElementById("spinnerUpload");
+  const mensagem = document.getElementById("mensagemUpload");
+
+  spinner.classList.remove("d-none");
+  mensagem.innerHTML = "";
+
+  fetch("../php/uploadRelatorio.php", {  // caminho corrigido aqui
+    method: "POST",
+    body: formData
+  })
+  .then(response => response.json())
+  .then(data => {
+    spinner.classList.add("d-none");
+    if (data.success) {
+      mensagem.innerHTML = `<div class="alert alert-success">${data.message}</div>`;
+      form.reset();
+    } else {
+      mensagem.innerHTML = `<div class="alert alert-danger">${data.message}</div>`;
+    }
+  })
+  .catch(error => {
+    spinner.classList.add("d-none");
+    mensagem.innerHTML = `<div class="alert alert-danger">Erro inesperado. Tente novamente.</div>`;
+    console.error(error);
+  });
+});
+
+</script>
+
+
+
+
+
+          </div>
         </div>
     
         <!-- Seção de Vagas -->
@@ -914,104 +955,202 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
 
       <!-- Seção de Documentos -->
       <div id="sec-empresa-documentos" class="content-section" style="display: none;">
-      
         <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
-               <h3 class="mb-4">
-        <i class="bi bi-file-earmark-text-fill me-2"></i>Documentos
-      </h3> 
-      <!-- Aba Documentos -->
-      <div class="tab-pane fade show active" id="documentos">
-        <div class="d-flex justify-content-between mb-3">
-          <!-- Filtros -->
-          <div>
-            <input type="text" class="form-control bg-light text-dark mb-2" placeholder="Buscar documentos...">
-            <select class="form-select bg-light text-dark" aria-label="Filtrar por categoria">
-              <option selected>Filtrar por categoria</option>
-              <option value="1">Categoria 1</option>
-              <option value="2">Categoria 2</option>
-              <option value="3">Categoria 3</option>
-            </select>
-          </div>
+    <h3 class="mb-4">
+      <i class="bi bi-file-earmark-text-fill me-2"></i>Documentos
+    </h3> 
 
-          <!-- Botão de Upload -->
-          <div>
-            <button class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">+ Novo Documento</button>
-          </div>
+    <div class="d-flex justify-content-between mb-3 flex-wrap">
+      <!-- Filtros -->
+      <div class="me-2">
+        <input type="text" class="form-control bg-light text-dark mb-2" placeholder="Buscar documentos...">
+        <select class="form-select bg-light text-dark">
+          <option selected>Filtrar por categoria</option>
+          <option value="1">Categoria 1</option>
+          <option value="2">Categoria 2</option>
+          <option value="3">Categoria 3</option>
+        </select>
+      </div>
+
+      <!-- Botão de Upload -->
+      <div>
+        <button type="button" class="btn btn-outline-light btn-sm" data-bs-toggle="modal" data-bs-target="#uploadModal">
+          + Novo Documento
+        </button>
+      </div>
+    </div>
+
+    <!-- Tabela de Documentos -->
+    <table class="table table-dark table-bordered">
+      <thead>
+        <tr>
+          <th scope="col">Nome do Documento</th>
+          <th scope="col">Categoria</th>
+          <th scope="col">Data de Upload</th>
+          <th scope="col">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Contrato de Estágio</td>
+          <td>Contrato</td>
+          <td>30/06/2025</td>
+          <td>
+            <!-- Botão de Preencher Contrato -->
+            <button type="button" class="btn btn-outline-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#contratoModal">
+              Preencher
+            </button>
+            <button type="button" class="btn btn-outline-light btn-sm">Visualizar</button>
+            <button type="button" class="btn btn-outline-light btn-sm">Excluir</button>
+          </td>
+        </tr>
+      
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal de Upload de Documento -->
+  <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title" id="uploadModalLabel">Upload de Documento</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
         </div>
-
-        <!-- Tabela de Documentos -->
-        <table class="table table-dark table-bordered">
-          <thead>
-            <tr>
-              <th scope="col">Nome do Documento</th>
-              <th scope="col">Categoria</th>
-              <th scope="col">Data de Upload</th>
-              <th scope="col">Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Documento Exemplo 1.pdf</td>
-              <td>Categoria 1</td>
-              <td>01/05/2025</td>
-              <td>
-                <button class="btn btn-outline-light btn-sm">Visualizar</button>
-                <button class="btn btn-outline-light btn-sm">Excluir</button>
-              </td>
-            </tr>
-            <tr>
-              <td>Documento Exemplo 2.pdf</td>
-              <td>Categoria 2</td>
-              <td>02/05/2025</td>
-              <td>
-                <button class="btn btn-outline-light btn-sm">Visualizar</button>
-                <button class="btn btn-outline-light btn-sm">Excluir</button>
-              </td>
-            </tr>
-            <!-- Mais documentos podem ser listados aqui -->
-          </tbody>
-        </table>
-      </div>
-
-             </div>
-
-            <!-- Modal de Upload de Documento -->
-            <div class="modal fade" id="uploadModal" tabindex="-1" aria-labelledby="uploadModalLabel" aria-hidden="true">
-              <div class="modal-dialog">
-                <div class="modal-content bg-dark text-white">
-                  <div class="modal-header">
-                    <h5 class="modal-title" id="uploadModalLabel">Upload de Documento</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                  </div>
-                  <div class="modal-body">
-                    <form>
-                      <div class="mb-3">
-                        <label for="documentName" class="form-label">Nome do Documento</label>
-                        <input type="text" class="form-control bg-light text-dark" id="documentName" placeholder="Nome do Documento">
-                      </div>
-                      <div class="mb-3">
-                        <label for="documentCategory" class="form-label">Categoria</label>
-                        <select class="form-select bg-light text-dark" id="documentCategory">
-                          <option selected>Escolha a categoria</option>
-                          <option value="1">Categoria 1</option>
-                          <option value="2">Categoria 2</option>
-                          <option value="3">Categoria 3</option>
-                        </select>
-                      </div>
-                      <div class="mb-3">
-                        <label for="documentFile" class="form-label">Arquivo</label>
-                        <input type="file" class="form-control bg-light text-dark" id="documentFile">
-                      </div>
-                    </form>
-                  </div>
-                  <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
-                    <button type="button" class="btn btn-primary">Salvar Documento</button>
-                  </div>
-                </div>
-              </div>
+        <form action="upload_documento.php" method="POST" enctype="multipart/form-data">
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="documentName" class="form-label">Nome do Documento</label>
+              <input type="text" class="form-control bg-light text-dark" id="documentName" name="documentName" required>
             </div>
+            <div class="mb-3">
+              <label for="documentCategory" class="form-label">Categoria</label>
+              <select class="form-select bg-light text-dark" id="documentCategory" name="documentCategory" required>
+                <option selected disabled>Escolha a categoria</option>
+                <option value="1">Categoria 1</option>
+                <option value="2">Categoria 2</option>
+                <option value="3">Categoria 3</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label for="documentFile" class="form-label">Arquivo</label>
+              <input type="file" class="form-control bg-light text-dark" id="documentFile" name="documentFile" required>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+            <button type="submit" class="btn btn-primary">Salvar Documento</button>
+          </div>
+        </form>
       </div>
+    </div>
+  </div>
+  <!-- Modal Preencher Contrato -->
+<div class="modal fade" id="contratoModal" tabindex="-1" aria-labelledby="contratoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable"> <!-- scrollável -->
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contratoModalLabel">Preencher Contrato</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formContrato" action="../php/gerar_contrato.php" method="POST" target="_blank">>
+          <!-- campos do contrato abaixo -->
+          
+          <h6 class="mt-3">Dados do Estagiário</h6>
+          <div class="mb-2">
+            <label>Nome do Aluno</label>
+            <input type="text" name="nome_aluno" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Data de Nascimento</label>
+            <input type="date" name="data_nascimento" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>CPF</label>
+            <input type="text" name="cpf" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Email</label>
+            <input type="email" name="email_aluno" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Telefone</label>
+            <input type="text" name="telefone_aluno" class="form-control">
+          </div>
+
+          <h6 class="mt-4">Dados da Empresa</h6>
+          <div class="mb-2">
+            <label>Nome da Empresa</label>
+            <input type="text" name="nome_empresa" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>CNPJ</label>
+            <input type="text" name="cnpj_empresa" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Endereço</label>
+            <input type="text" name="endereco_empresa" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Telefone</label>
+            <input type="text" name="telefone_empresa" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Responsável</label>
+            <input type="text" name="responsavel_empresa" class="form-control" required>
+          </div>
+
+          <h6 class="mt-4">Informações do Contrato</h6>
+          <div class="mb-2">
+            <label>Início</label>
+            <input type="date" name="inicio" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Término</label>
+            <input type="date" name="termino" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Carga Horária Semanal</label>
+            <input type="number" name="carga_horaria" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Valor da Bolsa</label>
+            <input type="number" step="0.01" name="valor_bolsa" class="form-control" required>
+          </div>
+
+          <h6 class="mt-4">Dados da Instituição (Opcional)</h6>
+          <div class="mb-2">
+            <label>Nome da Instituição</label>
+            <input type="text" name="nome_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>CNPJ</label>
+            <input type="text" name="cnpj_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Endereço</label>
+            <input type="text" name="endereco_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Telefone</label>
+            <input type="text" name="telefone_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Email</label>
+            <input type="email" name="email_instituicao" class="form-control">
+          </div>
+
+          <div class="text-end mt-4">
+            <button type="submit" class="btn btn-success">Gerar Contrato</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+      </div> 
+
       <!-- Seção de Mensagens -->
           <div id="sec-empresa-mensagens" class="content-section" style="display: none;">
           <div class="container mt-4">

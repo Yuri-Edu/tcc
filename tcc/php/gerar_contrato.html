@@ -1,144 +1,207 @@
 <?php
-require 'vendor/autoload.php'; // DomPDF
+ini_set('display_errors', 1);
+ini_set('display_startup_errors', 1);
+error_reporting(E_ALL);
 
+require '../vendor/autoload.php';
 use Dompdf\Dompdf;
 use Dompdf\Options;
+include 'db.php';
 
- include 'db.php';
+setlocale(LC_TIME, 'pt_BR.UTF-8');
 
-// Pega o ID da candidatura pela URL
-$candidatura_id = isset($_GET['id']) ? (int)$_GET['id'] : 0;
-if ($candidatura_id <= 0) {
-    die("ID de candidatura inválido.");
+$dados = [];
+
+if (isset($_GET['id']) && (int)$_GET['id'] > 0) {
+    $candidatura_id = (int)$_GET['id'];
+    $sql = "SELECT contratos.inicio, contratos.termino, contratos.carga_horaria, contratos.valor_bolsa,
+                   alunos.nome AS nome_aluno, alunos.data_nascimento, alunos.cpf, alunos.email AS email_aluno, alunos.telefone AS telefone_aluno,
+                   empresa.nome AS nome_empresa, empresa.cnpj, empresa.endereco, empresa.email AS email_empresa, empresa.telefone AS telefone_empresa, empresa.responsavel,
+                   instituicoes.nome AS nome_instituicao, instituicoes.cnpj AS cnpj_instituicao, instituicoes.endereco AS endereco_instituicao,
+                   instituicoes.telefone AS telefone_instituicao, instituicoes.email AS email_instituicao
+            FROM contratos
+            INNER JOIN candidaturas ON contratos.candidatura_id = candidaturas.id
+            INNER JOIN alunos ON candidaturas.aluno_id = alunos.id
+            INNER JOIN empresa ON candidaturas.vaga_id = empresa.id
+            INNER JOIN instituicoes ON candidaturas.instituicao_id = instituicoes.id
+            WHERE contratos.candidatura_id = ?";
+    $stmt = $mysqli->prepare($sql);
+    $stmt->bind_param('i', $candidatura_id);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $dados = $result->fetch_assoc();
+    if (!$dados) die("Dados da candidatura não encontrados.");
+} else {
+    // Preenchimento manual via formulário POST
+    $dados = [
+        'nome_empresa' => $_POST['nome_empresa'] ?? '',
+        'cnpj' => $_POST['cnpj_empresa'] ?? '',
+        'endereco' => $_POST['endereco_empresa'] ?? '',
+        'telefone_empresa' => $_POST['telefone_empresa'] ?? '',
+        'responsavel' => $_POST['responsavel_empresa'] ?? '',
+
+        'nome_aluno' => $_POST['nome_aluno'] ?? '',
+        'data_nascimento' => $_POST['data_nascimento'] ?? '',
+        'cpf' => $_POST['cpf_aluno'] ?? '',
+        'email_aluno' => $_POST['email_aluno'] ?? '',
+        'telefone_aluno' => $_POST['telefone_aluno'] ?? '',
+
+        'nome_instituicao' => $_POST['nome_instituicao'] ?? 'FAETEC',
+        'cnpj_instituicao' => $_POST['cnpj_instituicao'] ?? '42.498.168/0001-90',
+        'endereco_instituicao' => $_POST['endereco_instituicao'] ?? 'Rua Clarimundo de Melo, 847 - Quintino - RJ',
+        'telefone_instituicao' => $_POST['telefone_instituicao'] ?? '(21) 2333-6633',
+        'email_instituicao' => $_POST['email_instituicao'] ?? 'divest@faetec.rj.gov.br',
+
+        'inicio' => $_POST['inicio'] ?? date('Y-m-d'),
+        'termino' => $_POST['termino'] ?? date('Y-m-d', strtotime('+6 months')),
+        'carga_horaria' => $_POST['carga_horaria'] ?? '30',
+        'valor_bolsa' => $_POST['valor_bolsa'] ?? '0.00',
+    ];
 }
 
-// Consulta SQL
-$sql = "SELECT 
-            contratos.inicio,
-            contratos.termino,
-            contratos.carga_horaria,
-            contratos.valor_bolsa,
-            contratos.status AS status_contrato,
-            contratos.data_criacao,
 
-            alunos.nome AS nome_aluno,
-            alunos.data_nascimento,
-            alunos.cpf,
-            alunos.email AS email_aluno,
-            alunos.telefone AS telefone_aluno,
-
-            empresa.nome AS nome_empresa,
-            empresa.cnpj,
-            empresa.endereco,
-            empresa.email AS email_empresa,
-            empresa.telefone AS telefone_empresa,
-            empresa.responsavel,
-
-            instituicoes.nome AS nome_instituicao,
-            instituicoes.cnpj AS cnpj_instituicao,
-            instituicoes.endereco AS endereco_instituicao,
-            instituicoes.telefone AS telefone_instituicao,
-            instituicoes.email AS email_instituicao
-
-        FROM contratos
-        INNER JOIN candidaturas ON contratos.candidatura_id = candidaturas.id
-        INNER JOIN alunos ON candidaturas.aluno_id = alunos.id
-        INNER JOIN empresa ON candidaturas.vaga_id = empresa.id
-        INNER JOIN instituicoes ON candidaturas.instituicao_id = instituicoes.id
-        WHERE contratos.candidatura_id = ?";
-
-
-// Prepare e execute
-$stmt = $mysqli->prepare($sql);
-$stmt->bind_param('i', $candidatura_id);
-$stmt->execute();
-$result = $stmt->get_result();
-$dados = $result->fetch_assoc();
-
-if (!$dados) {
-    die("Dados do contrato não encontrados.");
-}
-
-// HTML do contrato
 ob_start();
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Contrato de Estágio</title>
-    <style>
-        body { font-family: DejaVu Sans, sans-serif; font-size: 12px; }
-        .logo { text-align: center; margin-bottom: 20px; }
-        .section { margin-bottom: 20px; }
-        .assinaturas { margin-top: 50px; text-align: center; }
-        .assinaturas div { margin-top: 40px; }
-    </style>
+  <meta charset="UTF-8">
+  <style>
+    body { font-family: DejaVu Sans, sans-serif; font-size: 11px; margin: 20px; }
+    .logo-faetec { width: 80px; }
+    .header-imgs { display: flex; justify-content: space-between; align-items: center; }
+    .bloco { margin: 15px 0; text-align: justify; }
+    .assinaturas { margin-top: 40px; display: flex; justify-content: space-around; font-size: 10px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 10px; font-size: 10px; }
+    th, td { border: 1px solid black; padding: 5px; text-align: center; }
+    .assinatura { text-align: center; margin-top: 60px; }
+  </style>
 </head>
 <body>
 
-<div class="logo">
-    <img src="../img/logo.png" alt="Logo do Site" width="150">
+<div class="header-imgs">
+  <img src="../img/logo_estado.png" class="logo-faetec">
+  <div style="text-align: center;">
+    <p><strong>Governo do Estado do Rio de Janeiro<br>
+    Secretaria de Estado de Ciência, Tecnologia e Inovação<br>
+    Fundação de Apoio à Escola Técnica</strong></p>
+    <h4>TERMO DE COMPROMISSO: EXTERNO REMUNERADO - SEGURO EMPRESA</h4>
+  </div>
+  <img src="../img/logo_faetec.png" class="logo-faetec">
 </div>
 
-<h2 style="text-align:center;">Contrato de Estágio</h2>
-
-<div class="section">
-    <strong>Empresa Concedente:</strong><br>
-    Nome: <?= $dados['nome_empresa'] ?><br>
-    CNPJ: <?= $dados['cnpj'] ?><br>
-    Endereço: <?= $dados['endereco'] ?><br>
-    Telefone: <?= $dados['telefone_empresa'] ?><br>
-    Responsável: <?= $dados['responsavel'] ?>
+<div class="bloco">
+  Considerando a LEI nº 11.788 de 25 de setembro de 2008, as partes a seguir nomeadas:
 </div>
 
-<div class="section">
-    <strong>Estagiário:</strong><br>
-    Nome: <?= $dados['nome_aluno'] ?><br>
-    Nascimento: <?= date('d/m/Y', strtotime($dados['data_nascimento'])) ?><br>
-    CPF: <?= $dados['cpf'] ?><br>
-    E-mail: <?= $dados['email_aluno'] ?><br>
-    Telefone: <?= $dados['telefone_aluno'] ?>
-</div>
-<div class="section">
-    <strong>Instituição de Ensino:</strong><br>
-    Nome: <?= $dados['nome_instituicao'] ?><br>
-    CNPJ: <?= $dados['cnpj_instituicao'] ?><br>
-    Endereço: <?= $dados['endereco_instituicao'] ?><br>
-    Telefone: <?= $dados['telefone_instituicao'] ?><br>
-    E-mail: <?= $dados['email_instituicao'] ?>
+<div class="bloco">
+  <strong>INTERVENIENTE:</strong><br>
+  Fundação de Apoio à Escola Técnica – FAETEC/U.E.<br>
+  Endereço: <?= $dados['endereco_instituicao'] ?><br>
+  CNPJ: <?= $dados['cnpj_instituicao'] ?><br>
+  Representada por: Diretor(a) da Unidade de Ensino
 </div>
 
-<div class="section">
-    <strong>Detalhes do Estágio:</strong><br>
-    Início: <?= date('d/m/Y', strtotime($dados['inicio'])) ?><br>
-    Término: <?= date('d/m/Y', strtotime($dados['termino'])) ?><br>
-    Carga Horária: <?= $dados['carga_horaria'] ?> horas/semana<br>
-    Bolsa: R$ <?= number_format($dados['valor_bolsa'], 2, ',', '.') ?>
+<div class="bloco">
+  <strong>ESTAGIÁRIO:</strong><br>
+  Nome: <?= $dados['nome_aluno'] ?><br>
+  Nascimento: <?= date('d/m/Y', strtotime($dados['data_nascimento'])) ?><br>
+  CPF: <?= $dados['cpf'] ?><br>
+  Telefone: <?= $dados['telefone_aluno'] ?><br>
+  Email: <?= $dados['email_aluno'] ?><br>
 </div>
 
-<div class="section">
-    Este contrato é firmado entre as partes acima, com vigência conforme datas estabelecidas e seguindo as normas da Lei do Estágio (Lei nº 11.788/2008).
+<div class="bloco">
+  <strong>CONCEDENTE:</strong><br>
+  Empresa: <?= $dados['nome_empresa'] ?><br>
+  Endereço: <?= $dados['endereco'] ?><br>
+  Telefone: <?= $dados['telefone_empresa'] ?><br>
+  CNPJ: <?= $dados['cnpj'] ?><br>
+  Representante: <?= $dados['responsavel'] ?><br>
+</div>
+
+<div class="bloco">
+  <strong>1º</strong> Cabe à CONCEDENTE:<br>
+  a) proporcionar ao estagiário treinamento prático, aperfeiçoamento técnico-cultural e de relacionamento humano no período de <?= date('d/m/Y', strtotime($dados['inicio'])) ?> a <?= date('d/m/Y', strtotime($dados['termino'])) ?>;<br>
+  b) fornecer declaração de atividades ao final do estágio;<br>
+  c) garantir a realização do estágio supervisionado;<br>
+  d) garantir ao estagiário o seguro contra acidentes pessoais por meio da Apólice nº 87.1391.555985 da Seguradora Porto Seguro.
+</div>
+
+<div class="bloco">
+  <strong>2º</strong> Cabe à INTERVENIENTE:<br>
+  a) encaminhar o aluno à CONCEDENTE por meio da carta de apresentação;<br>
+  b) atestar a frequência do estagiário e notificar em caso de irregularidades;<br>
+  c) registrar atividades e avaliações;<br>
+  d) designar professor orientador;<br>
+  e) acompanhar o estágio e emitir parecer final.
+</div>
+
+<div class="bloco">
+  <strong>3º</strong> Cabe ao ESTAGIÁRIO:<br>
+  a) cumprir o plano de atividades estabelecido;<br>
+  b) observar normas da CONCEDENTE;<br>
+  c) elaborar relatórios de estágio.
+</div>
+
+<div class="bloco">
+  <strong>4º</strong> O estágio não cria vínculo empregatício.<br>
+  <strong>5º</strong> Atividades: auxiliar na digitalização e organização de documentos.<br>
+  <strong>6º</strong> Horário do estágio:
+  <table>
+    <tr><th>Dia</th><th>Horário</th></tr>
+    <tr><td>2ª feira</td><td>10:00 às 17:00</td></tr>
+    <tr><td>3ª feira</td><td>10:00 às 17:00</td></tr>
+    <tr><td>4ª feira</td><td>10:00 às 17:00</td></tr>
+    <tr><td>5ª feira</td><td>10:00 às 17:00</td></tr>
+    <tr><td>6ª feira</td><td>10:00 às 17:00</td></tr>
+  </table>
+</div>
+
+<div class="bloco">
+  <strong>7º</strong> Motivos para cessação automática:<br>
+  a) abandono do curso ou trancamento de matrícula;<br>
+  b) não cumprimento das cláusulas deste termo.
+</div>
+
+<div class="bloco">
+  <strong>8º</strong> O estágio poderá cessar mediante comunicação escrita.<br>
+  <strong>9º</strong> A duração será de no mínimo 1 semestre letivo e máximo de 2 anos.<br>
+  <strong>10º</strong> A FAETEC compromete-se a acompanhar o estágio com base nos relatórios emitidos pelas partes.
+</div>
+
+<div class="assinatura">
+  Rio de Janeiro, <?= strftime('%d de %B de %Y', strtotime(date('Y-m-d'))) ?>
 </div>
 
 <div class="assinaturas">
-    <div>_______________________________________<br>Estagiário</div>
-    <div>_______________________________________<br>Empresa</div>
-    <div>_______________________________________<br>Instituição de Ensino</div>
+  <div>_______________________________________<br>INTERVENIENTE (Unidade FAETEC)</div>
+  <div>_______________________________________<br>CONCEDENTE (Empresa)</div>
+  <div>_______________________________________<br>ESTAGIÁRIO</div>
+</div>
+
+<div style="margin-top: 30px; font-size: 10px; text-align:center;">
+  _______________________________________ <br>
+  RESPONSÁVEL (caso o estagiário seja menor de 18 anos)
+</div>
+
+<div style="text-align: center; font-size: 9px; margin-top: 40px;">
+  DIVISÃO DE ESTÁGIO - DIVEST<br>
+  Rua Clarimundo de Melo, 847 – CEP 21311-281 – Quintino – Rio de Janeiro<br>
+  (21) 2333-6633 / 2332-4121 | divest@faetec.rj.gov.br
 </div>
 
 </body>
 </html>
+
 <?php
 $html = ob_get_clean();
-
-// Gera o PDF com DomPDF
 $options = new Options();
 $options->set('defaultFont', 'DejaVu Sans');
 $dompdf = new Dompdf($options);
 $dompdf->loadHtml($html);
 $dompdf->setPaper('A4', 'portrait');
 $dompdf->render();
-
-// Exibe ou salva
-$dompdf->stream("contrato_estagio.pdf", ["Attachment" => false]);
+$dompdf->stream("termo_compromisso.pdf", ["Attachment" => false]);
+exit;

@@ -1366,23 +1366,19 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
       </thead>
       <tbody>
         <tr>
-          <td>Documento Exemplo 1.pdf</td>
-          <td>Categoria 1</td>
-          <td>01/05/2025</td>
+          <td>Contrato de Estágio</td>
+          <td>Contrato</td>
+          <td>30/06/2025</td>
           <td>
+            <!-- Botão de Preencher Contrato -->
+            <button type="button" class="btn btn-outline-light btn-sm ms-2" data-bs-toggle="modal" data-bs-target="#contratoModal">
+              Preencher
+            </button>
             <button type="button" class="btn btn-outline-light btn-sm">Visualizar</button>
             <button type="button" class="btn btn-outline-light btn-sm">Excluir</button>
           </td>
         </tr>
-        <tr>
-          <td>Documento Exemplo 2.pdf</td>
-          <td>Categoria 2</td>
-          <td>02/05/2025</td>
-          <td>
-            <button type="button" class="btn btn-outline-light btn-sm">Visualizar</button>
-            <button type="button" class="btn btn-outline-light btn-sm">Excluir</button>
-          </td>
-        </tr>
+      
       </tbody>
     </table>
   </div>
@@ -1423,6 +1419,112 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
       </div>
     </div>
   </div>
+  <!-- Modal Preencher Contrato -->
+<div class="modal fade" id="contratoModal" tabindex="-1" aria-labelledby="contratoModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-scrollable"> <!-- scrollável -->
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contratoModalLabel">Preencher Contrato</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formContrato" action="../php/gerar_contrato.php" method="POST" target="_blank">>
+          <!-- campos do contrato abaixo -->
+          
+          <h6 class="mt-3">Dados do Estagiário</h6>
+          <div class="mb-2">
+            <label>Nome do Aluno</label>
+            <input type="text" name="nome_aluno" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Data de Nascimento</label>
+            <input type="date" name="data_nascimento" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>CPF</label>
+            <input type="text" name="cpf" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Email</label>
+            <input type="email" name="email_aluno" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Telefone</label>
+            <input type="text" name="telefone_aluno" class="form-control">
+          </div>
+
+          <h6 class="mt-4">Dados da Empresa</h6>
+          <div class="mb-2">
+            <label>Nome da Empresa</label>
+            <input type="text" name="nome_empresa" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>CNPJ</label>
+            <input type="text" name="cnpj_empresa" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Endereço</label>
+            <input type="text" name="endereco_empresa" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Telefone</label>
+            <input type="text" name="telefone_empresa" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Responsável</label>
+            <input type="text" name="responsavel_empresa" class="form-control" required>
+          </div>
+
+          <h6 class="mt-4">Informações do Contrato</h6>
+          <div class="mb-2">
+            <label>Início</label>
+            <input type="date" name="inicio" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Término</label>
+            <input type="date" name="termino" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Carga Horária Semanal</label>
+            <input type="number" name="carga_horaria" class="form-control" required>
+          </div>
+          <div class="mb-2">
+            <label>Valor da Bolsa</label>
+            <input type="number" step="0.01" name="valor_bolsa" class="form-control" required>
+          </div>
+
+          <h6 class="mt-4">Dados da Instituição (Opcional)</h6>
+          <div class="mb-2">
+            <label>Nome da Instituição</label>
+            <input type="text" name="nome_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>CNPJ</label>
+            <input type="text" name="cnpj_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Endereço</label>
+            <input type="text" name="endereco_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Telefone</label>
+            <input type="text" name="telefone_instituicao" class="form-control">
+          </div>
+          <div class="mb-2">
+            <label>Email</label>
+            <input type="email" name="email_instituicao" class="form-control">
+          </div>
+
+          <div class="text-end mt-4">
+            <button type="submit" class="btn btn-success">Gerar Contrato</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
            </div>
        <!-- <-- fechamento da div principal -->
 

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Contrato de Estágio</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; color: #000; }
+    h1, h2 { text-align: center; }
+    p { text-align: justify; margin: 10px 0; }
+  </style>
+</head>
+<body>
+
+<h2>Governo do Estado do Rio de Janeiro<br>
+Secretaria de Estado de Ciência, Tecnologia e Inovação<br>
+Fundação de Apoio à Escola Técnica - FAETEC</h2>
+
+<h3>Carta de Apresentação nº {{numero_carta}}</h3>
+
+<p><strong>Unidade Escolar:</strong> {{unidade_escolar}}</p>
+<p><strong>Representada por:</strong> {{nome_interveniente}} - Diretora</p>
+
+<hr>
+
+<h3>ESTAGIÁRIO</h3>
+<p>Nome: {{nome_aluno}}</p>
+<p>Matrícula: {{matricula}} | RG: {{rg}} - {{orgao_emissor}} | CPF: {{cpf}}</p>
+<p>Data de nascimento: {{data_nascimento}}</p>
+<p>Endereço: {{endereco_aluno}}, Bairro: {{bairro_aluno}}, CEP: {{cep_aluno}}</p>
+<p>Curso: {{curso}}, Série/Módulo: {{serie}}, Turno: {{turno}}</p>
+
+<hr>
+
+<h3>CONCEDENTE</h3>
+<p>Empresa: {{nome_empresa}}</p>
+<p>Endereço: {{endereco_empresa}}, Bairro: {{bairro_empresa}}, CEP: {{cep_empresa}}</p>
+<p>CNPJ: {{cnpj_empresa}} | Telefone: {{telefone_empresa}}</p>
+<p>Responsável: {{responsavel_empresa}}</p>
+
+<hr>
+
+<h3>TERMO DE COMPROMISSO</h3>
+<p>O estágio ocorrerá de <strong>{{inicio}}</strong> até <strong>{{termino}}</strong> com bolsa de R$ {{valor_bolsa}} mensais.</p>
+<p>Supervisor: {{nome_supervisor}} ({{formacao_supervisor}})</p>
+<p>Seguro de acidentes pessoais: Apólice nº {{apolice}}</p>
+
+<hr>
+
+<h3>OBRIGAÇÕES</h3>
+<p><strong>Concedente:</strong> Garantir o treinamento prático, comunicar a interveniente sobre qualquer mudança e avaliar o desempenho do estagiário.</p>
+<p><strong>Interveniente:</strong> {{unidade_escolar}}, representada por {{nome_interveniente}}, designa a professora {{professor_orientador}} como orientadora de estágio.</p>
+<p><strong>Estagiário:</strong> Cumprir as normas da concedente, elaborar relatórios e participar das reuniões mensais.</p>
+
+<hr>
+
+<h3>ATIVIDADES</h3>
+<p>{{atividades_estagio}}</p>
+
+<h3>HORÁRIO</h3>
+<p>{{horario_estagio}}</p>
+
+<hr>
+
+<p>Rio de Janeiro, {{data_hoje}}</p>
+
+<p><strong>Concedente:</strong> {{responsavel_empresa}}</p>
+<p><strong>Estagiário:</strong> {{nome_aluno}}</p>
+<p><strong>Interveniente:</strong> {{nome_interveniente}}</p>
+
+</body>
+</html>
