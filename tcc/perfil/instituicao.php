@@ -69,16 +69,11 @@ if (isset($_GET['upload']) && $_GET['upload'] === 'sucesso') {
 <body>
 
   <div class="d-flex">
-    <!-- Botão toggle do menu (visível em telas pequenas) -->
-   <button class="btn btn-dark d-md-none mb-3" type="button"
-  data-bs-toggle="collapse" data-bs-target="#sidebarMenu"
-  aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-  <i class="bi bi-list"></i>
-</button>
-
+    
+   
 
   <!-- Sidebar -->
-      <nav class="collapse d-md-block bg-dark text-white p-3" id="sidebarMenu">
+      <nav class="sidebar collapse d-md-block bg-dark text-white p-3" id="sidebarMenu">
               <div class="p-3">
                 <h4 class="justify-content-center">Área da Instituição</h4>
                 <ul class="nav flex-column">
@@ -135,13 +130,25 @@ if (isset($_GET['upload']) && $_GET['upload'] === 'sucesso') {
                 </ul>
               </div>
       </nav>
+         <button class="btn btn-dark d-md-none mb-3" type="button"
+          data-bs-toggle="collapse" 
+          data-bs-target="#sidebarMenu"
+          aria-controls="#sidebarMenu">
+          <i class="bi bi-list"></i>
+          </button>
+
 
   <!-- Conteúdo principal -->
       <main class="flex-grow-1 p-4"> <!-- style="overflow-x: hidden; overflow-y: auto; height: 100vh;"-->
         <!-- Conteúdo das seções -->
         <!-- DASHBOARD -->
 <div id="sec-dashboard" class="content-section" style="display: block;">
-      <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+     <div class="w-100 bg-dark text-white py-3 px-4">
+  <h2 class="m-0">
+    <i class="bi bi-speedometer2 me-2"></i>Dashboard
+  </h2>
+</div>
+
     <div class="row gx-2 gy-2">
         <!-- Estágios Pendentes -->
         <div class="col-md-6 d-flex justify-content-start">
@@ -197,42 +204,53 @@ if (isset($_GET['upload']) && $_GET['upload'] === 'sucesso') {
 
         <!-- seção alunos -->
       <div id="sec-alunos" class="content-section" style="display: none;">
+                <div class="w-100 bg-dark text-white py-3 px-4">  
+        <h2><i class="bi bi-people-fill me-2"></i>Alunos</h2>
+        </div>
         <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2><i class="bi bi-people-fill me-2"></i>Alunos</h2>
-          <button class="btn btn-success rounded-pill" onclick="abrirCadastroAluno()">
+          <button class="btn btn-success rounded-pill mt-2" onclick="abrirCadastroAluno()">
             <i class="bi bi-person-plus-fill me-1"></i> Novo Aluno
           </button>
         </div>
 
         <!-- Filtros -->
         <div class="row mb-4">
+    <div class="col-md-4">
+  <label for="filtroCurso" class="form-label fw-bold text-dark">
+    <i class="bi bi-mortarboard-fill me-1"></i> Curso
+  </label>
+  <select id="filtroCurso" class="form-select bg-dark text-white border-light">
+    <option value="" selected>Todos</option>
+    <option value="adm">Técnico em Administração</option>
+    <option value="info">Técnico em Informática</option>
+    <option value="edif">Técnico em Edificações</option>
+  </select>
+</div>
+
           <div class="col-md-4">
-            <label for="filtroCurso" class="form-label">Curso</label>
-            <select id="filtroCurso" class="form-select bg-dark text-white border-light">
-              <option value="" selected>Todos</option>
-              <option>Técnico em Administração</option>
-              <option>Técnico em Informática</option>
-              <option>Técnico em Edificações</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="filtroPeriodo" class="form-label">Período</label>
-            <select id="filtroPeriodo" class="form-select bg-dark text-white border-light">
-              <option value="" selected>Todos</option>
-              <option>1º</option>
-              <option>2º</option>
-              <option>3º</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="filtroTurno" class="form-label">Turno</label>
-            <select id="filtroTurno" class="form-select bg-dark text-white border-light">
-              <option value="" selected>Todos</option>
-              <option>Manhã</option>
-              <option>Tarde</option>
-              <option>Noite</option>
-            </select>
-          </div>
+  <label for="filtroPeriodo" class="form-label fw-bold text-dark">
+    <i class="bi bi-calendar-range-fill me-1"></i> Período
+  </label>
+  <select id="filtroPeriodo" class="form-select bg-dark text-white border-light">
+    <option value="" selected>Todos</option>
+    <option value="1">1º</option>
+    <option value="2">2º</option>
+    <option value="3">3º</option>
+  </select>
+</div>
+
+         <div class="col-md-4">
+  <label for="filtroTurno" class="form-label fw-bold text-dark">
+    <i class="bi bi-clock-fill me-1"></i> Turno
+  </label>
+  <select id="filtroTurno" class="form-select bg-dark text-white border-light">
+    <option value="" selected>Todos</option>
+    <option value="manha">Manhã</option>
+    <option value="tarde">Tarde</option>
+    <option value="noite">Noite</option>
+  </select>
+</div>
+
         </div>
 
         <!-- Tabela de Alunos -->
@@ -328,7 +346,9 @@ if (isset($_GET['upload']) && $_GET['upload'] === 'sucesso') {
 
         <!-- seção estágios -->
      <div id="sec-estagios" class="content-section" style="display: none;">
-  <h2><i class="bi bi-briefcase-fill me-2"></i>Estágios</h2>
+      <div class="w-100 bg-dark text-white py-3 px-4">
+     <h2><i class="bi bi-briefcase-fill me-2"></i>Estágios</h2>
+    </div>
 
   <div class="container my-4">
     <!-- Botão e Filtro -->
@@ -519,7 +539,9 @@ if (isset($_GET['upload']) && $_GET['upload'] === 'sucesso') {
 
         <!-- seção relatórios -->
         <div id="sec-relatorios" class="content-section" style="display: none;">
+          <div class="w-100 bg-dark text-white py-3 px-4"> 
           <h2><i class="bi bi-file-earmark-bar-graph-fill me-2"></i>Relatórios</h2>
+          </div>
           <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
 
       <!-- Aba Relatórios -->
@@ -993,10 +1015,11 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
       <!-- Fim da Aba Relatórios -->
         <!-- seção vagas -->
             <div id="sec-vagas" class="content-section" style="display: none;">
+              <div class="w-100 bg-dark text-white py-3 px-4"> 
                     <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
-
+                    </div>
                         <!-- Botão Nova Vaga -->
-                        <div class="mb-4">
+                        <div class="mb-2 mt-2">
                           <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCriarVaga">Criar Nova Vaga</button>
                         </div>
 
@@ -1190,7 +1213,9 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
 
         <!-- seção usuários -->
           <div id="sec-usuarios" class="content-section" style="display: none;">
+            <div class="w-100 bg-dark text-white py-3 px-4"> 
             <h2><i class="bi bi-person-gear me-2"></i>Usuário</h2>
+            </div>
             <div class="container mt-4">
 
               <!-- Abas Usuários e Perfis -->
@@ -1683,13 +1708,14 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
         <!-- seção configurações -->
         <div id="sec-configuracoes" class="content-section" style="display: none;">
           <div class="container mt-4">
-            <h3 class="mb-4"> <i class="bi bi-gear-fill me-2"></i> Configurações</h3>
+           
 
           </div>
 
             <!-- Conteúdo das abas -->
               <div class="tab-content bg-dark p-4 mx-4 my-4 rounded border border-secondary text-white">
-                  <!-- Abas -->
+               <h3 class="mb-4"> <i class="bi bi-gear-fill me-2"></i> Configurações</h3>  
+              <!-- Abas -->
               <ul class="nav nav-pills mb-3 bg-dark p-2 rounded" id="configTab" role="tablist">
                <li class="nav-item"><a class="nav-link active text-white" data-bs-toggle="pill" href="#dadosInstitucionais">Dados Institucionais</a></li>
                 <li class="nav-item"><a class="nav-link text-white" data-bs-toggle="pill" href="#regrasSistema">Regras do Sistema</a></li>
@@ -1844,6 +1870,7 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
 
         </div>
       </main>
+  </div>
   </div>
   <!-- Scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>

@@ -29,8 +29,11 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
 <body>
 
   <div class="d-flex">
+ 
     <!-- Sidebar da empresa -->
-    <nav class="col-md-3 col-lg-2 bg-dark text-white sidebar collapse d-md-block" id="sidebarMenu" style="min-height: 100vh;">
+    <nav class="col-md-3 col-lg-2 bg-dark text-white sidebar collapse d-md-block" 
+    id="sidebarMenu" 
+    style="min-height: 100vh;">
       <div class="p-3">
         <h4 class="text-center">Área da Empresa</h4>
         <ul class="nav flex-column">
@@ -77,12 +80,20 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
         </ul>
       </div>
     </nav>
+         <!-- Toggler (para telas pequenas) -->
+          <button class="btn btn-dark d-md-none m-2" 
+          type="button" data-bs-toggle="collapse" 
+          data-bs-target="#sidebarMenu">
+            <i class="bi bi-list"></i> Menu
+          </button>
 
     <!-- Conteúdo principal -->
     <main class="flex-grow-1 p-4">
          <!-- Seção de Dashboard -->
     <div id="sec-empresa-painel" class="content-section" style="display: block;">
+         <div class="w-100 bg-dark text-white py-3 px-4">
     <h2><i class="bi bi-speedometer2 me-2"></i>Dashboard</h2>
+    </div>
     <div class="row gx-2 gy-2">
         <!-- Estágios Pendentes -->
         <div class="col-md-6 d-flex justify-content-start">
@@ -138,135 +149,197 @@ if(!isset($_SESSION['id_usuario']) || $_SESSION['tipo_usuario'] != 'empresa'){
 
 
       <!-- Seção de Estágios -->
-      <div id="sec-empresa-estagios" class="content-section" style="display: none;">
-          <!-- Filtros e Botões -->
-             <div class="d-flex justify-content-between align-items-center mb-3">
-          <h2><i class="bi bi-people-fill me-2"></i>Alunos</h2>
-          <button class="btn btn-success rounded-pill" onclick="abrirCadastroAluno()">
-            <i class="bi bi-person-plus-fill me-1"></i> Novo Aluno
-          </button>
-        </div>
+        <div id="sec-empresa-estagios" class="content-section" style="display: none;">
+      <div class="w-100 bg-dark text-white py-3 px-4">
+     <h2><i class="bi bi-briefcase-fill me-2"></i>Estágios</h2>
+    </div>
 
-        <!-- Filtros -->
-        <div class="row mb-4">
-          <div class="col-md-4">
-            <label for="filtroCurso" class="form-label">Curso</label>
-            <select id="filtroCurso" class="form-select bg-dark text-white border-light">
-              <option value="" selected>Todos</option>
-              <option>Técnico em Administração</option>
-              <option>Técnico em Informática</option>
-              <option>Técnico em Edificações</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="filtroPeriodo" class="form-label">Período</label>
-            <select id="filtroPeriodo" class="form-select bg-dark text-white border-light">
-              <option value="" selected>Todos</option>
-              <option>1º</option>
-              <option>2º</option>
-              <option>3º</option>
-            </select>
-          </div>
-          <div class="col-md-4">
-            <label for="filtroTurno" class="form-label">Turno</label>
-            <select id="filtroTurno" class="form-select bg-dark text-white border-light">
-              <option value="" selected>Todos</option>
-              <option>Manhã</option>
-              <option>Tarde</option>
-              <option>Noite</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Tabela de Alunos -->
-        <div class="table-responsive rounded-3 border border-light">
-          <table class="table table-dark table-hover table-bordered align-middle mb-0">
-            <thead>
-              <tr>
-                <th>Nome</th>
-                <th>Matrícula</th>
-                <th>Curso</th>
-                <th>Período</th>
-                <th>Turno</th>
-                <th>Email</th>
-                <th class="text-center">Ações</th>
-              </tr>
-            </thead>
-            <tbody id="tabelaAlunos">
-           
-              <!-- Adicione mais alunos aqui ou via backend/JS -->
-            </tbody>
-          </table>
-        </div>
-
-        <!-- Modal Cadastro de Aluno -->
-           <!-- Modal Cadastro de Aluno -->
-          <div class="modal fade" id="modalCadastroAluno" tabindex="-1" aria-labelledby="modalCadastroAlunoLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-dialog-centered">
-              <div class="modal-content bg-dark text-white border-light rounded-4">
-                <div class="modal-header border-bottom border-light">
-                  <h5 class="modal-title" id="modalCadastroAlunoLabel">Cadastro de Novo Aluno</h5>
-                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
-                </div>
-                <div class="modal-body">
-                  <form id="formAluno" novalidate>
-                    <div class="row g-3">
-                      <div class="col-md-6">
-                        <label for="nome" class="form-label">Nome completo</label>
-                        <input type="text" class="form-control bg-dark text-white border-light" id="nome" name="nome" required>
-                        <div class="invalid-feedback">Por favor, insira o nome completo.</div>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="matricula" class="form-label">Matrícula</label>
-                        <input type="text" class="form-control bg-dark text-white border-light" id="matricula" name="matricula" required>
-                        <div class="invalid-feedback">Informe a matrícula do aluno.</div>
-                      </div>
-                      <div class="col-md-3">
-                        <label for="email" class="form-label">E-mail</label>
-                        <input type="email" class="form-control bg-dark text-white border-light" id="email" name="email" required>
-                        <div class="invalid-feedback">Informe um e-mail válido.</div>
-                      </div>
-                      <div class="col-md-4">
-                        <label for="curso" class="form-label">Curso</label>
-                        <select class="form-select bg-dark text-white border-light" id="curso" name="curso" required>
-                          <option value="" disabled selected>Selecione</option>
-                          <option>Técnico em Administração</option>
-                          <option>Técnico em Informática</option>
-                          <option>Técnico em Edificações</option>
-                        </select>
-                        <div class="invalid-feedback">Selecione um curso.</div>
-                      </div>
-                      <div class="col-md-4">
-                        <label for="periodo" class="form-label">Período</label>
-                        <select class="form-select bg-dark text-white border-light" id="periodo" name="periodo" required>
-                          <option value="" disabled selected>Selecione</option>
-                          <option>1º</option>
-                          <option>2º</option>
-                          <option>3º</option>
-                        </select>
-                        <div class="invalid-feedback">Selecione um período.</div>
-                      </div>
-                      <div class="col-md-4">
-                        <label for="turno" class="form-label">Turno</label>
-                        <select class="form-select bg-dark text-white border-light" id="turno" name="turno" required>
-                          <option value="" disabled selected>Selecione</option>
-                          <option>Manhã</option>
-                          <option>Tarde</option>
-                          <option>Noite</option>
-                        </select>
-                        <div class="invalid-feedback">Selecione um turno.</div>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer border-top border-light">
-                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-success" form="formAluno">Salvar</button>
-                </div>
-              </div>
-            </div>
-          </div>
+  <div class="container my-4">
+    <!-- Botão e Filtro -->
+    <div class="d-flex justify-content-between align-items-center mb-3">
+      <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modalCriarEstagio">
+        <i class="bi bi-plus-circle me-2"></i> Criar Estágio
+      </button>
+      <div style="width: 200px;">
+        <label for="filtroStatus" class="form-label text-white">Status</label>
+        <select id="filtroStatus" class="form-select bg-dark text-white border-secondary" onchange="carregarEstagios()">
+          <option value="">Todos</option>
+          <option value="em curso">Em Curso</option>
+          <option value="concluído">Concluído</option>
+          <option value="aprovado">Aprovado</option>
+          <option value="encerrado">Encerrado</option>
+          <option value="pendente">Pendente</option>
+        </select>
       </div>
+    </div>
+
+    <!-- Cards -->
+    <div class="row mb-3">
+      <div class="col-md-4">
+        <div class="card text-white bg-dark">
+          <div class="card-body">
+            <h5 class="card-title">Total de Estágios</h5>
+            <p id="totalEstagios" class="card-text">
+              <?php include '../php/cardTotalEstagiarios.php'; ?>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-white bg-dark">
+          <div class="card-body">
+            <h5 class="card-title">Aprovados</h5>
+            <p id="totalAprovados" class="card-text">
+              <?php include '../php/cardContratados.php'; ?>
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card text-white bg-dark">
+          <div class="card-body">
+            <h5 class="card-title">Pendentes</h5>
+            <p id="totalPendentes" class="card-text">
+              <?php include '../php/cardEstagiosPendentes.php'; ?>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela -->
+    <table id="tabelaEstagios" class="table table-dark table-bordered">
+      <thead>
+        <tr>
+          <th>Empresa</th>
+          <th>Curso</th>
+          <th>Carga Horária</th>
+          <th>Período</th>
+          <th>Início</th>
+          <th>Término</th>
+          <th>Status</th>
+          <th>Estagiário</th>
+          <th>Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Preenchido via JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Modal Criar Estágio -->
+  <div class="modal fade" id="modalCriarEstagio" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title">Criar Estágio</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formCriarEstagio">
+            <div class="mb-3">
+              <label class="form-label">Empresa</label>
+              <input type="text" class="form-control" id="empresa" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Curso</label>
+              <input type="text" class="form-control" id="curso" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Carga Horária</label>
+              <input type="text" class="form-control" id="carga" placeholder="Em horas" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Período</label>
+              <select class="form-select" id="periodo" required>
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Início</label>
+              <input type="date" class="form-control" id="inicio" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Término</label>
+              <input type="date" class="form-control" id="termino" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select class="form-select" id="status" required>
+                <option value="pendente">Pendente</option>
+                <option value="aprovado">Aprovado</option>
+                <option value="concluído">Concluído</option>
+                <option value="encerrado">Encerrado</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-light" form="formCriarEstagio">Criar Estágio</button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Editar Estágio -->
+  <div class="modal fade" id="modalEditarEstagio" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content bg-dark text-white">
+        <div class="modal-header">
+          <h5 class="modal-title">Editar Estágio</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formEditarEstagio">
+            <div class="mb-3">
+              <label class="form-label">Empresa</label>
+              <input type="text" class="form-control" id="editEmpresa" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Curso</label>
+              <input type="text" class="form-control" id="editCurso" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Carga Horária</label>
+              <input type="text" class="form-control" id="editCarga" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Período</label>
+              <select class="form-select" id="editPeriodo" required>
+                <option value="Manhã">Manhã</option>
+                <option value="Tarde">Tarde</option>
+              </select>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Início</label>
+              <input type="date" class="form-control" id="editInicio" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Término</label>
+              <input type="date" class="form-control" id="editTermino" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label">Status</label>
+              <select class="form-select" id="editStatus" required>
+                <option value="pendente">Pendente</option>
+                <option value="aprovado">Aprovado</option>
+                <option value="concluído">Concluído</option>
+                <option value="encerrado">Encerrado</option>
+              </select>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-outline-light" form="formEditarEstagio">Salvar</button>
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+    </div>
         <!-- Seção de Relatórios -->
          <div id="sec-empresa-relatorios" class="content-section" style="display: none;">
             
@@ -743,8 +816,10 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
     
         <!-- Seção de Vagas -->
       <div id="sec-empresa-vagas" class="content-section" style="display: none;">
-        <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
-         <div class="mb-4">
+            <div class="w-100 bg-dark text-white py-3 px-4">  
+      <h3 class="mb-4"><i class="bi bi-megaphone-fill me-2"></i>Vagas</h3>
+      </div>   
+      <div class="mb-2 mt-2">
         <button class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#modalCriarVaga">Criar Nova Vaga</button>
          </div> 
           
@@ -1448,6 +1523,7 @@ document.getElementById("formUploadRelatorio").addEventListener("submit", functi
     </main>
   </div>
   </div>
+  
 
   <!-- Bootstrap e scripts -->
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
